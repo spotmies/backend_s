@@ -1,10 +1,8 @@
+const { nonReqStr } = require("../../helpers/schema/schemaHelp");
 const mongoose = require("mongoose");
 
 const feedback = new mongoose.Schema({
-  docId: {
-    type: String,
-    required: false,
-  },
+  docId: nonReqStr,
   body: {
     type: [String],
     require: true,
