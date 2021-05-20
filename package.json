@@ -1,0 +1,31 @@
+{
+  "name": "backend_s",
+  "version": "1.0.0",
+  "description": "this repository is for backed of the spotmies project with mongoDB",
+  "main": "index.js",
+  "engines": {
+    "npm": "6.x",
+    "node": "14.x"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/modernsilpi/backend_s.git"
+  },
+  "author": "modernsilpi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/modernsilpi/backend_s/issues"
+  },
+  "homepage": "https://github.com/modernsilpi/backend_s#readme",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "body-parser": "^1.19.0",
+    "dotenv": "^9.0.2",
+    "express": "^4.17.1",
+    "mongoose": "^5.12.10"
+  }
+}
