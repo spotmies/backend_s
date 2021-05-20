@@ -20,6 +20,8 @@ const userSchema = {
   altNum: nonReqNum,
   uId: reqUniqueStr,
   userState: reqStr,
+  orders: [String],
+  quotes: [String],
 };
 
 module.exports = mongoose.model("users", userSchema);

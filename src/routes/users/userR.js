@@ -66,6 +66,29 @@ router.put("/users/:id", (req, res) => {
   }
 });
 
+//delete particular user with uId
+router.delete("/users/:id", (req, res) => {
+  console.log("deleting");
+  const uId = req.params.id;
+  try {
+    userDb.findOneAndRemove({ uId: uId }, (err) => {
+      if (err) {
+        console.error(err);
+        return res.status(400).send(err.message);
+      } else {
+        userDb.findOne({ uId: uId }, (err, doc) => {
+          if (!doc) {
+            console.log("deleted");
+            return res.status(200).send("doc deleted");
+          } else return res.status(400).send("not deleted");
+        });
+      }
+    });
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+});
+
 //get all user
 router.get("/users", (req, res) => {
   try {
