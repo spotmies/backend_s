@@ -22,7 +22,7 @@ const userSchema = {
   userState: reqStr,
   orders: [String],
   quotes: [String],
-  lastLogin: reqNum,
+  lastLogin: nonReqNum,
   logs: [String],
 };
 
