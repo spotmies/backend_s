@@ -22,6 +22,8 @@ const userSchema = {
   userState: reqStr,
   orders: [String],
   quotes: [String],
+  lastLogin: reqNum,
+  logs: [String],
 };
 
 module.exports = mongoose.model("users", userSchema);
