@@ -105,7 +105,7 @@ router.delete(`/${constants.orders}/:ordId`, (req, res) => {
 /* -------------------------------------------------------------------------- */
 /*                               GET ALL ORDERS                               */
 /* -------------------------------------------------------------------------- */
-router.get("/${constants.orders}", (req, res) => {
+router.get(`/${constants.orders}`, (req, res) => {
   try {
     orderDB.find({}, (err, data) => {
       if (err) {
