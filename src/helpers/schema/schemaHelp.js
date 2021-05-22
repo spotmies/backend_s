@@ -29,6 +29,18 @@ const uniqueNum = {
   unique: true,
 };
 
+const unChangeUniqueNum = {
+  type: Number,
+  unique: true,
+  required: true,
+  immutable: true,
+};
+const unChangeStr = {
+  type: String,
+  required: true,
+  immutable: true,
+};
+
 //unique number notRequired
 const nonReqUniqueNum = {
   type: Number,
@@ -59,4 +71,6 @@ module.exports = {
   nonReqUniqueNum,
   reqUniqueStr,
   nonReqUniqueStr,
+  unChangeUniqueNum,
+  unChangeStr,
 };
