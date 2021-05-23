@@ -119,4 +119,23 @@ router.get(`/${constants.orders}`, (req, res) => {
   }
 });
 
+/* -------------------------------------------------------------------------- */
+/*                             GET ALL USER ORDERS                            */
+/* -------------------------------------------------------------------------- */
+router.get(`/user/:uId`, (req, res) => {
+  const uId = req.params.uId;
+  try {
+    orderDB.find({ uId: uId }, (err, data) => {
+      if (err) {
+        //console.error(err);
+        return res.status(400).send(err.message);
+      }
+      if (!data) return res.status(404).json(data);
+      return res.status(200).json(data);
+    });
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+});
+
 module.exports = router;
