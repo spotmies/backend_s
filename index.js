@@ -3,11 +3,13 @@ const mongoose = require("mongoose");
 const connectdb = require("./src/config/db");
 const mainRoute = require("./src/routes/router");
 var bodyParser = require("body-parser");
+var cors = require("cors");
 
 var PORT = process.env.PORT || 4000;
 connectdb();
 
 const app = express();
+app.use(cors());
 // app.use(bodyParser.urlencoded({ extended: true }));
 
 // parse application/x-www-form-urlencoded
