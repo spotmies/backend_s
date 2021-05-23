@@ -7,7 +7,7 @@ const {
   uniqueNum,
   reqUniqueStr,
   nonReqUniqueStr,
-  unChangeUniqueNum,
+  unChangeUniqueStr,
   unChangeStr,
 } = require("../../helpers/schema/schemaHelp");
 
@@ -16,9 +16,9 @@ const newOrderSchema = {
   job: reqNum,
   desc: nonReqStr,
   money: nonReqNum,
-  ordId: unChangeUniqueNum,
+  ordId: unChangeUniqueStr,
   ordState: reqNum,
-  join: unChangeUniqueNum,
+  join: unChangeUniqueStr,
   schedule: reqNum,
   uId: unChangeStr,
   views: nonReqNum,

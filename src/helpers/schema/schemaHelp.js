@@ -29,11 +29,13 @@ const uniqueNum = {
   unique: true,
 };
 
-const unChangeUniqueNum = {
-  type: Number,
+const unChangeUniqueStr = {
+  type: String,
   unique: true,
   required: true,
   immutable: true,
+  minlength: 13,
+  maxlength: 13,
 };
 const unChangeStr = {
   type: String,
@@ -62,6 +64,26 @@ const nonReqUniqueStr = {
   unique: true,
 };
 
+const arrSch = [{ type: String }];
+
+const bool = {
+  type: Boolean,
+};
+
+const uIdSch = {
+  type: String,
+  unique: true,
+  immutable: true,
+  required: true,
+};
+
+const dobSch = {
+  required: true,
+  type: String,
+  minlength: 10,
+  maxlength: 10,
+};
+
 module.exports = {
   reqNum,
   nonReqStr,
@@ -71,6 +93,10 @@ module.exports = {
   nonReqUniqueNum,
   reqUniqueStr,
   nonReqUniqueStr,
-  unChangeUniqueNum,
+  unChangeUniqueStr,
   unChangeStr,
+  arrSch,
+  bool,
+  uIdSch,
+  dobSch,
 };
