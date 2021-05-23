@@ -5,6 +5,7 @@ const router = express.Router();
 
 //post feedback / contactus / partner pre registraion
 router.post("/:id", (req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
   const docId = req.params.id;
   console.log("Got body:", req.body);
 
