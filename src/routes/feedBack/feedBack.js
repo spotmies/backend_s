@@ -3,7 +3,9 @@ const mongoose = require("mongoose");
 const feedback = require("../../models/feedBack/feedback");
 const router = express.Router();
 
-//post feedback / contactus / partner pre registraion
+/* -------------------------------------------------------------------------- */
+/*             feedback  contactus  partner pre registraion                   */
+/* -------------------------------------------------------------------------- */
 router.post("/:id", (req, res, next) => {
   const docId = req.params.id;
   console.log("Got body:", req.body);

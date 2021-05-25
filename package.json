@@ -27,6 +27,8 @@
     "cors": "^2.8.5",
     "dotenv": "^9.0.2",
     "express": "^4.17.1",
-    "mongoose": "^5.12.10"
+    "mongoose": "^5.12.10",
+    "querystring": "^0.2.1",
+    "url": "^0.11.0"
   }
 }
