@@ -1,6 +1,8 @@
+const { parseParams } = require("../../helpers/query/parse_params");
+
 const express = require("express");
-const url = require("url");
-const querystring = require("querystring");
+// const url = require("url");
+// const querystring = require("querystring");
 const router = express.Router();
 const chatDB = require("../../models/messaging/messaging_sch");
 const constants = require("../../helpers/constants");
@@ -35,15 +37,18 @@ router.post(`/${constants.newChat}`, (req, res, next) => {
 /* -------------------------------------------------------------------------- */
 router.get(`/${constants.chats}/:ID`, (req, res) => {
   const ID = req.params.ID;
-  let rawUrl = req.originalUrl;
-  console.log("38", req.originalUrl);
-  let parsedUrl = url.parse(rawUrl);
-  console.log("39", parsedUrl);
-  let parsedQs = querystring.parse(parsedUrl.query);
-  console.log("41", parsedQs.cBuild);
-  let cBuild = parsedQs.cBuild ?? 0;
+  let sekhar = parseParams(req.originalUrl);
+  let param1;
+  let cBuild;
+  if (sekhar.cBuild != null) {
+    cBuild = sekhar.cBuild;
+    param1 = "cBuild";
+  } else {
+    param1 = "msgId";
+    cBuild = ID;
+  }
   try {
-    chatDB.findOne({ msgId: ID, cBuild: cBuild }, (err, data) => {
+    chatDB.findOne({ msgId: ID, [param1]: cBuild }, (err, data) => {
       if (err) {
         return res.status(400).send(err.message);
       }
@@ -56,12 +61,30 @@ router.get(`/${constants.chats}/:ID`, (req, res) => {
 });
 
 /* -------------------------------------------------------------------------- */
-/*                           GET ALL CHATLIST BY UID                          */
+/*                           GET ALL CHATLIST BY UID & PID                    */
 /* -------------------------------------------------------------------------- */
-router.get(`/${constants.user}/:uId/`, (req, res) => {
+router.get(`/:userType/:uId`, (req, res) => {
   const uId = req.params.uId;
+  const userType =
+    req.params.userType == constants.user
+      ? "uId"
+      : req.params.userType == constants.partner
+      ? "pId"
+      : null;
+  console.log(userType, uId);
+  let sekhar = parseParams(req.originalUrl);
+  let param1;
+  let cBuild;
+  if (sekhar.cBuild != null) {
+    cBuild = sekhar.cBuild;
+    param1 = "cBuild";
+  } else {
+    param1 = userType;
+    cBuild = uId;
+  }
+
   try {
-    chatDB.find({ uId: uId }, (err, data) => {
+    chatDB.find({ [userType]: uId, [param1]: cBuild }, (err, data) => {
       if (err) {
         return res.status(400).send(err.message);
       }
@@ -79,21 +102,21 @@ router.get(`/${constants.user}/:uId/`, (req, res) => {
 /* -------------------------------------------------------------------------- */
 /*                           GET ALL CHATLIST BY PID                          */
 /* -------------------------------------------------------------------------- */
-router.get(`/${constants.partner}/:uId`, (req, res) => {
-  const uId = req.params.uId;
-  try {
-    chatDB.find({ pId: uId }, (err, data) => {
-      if (err) {
-        return res.status(400).send(err.message);
-      }
-      if (!data || data == null || data == "")
-        return res.status(404).json(data);
-      return res.status(200).json(data);
-    });
-  } catch (error) {
-    return res.status(500).send(error.message);
-  }
-});
+// router.get(`/${constants.partner}/:uId`, (req, res) => {
+//   const uId = req.params.uId;
+//   try {
+//     chatDB.find({ pId: uId }, (err, data) => {
+//       if (err) {
+//         return res.status(400).send(err.message);
+//       }
+//       if (!data || data == null || data == "")
+//         return res.status(404).json(data);
+//       return res.status(200).json(data);
+//     });
+//   } catch (error) {
+//     return res.status(500).send(error.message);
+//   }
+// });
 
 /* -------------------------------------------------------------------------- */
 /*                              GET ALL CHATLIST                              */

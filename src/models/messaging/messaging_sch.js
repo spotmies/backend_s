@@ -17,6 +17,7 @@ const messaging = {
   uState: reqNum,
   uCount: reqNum,
   pCount: reqNum,
+  lastModified: { type: Number, default: new Date().valueOf() },
 };
 
 module.exports = mongoose.model("messaging", messaging);
