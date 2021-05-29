@@ -1,8 +1,6 @@
 const { parseParams } = require("../../helpers/query/parse_params");
 
 const express = require("express");
-// const url = require("url");
-// const querystring = require("querystring");
 const router = express.Router();
 const chatDB = require("../../models/messaging/messaging_sch");
 const constants = require("../../helpers/constants");

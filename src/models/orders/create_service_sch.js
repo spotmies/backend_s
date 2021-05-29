@@ -4,9 +4,6 @@ const {
   reqStr,
   nonReqStr,
   nonReqNum,
-  uniqueNum,
-  reqUniqueStr,
-  nonReqUniqueStr,
   unChangeUniqueStr,
   unChangeStr,
 } = require("../../helpers/schema/schemaHelp");
@@ -22,11 +19,16 @@ const newOrderSchema = {
   schedule: reqNum,
   uId: unChangeStr,
   views: nonReqNum,
-  loc: { type: [Number], validate: (v) => Array.isArray(v) && v.length > 1 },
+  loc: {
+    type: [Number],
+    required: true,
+    validate: (v) => Array.isArray(v) && v.length > 1,
+  },
   media: [String],
   fBack: nonReqNum,
   pId: nonReqStr,
-  msgId: [nonReqStr],
+  messages: [{ type: mongoose.Schema.Types.ObjectId, ref: "messaging" }],
+  responses: [{ type: mongoose.Schema.Types.ObjectId, ref: "responses" }],
 };
 
 module.exports = mongoose.model("orders", newOrderSchema);

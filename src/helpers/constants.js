@@ -9,4 +9,7 @@ module.exports = {
   chats: "chats",
   user: "user",
   partner: "partner",
+  mainRouteResponse: "response",
+  responses: "responses",
+  newResponse: "newResponse",
 };

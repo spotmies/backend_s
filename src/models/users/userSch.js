@@ -20,8 +20,7 @@ const userSchema = {
   altNum: nonReqNum,
   uId: reqUniqueStr,
   userState: reqStr,
-  orders: [String],
-  quotes: [String],
+  orders: [{ type: mongoose.Schema.Types.ObjectId, ref: "orders" }],
   lastLogin: nonReqNum,
   logs: [String],
 };
