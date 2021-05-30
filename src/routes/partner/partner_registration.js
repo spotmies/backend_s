@@ -41,14 +41,17 @@ router.post(`/${constants.newPartner}`, (req, res, next) => {
 router.get(`/${constants.getPartner}/:pId`, (req, res) => {
   const pId = req.params.pId;
   try {
-    partnerDB.findOne({ pId: pId }, (err, data) => {
-      if (err) {
-        //console.error(err);
-        return res.status(400).send(err.message);
-      }
-      if (!data) return res.status(404).json(data);
-      return res.status(200).json(data);
-    });
+    partnerDB
+      .findOne({ pId: pId })
+      .populate("reports.reportedBy")
+      .populate("complaints")
+      .exec(function (err, data) {
+        if (err) {
+          console.error(err);
+          return res.status(400).send(err.message);
+        }
+        return res.status(200).json(data);
+      });
   } catch (error) {
     return res.status(500).send(error.message);
   }
@@ -138,5 +141,28 @@ router.get(`/${constants.getPartner}`, (req, res) => {
 /*                         RAISE COMPLAINT ON PARTNER                         */
 /* -------------------------------------------------------------------------- */
 router.use("/complaint", complaintR);
+
+/* -------------------------------------------------------------------------- */
+/*                           REPORT PARTNER BY USER                           */
+/* -------------------------------------------------------------------------- */
+router.put("/report", (req, res) => {
+  const body = req.body;
+  const report = req.body.report;
+  try {
+    partnerDB.findOneAndUpdate(
+      { pId: body.pId },
+      { $push: { reports: report } },
+      { new: true },
+      (err, data) => {
+        if (err) return res.status(400).send(err.message);
+        if (data == null || !data || data == "")
+          return res.status(400).send("doc not updated");
+        return res.status(200).json(data);
+      }
+    );
+  } catch (error) {
+    if (error) return res.status(500).send(error.message);
+  }
+});
 
 module.exports = router;

@@ -10,6 +10,7 @@ const {
   dobSch,
   bool,
   uIdSch,
+  unChangeStr,
 } = require("../../helpers/schema/schemaHelp");
 
 const partnerRegistration = {
@@ -47,7 +48,12 @@ const partnerRegistration = {
   logs: [String],
   permission: reqNum,
   feedBack: [],
-  reports: [],
+  reports: [
+    {
+      reportedBy: { type: mongoose.Schema.Types.ObjectId, ref: "users" },
+      reportedAt: reqNum,
+    },
+  ],
   complaints: [
     { type: mongoose.Schema.Types.ObjectId, ref: "partnerComplaints" },
   ],
