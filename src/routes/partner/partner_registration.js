@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const partnerDB = require("../../models/partner/partner_registration_sch");
 const constants = require("../../helpers/constants");
+const complaintR = require("./complaints");
 
 /* -------------------------------------------------------------------------- */
 /*                                 NEW PARTNER                                */
@@ -132,5 +133,10 @@ router.get(`/${constants.getPartner}`, (req, res) => {
     return res.status(500).send(error.message);
   }
 });
+
+/* -------------------------------------------------------------------------- */
+/*                         RAISE COMPLAINT ON PARTNER                         */
+/* -------------------------------------------------------------------------- */
+router.use("/complaint", complaintR);
 
 module.exports = router;

@@ -29,7 +29,7 @@ const partnerRegistration = {
   experience: nonReqNum,
   ref: [String],
   orders: [{ type: mongoose.Schema.Types.ObjectId, ref: "orders" }],
-  rate: nonReqNum,
+  rate: [nonReqNum],
   acceptance: nonReqNum,
   availability: bool,
   partnerPic: nonReqStr,
@@ -46,5 +46,10 @@ const partnerRegistration = {
   lastLogin: nonReqUniqueStr,
   logs: [String],
   permission: reqNum,
+  feedBack: [],
+  reports: [],
+  complaints: [
+    { type: mongoose.Schema.Types.ObjectId, ref: "partnerComplaints" },
+  ],
 };
 module.exports = mongoose.model("partners", partnerRegistration);
