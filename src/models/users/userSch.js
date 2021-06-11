@@ -11,7 +11,7 @@ const {
 
 const userSchema = {
   name: reqStr,
-  phNum: reqNum,
+  phNum: uniqueNum,
   //  uniqueNum,
   join: reqNum,
   pic: nonReqStr,
