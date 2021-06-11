@@ -2,6 +2,8 @@
 const reqNum = {
   type: Number,
   required: true,
+  minlength: 12,
+  maxlength: 12,
 };
 
 //string notRequired
