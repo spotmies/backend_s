@@ -6,19 +6,18 @@ const {
   nonReqNum,
   uniqueNum,
   reqUniqueStr,
+  uIdSch,
   nonReqUniqueStr,
 } = require("../../helpers/schema/schemaHelp");
 
 const userSchema = {
   name: reqStr,
   phNum: uniqueNum,
-  //  uniqueNum,
   join: reqNum,
   pic: nonReqStr,
-  eMail: nonReqStr,
-  // nonReqUniqueStr
+  eMail: nonReqUniqueStr,
   altNum: nonReqNum,
-  uId: reqUniqueStr,
+  uId: uIdSch,
   userState: reqStr,
   orders: [{ type: mongoose.Schema.Types.ObjectId, ref: "orders" }],
   lastLogin: nonReqNum,

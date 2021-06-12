@@ -28,7 +28,6 @@ const uniqueNum = {
   required: true,
   unique: true,
 };
-
 const unChangeUniqueStr = {
   type: String,
   unique: true,
