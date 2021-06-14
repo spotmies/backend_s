@@ -1,27 +1,40 @@
 const express = require("express");
 const router = express.Router();
 const orderDB = require("../../models/orders/create_service_sch");
+const userDb = require("../../models/users/userSch");
 const constants = require("../../helpers/constants");
 
 /* -------------------------------------------------------------------------- */
 /*                              create new order                              */
 /* -------------------------------------------------------------------------- */
-router.post(`/${constants.createOrder}`, (req, res, next) => {
+router.post(`/${constants.createOrder}/:uId`, (req, res, next) => {
+  const uId = req.params.uId;
   const data = req.body;
   try {
     orderDB
       .create(data)
       .then((doc, err) => {
-        //console.log("error", err);
-        //console.log("data", doc);
         if (err) {
           return res.status(400).send(err.message);
         }
         if (!doc) return res.status(404).json(doc);
-        return res.status(200).json(doc);
+        try {
+          userDb.findOneAndUpdate(
+            { uId: uId },
+            { $push: { orders: doc.id } },
+            { new: true },
+            (err, result) => {
+              if (err) {
+                return res.status(400).send(err.message);
+              }
+              return res.status(200).json(doc);
+            }
+          );
+        } catch (err) {}
+
+        // return res.status(200).json(doc);
       })
       .catch((err) => {
-        //console.log("err", err);
         if (err) {
           return res.status(400).send(err.message);
         }
