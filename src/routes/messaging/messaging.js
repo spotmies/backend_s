@@ -173,7 +173,7 @@ router.delete(`/${constants.chats}/:msgId`, (req, res) => {
         chatDB.findOne({ msgId: msgId }, (err, doc) => {
           if (!doc) {
             //console.log("deleted");
-            return res.status(200).send("doc deleted");
+            return res.status(204).send();
           } else return res.status(400).send("not deleted");
         });
       }

@@ -105,7 +105,7 @@ router.delete("/users/:id", (req, res) => {
         userDb.findOne({ uId: uId }, (err, doc) => {
           if (!doc) {
             //console.log("deleted");
-            return res.status(200).send("doc deleted");
+            return res.status(204).send();
           } else return res.status(400).send("not deleted");
         });
       }

@@ -88,7 +88,7 @@ router.delete(`/${constants.responses}/:ID`, (req, res) => {
       } else {
         responsesDB.findOne({ responseId: ID }, (err, doc) => {
           if (!doc) {
-            return res.status(200).send("doc deleted");
+            return res.status(204).send();
           } else return res.status(400).send("not deleted");
         });
       }

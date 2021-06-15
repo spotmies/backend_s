@@ -109,7 +109,7 @@ router.delete(`/${constants.getPartner}/:pId`, (req, res) => {
         partnerDB.findOne({ pId: pId }, (err, doc) => {
           if (err) return res.status(400).send(err.message);
           if (!doc) {
-            return res.status(200).send("doc deleted");
+            return res.status(204).send();
           } else return res.status(400).send("not deleted");
         });
       }
