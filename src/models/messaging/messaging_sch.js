@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const {
   reqNum,
   unChangeUniqueStr,
+  timeStamp,
   unChangeStr,
 } = require("../../helpers/schema/schemaHelp");
 
@@ -9,7 +10,7 @@ const messaging = {
   msgId: unChangeUniqueStr,
   msgs: { type: [String], validate: (v) => Array.isArray(v) && v.length > 0 },
   cBuild: reqNum,
-  join: unChangeUniqueStr,
+  join: timeStamp,
   ordId: unChangeStr,
   pId: unChangeStr,
   uId: unChangeStr,

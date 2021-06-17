@@ -5,6 +5,7 @@ const {
   nonReqStr,
   nonReqNum,
   unChangeUniqueStr,
+  timeStamp,
   unChangeStr,
 } = require("../../helpers/schema/schemaHelp");
 
@@ -14,9 +15,13 @@ const newOrderSchema = {
   desc: nonReqStr,
   money: nonReqNum,
   ordId: unChangeUniqueStr,
-  ordState: reqNum,
-  join: unChangeUniqueStr,
-  schedule: reqNum,
+  ordState: {
+    type: String,
+    required: true,
+    enum: ["req", "noPartner", "updated", "onGoing", "completed", "cancel"],
+  },
+  join: timeStamp,
+  schedule: timeStamp,
   uId: unChangeStr,
   views: nonReqNum,
   loc: {

@@ -9,7 +9,7 @@ const constants = require("../../helpers/constants");
 router.post("/newUser", (req, res, next) => {
   //console.log("newUser");
   const data = req.body;
-  //console.log("from api", data);
+  console.log("from api", data);
   try {
     userDb
       .create(data)

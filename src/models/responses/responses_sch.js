@@ -23,5 +23,7 @@ const newReponseSch = {
     immutable: true,
     ref: "orders",
   },
+
+  //add join attribute hehre
 };
 module.exports = mongoose.model("responses", newReponseSch);
