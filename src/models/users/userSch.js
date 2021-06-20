@@ -20,7 +20,7 @@ const userSchema = {
   phNum: phoneNum,
   join: timeStamp,
   pic: nonReqStr,
-  eMail: nonReqUniqueStr,
+  eMail: { type: String, trim: true, index: true, unique: true, sparse: true },
   altNum: altNum,
   uId: uIdSch,
   userState: {

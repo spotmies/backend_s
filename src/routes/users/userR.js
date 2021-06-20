@@ -12,15 +12,11 @@ router.post("/newUser", (req, res, next) => {
   console.log("from api", data);
   try {
     userDb
-      .create(data)
-      .then((doc, err) => {
-        //console.log("error", err);
-        //console.log("data", doc);
-        if (err) {
-          return res.status(400).send(err.message);
-        }
-        if (!doc) return res.status(404).json(doc);
-        return res.status(200).json(doc);
+      .init()
+      .then(async () => {
+        const user = new userDb(data);
+        const result = await user.save();
+        res.json(result);
       })
       .catch((err) => {
         //console.log("err", err);
