@@ -10,7 +10,7 @@ const complaintR = require("./complaints");
 
 router.post(`/${constants.newPartner}`, (req, res, next) => {
   const data = req.body;
-  console.log("newPart");
+  console.log("newPart", data);
   try {
     partnerDB
       .create(data)
