@@ -9,8 +9,20 @@ const complaintR = require("./complaints");
 /* -------------------------------------------------------------------------- */
 
 router.post(`/${constants.newPartner}`, (req, res, next) => {
-  const data = req.body;
+  var data = req.body;
   console.log("newPart", data);
+  console.log(data.docs);
+  if (
+    req.body.docs != null ||
+    req.body.docs != "" ||
+    req.body.docs != undefined
+  ) {
+    if (typeof req.body.docs == "string") {
+      let newDoc = JSON.parse(req.body.docs);
+      data["docs"] = newDoc;
+    } else console.log("doc not a string");
+  }
+  console.log("parsed", data);
   try {
     partnerDB
       .create(data)
