@@ -12,6 +12,7 @@ const {
   bool,
   uIdSch,
   unChangeStr,
+  nonReqTimeStamp,
 } = require("../../helpers/schema/schemaHelp");
 
 const partnerRegistration = {
@@ -32,7 +33,7 @@ const partnerRegistration = {
   ref: [String],
   orders: [{ type: mongoose.Schema.Types.ObjectId, ref: "orders" }],
   rate: [nonReqNum],
-  acceptance: nonReqNum,
+  acceptance: [nonReqNum],
   availability: bool,
   partnerPic: nonReqStr,
   docs: {
@@ -45,7 +46,7 @@ const partnerRegistration = {
     otherDocs: [String],
   },
 
-  lastLogin: nonReqUniqueStr,
+  lastLogin: nonReqTimeStamp,
   logs: [String],
   permission: reqNum,
   feedBack: [],
@@ -58,5 +59,6 @@ const partnerRegistration = {
   complaints: [
     { type: mongoose.Schema.Types.ObjectId, ref: "partnerComplaints" },
   ],
+  isTermsAccepted:{type:Boolean,required:true}
 };
 module.exports = mongoose.model("partners", partnerRegistration);
