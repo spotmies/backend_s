@@ -134,8 +134,8 @@ const uIdSch = {
 const dobSch = {
   required: true,
   type: String,
-  minlength: 10,
-  maxlength: 10,
+  minlength: 13,
+  maxlength: 14,
 };
 
 module.exports = {
