@@ -13,7 +13,7 @@ const newReponseSch = {
   uId: unChangeStr,
   pId: unChangeStr,
   money: reqNum,
-  schedule: reqNum,
+  schedule: timeStamp,
   loc: {
     type: [Number],
     required: true,
