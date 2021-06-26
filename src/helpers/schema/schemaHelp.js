@@ -75,6 +75,13 @@ const unChangeUniqueStr = {
   minlength: 13,
   maxlength: 13,
 };
+const ordIdSch = {
+  unique: true,
+  required: true,
+  immutable: true,
+  type: Number,
+  validate: [timstampValidate, "orderId must be length 13"],
+};
 const unChangeStr = {
   type: String,
   required: true,
@@ -158,4 +165,5 @@ module.exports = {
   nonReqEmail,
   timeStamp,
   nonReqTimeStamp,
+  ordIdSch,
 };

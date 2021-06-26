@@ -57,6 +57,7 @@ router.get(`/${constants.getPartner}/:pId`, (req, res) => {
       .findOne({ pId: pId })
       .populate("reports.reportedBy")
       .populate("complaints")
+      .populate("inComingOrders")
       .exec(function (err, data) {
         if (err) {
           console.error(err);

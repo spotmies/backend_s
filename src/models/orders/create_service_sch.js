@@ -7,6 +7,7 @@ const {
   unChangeUniqueStr,
   timeStamp,
   unChangeStr,
+  ordIdSch,
 } = require("../../helpers/schema/schemaHelp");
 
 const newOrderSchema = {
@@ -14,7 +15,7 @@ const newOrderSchema = {
   job: reqNum,
   desc: nonReqStr,
   money: nonReqNum,
-  ordId: unChangeUniqueStr,
+  ordId: ordIdSch,
   ordState: {
     type: String,
     required: true,

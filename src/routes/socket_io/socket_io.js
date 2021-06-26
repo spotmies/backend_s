@@ -1,13 +1,13 @@
 mongoose = require("mongoose");
+const partnerDB = require("../../models/partner/partner_registration_sch");
 const connection = mongoose.connection;
 function changeStrema(io) {
   connection.once("open", () => {
-    console.log("MongoDB database connected");
-
     console.log("Setting change streams");
-    const thoughtChangeStream = connection.collection("responses").watch();
+    const responsesChangeStream = connection.collection("responses").watch();
+    const orderChangeStream = connection.collection("orders").watch();
 
-    thoughtChangeStream.on("change", (change) => {
+    responsesChangeStream.on("change", (change) => {
       switch (change.operationType) {
         case "insert":
           //   console.log(change);
@@ -25,6 +25,31 @@ function changeStrema(io) {
 
         case "delete":
           io.of("/api/socket").emit("deletedThought", change.documentKey._id);
+          break;
+      }
+    });
+    orderChangeStream.on("change", (change) => {
+      switch (change.operationType) {
+        case "insert":
+          console.log("new order came...", change.fullDocument);
+          partnerDB.updateMany(
+            { job: change.fullDocument.job, availability: true },
+            {
+              $push: { inComingOrders: change.fullDocument._id },
+            },
+            function (err, doc) {
+              if (err) {
+                console.log(`problem with assign order ${err}`);
+              } else {
+                console.log("order assigned : ");
+              }
+            }
+          );
+          break;
+        case "update":
+          console.log("orders updated...", change);
+
+        default:
           break;
       }
     });
