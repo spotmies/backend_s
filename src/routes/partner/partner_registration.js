@@ -55,7 +55,7 @@ router.get(`/${constants.getPartner}/:pId`, (req, res) => {
   const pId = req.params.pId;
   let originalUrl = parseParams(req.originalUrl);
   console.log(originalUrl);
-  //comment
+  //commentt
   try {
     partnerDB
       .findOne({ pId: pId })
