@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const responsesDB = require("../../models/responses/responses_sch");
+const orderDB = require("../../models/orders/create_service_sch");
 const constants = require("../../helpers/constants");
 
 /* -------------------------------------------------------------------------- */
@@ -10,20 +11,48 @@ router.post(`/${constants.newResponse}`, (req, res, next) => {
   const data = req.body;
   console.log("post resp", data);
   try {
-    responsesDB
-      .create(data)
-      .then((doc, err) => {
-        if (err) {
-          return res.status(400).send(err.message);
-        }
-        if (!doc) return res.status(404).json(doc);
-        return res.status(200).json(doc);
-      })
-      .catch((err) => {
-        if (err) {
-          return res.status(400).send(err.message);
-        }
-      });
+    // try {
+    orderDB.findOne({ ordId: data.ordId }, (err, ordData) => {
+      if (err) {
+        return res.status(400).send(err.message);
+      }
+      if (!ordData) return res.status(404).json("invalid ordId");
+      responsesDB
+        .create(data)
+        .then((doc, err) => {
+          if (err) {
+            return res.status(400).send(err.message);
+          }
+          if (!doc) return res.status(404).json(doc);
+          // return res.status(200).json(doc);
+          try {
+            orderDB.findOneAndUpdate(
+              { ordId: doc.ordId },
+              { $push: { responses: doc.id } },
+              { new: true },
+              (err, result) => {
+                if (err) {
+                  return res.status(400).send(err.message);
+                }
+                return res.status(200).json(doc);
+              }
+            );
+          } catch (err) {
+            if (err) {
+              return res.status(400).send(err.message);
+            }
+          }
+        })
+        .catch((err) => {
+          if (err) {
+            return res.status(400).send(err.message);
+          }
+        });
+    });
+    // }
+    //  catch (error) {
+    //   return res.status(500).send(error.message);
+    // }
   } catch (error) {
     return res.status(500).send(error.message);
   }

@@ -2,12 +2,14 @@ const mongoose = require("mongoose");
 const {
   reqNum,
   unChangeStr,
-  unChangeUniqueStr,
+  timeStamp,
+  ordIdSch,
+  unChangeNum,
 } = require("../../helpers/schema/schemaHelp");
 
 const newReponseSch = {
-  responseId: unChangeUniqueStr,
-  ordId: unChangeStr,
+  responseId: ordIdSch,
+  ordId: unChangeNum,
   uId: unChangeStr,
   pId: unChangeStr,
   money: reqNum,
@@ -23,6 +25,7 @@ const newReponseSch = {
     immutable: true,
     ref: "orders",
   },
+  join: timeStamp,
 
   //add join attribute hehre
 };

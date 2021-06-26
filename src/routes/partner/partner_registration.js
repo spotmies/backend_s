@@ -3,6 +3,7 @@ const router = express.Router();
 const partnerDB = require("../../models/partner/partner_registration_sch");
 const constants = require("../../helpers/constants");
 const complaintR = require("./complaints");
+const { parseParams } = require("../../helpers/query/parse_params");
 
 /* -------------------------------------------------------------------------- */
 /*                                 NEW PARTNER                                */
@@ -52,18 +53,45 @@ router.post(`/${constants.newPartner}`, (req, res, next) => {
 /* -------------------------------------------------------------------------- */
 router.get(`/${constants.getPartner}/:pId`, (req, res) => {
   const pId = req.params.pId;
+  let originalUrl = parseParams(req.originalUrl);
+  // console.log(originalUrl);
   try {
     partnerDB
       .findOne({ pId: pId })
-      .populate("reports.reportedBy")
-      .populate("complaints")
-      .populate("inComingOrders")
+      .populate({
+        path: originalUrl.extractData == "true" ? "reports.reportedBy" : "null",
+      })
+      .populate({
+        path: originalUrl.extractData == "true" ? "complaints" : "null",
+      })
+      .populate({
+        path: originalUrl.extractData == "true" ? "inComingOrders" : "null",
+        match: {
+          ordState: originalUrl.ordState ?? "req",
+        },
+      })
+      .populate({
+        path: originalUrl.extractData == "true" ? "orders" : "null",
+      })
       .exec(function (err, data) {
         if (err) {
           console.error(err);
           return res.status(400).send(err.message);
         }
-        return res.status(200).json(data);
+        switch (originalUrl.showOnly) {
+          case "inComingOrders":
+            res.status(200).json(data.inComingOrders);
+            break;
+          case "complaints":
+            res.status(200).json(data.complaints);
+          case "orders":
+            res.status(200).json(data.orders);
+            break;
+
+          default:
+            res.status(200).json(data);
+            break;
+        }
       });
   } catch (error) {
     return res.status(500).send(error.message);

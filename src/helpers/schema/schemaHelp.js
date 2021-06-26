@@ -80,7 +80,7 @@ const ordIdSch = {
   required: true,
   immutable: true,
   type: Number,
-  validate: [timstampValidate, "orderId must be length 13"],
+  validate: [timstampValidate, "Id must be length 13"],
 };
 const unChangeStr = {
   type: String,
@@ -144,6 +144,11 @@ const dobSch = {
   minlength: 13,
   maxlength: 14,
 };
+const unChangeNum = {
+  type: Number,
+  immutable: true,
+  required: true,
+};
 
 module.exports = {
   reqNum,
@@ -166,4 +171,5 @@ module.exports = {
   timeStamp,
   nonReqTimeStamp,
   ordIdSch,
+  unChangeNum,
 };
