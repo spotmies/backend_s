@@ -79,6 +79,7 @@ router.get(`/${constants.getPartner}/:pId`, (req, res) => {
           console.error(err);
           return res.status(400).send(err.message);
         }
+        if (!data) return res.status(404).send("data not found");
         switch (originalUrl.showOnly) {
           case "inComingOrders":
             res.status(200).json(data.inComingOrders);
