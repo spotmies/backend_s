@@ -148,7 +148,10 @@ router.get(`/:userType/:uId`, (req, res) => {
     responsesDB
       .find({ [userType]: uId })
       .populate("orderDetails")
-      .populate("pDetails")
+      .populate(
+        "pDetails",
+        "name eMail phNum partnerPic rate lang experience job loc businessName accountType availability"
+      )
       .exec(function (err, data) {
         if (err) {
           console.error(err);
