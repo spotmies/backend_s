@@ -35,6 +35,12 @@ const newOrderSchema = {
   pId: nonReqStr,
   messages: [{ type: mongoose.Schema.Types.ObjectId, ref: "messaging" }],
   responses: [{ type: mongoose.Schema.Types.ObjectId, ref: "responses" }],
+  uDetails: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    immutable: true,
+    ref: "users",
+  },
 };
 
 module.exports = mongoose.model("orders", newOrderSchema);

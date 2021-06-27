@@ -56,7 +56,7 @@ router.get(`/orders/:ordId`, (req, res) => {
         //console.error(err);
         return res.status(400).send(err.message);
       }
-      if (!data) return res.status(404).json(data);
+      if (!data) return res.status(501).json(data);
       return res.status(200).json(data);
     });
   } catch (error) {
@@ -80,7 +80,7 @@ router.put(`/${constants.orders}/:ordId`, (req, res, next) => {
           //console.error(err);
           return res.status(400).send(err.message);
         }
-        if (!data) return res.status(404).json(data);
+        if (!data) return res.status(501).json(data);
         return res.status(200).json(data);
       }
     );
@@ -126,7 +126,7 @@ router.get(`/${constants.orders}`, (req, res) => {
         return res.status(400).send(err.message);
       }
       if (!data || data == null || data == "")
-        return res.status(404).json(data);
+        return res.status(501).json(data);
 
       res.status(200).json(data);
     });
@@ -147,7 +147,7 @@ router.get(`/user/:uId`, (req, res) => {
         return res.status(400).send(err.message);
       }
       if (!data || data == null || data == "")
-        return res.status(404).json(data);
+        return res.status(501).json(data);
       return res.status(200).json(data);
     });
   } catch (error) {
