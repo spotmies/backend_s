@@ -34,6 +34,7 @@ router.post(`/${constants.newResponse}`, (req, res, next) => {
               { new: true },
               (err, result) => {
                 if (err) {
+                  console.log(err.message);
                   return res.status(400).send(err.message);
                 }
                 return res.status(200).json(doc);
@@ -48,6 +49,7 @@ router.post(`/${constants.newResponse}`, (req, res, next) => {
         })
         .catch((err) => {
           if (err) {
+            console.log(err.message);
             return res.status(400).send(err.message);
           }
         });
