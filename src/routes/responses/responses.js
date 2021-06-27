@@ -14,6 +14,7 @@ router.post(`/${constants.newResponse}`, (req, res, next) => {
     // try {
     orderDB.findOne({ ordId: data.ordId }, (err, ordData) => {
       if (err) {
+        console.log(err.message);
         return res.status(400).send(err.message);
       }
       if (!ordData) return res.status(404).json("invalid ordId");
@@ -21,6 +22,7 @@ router.post(`/${constants.newResponse}`, (req, res, next) => {
         .create(data)
         .then((doc, err) => {
           if (err) {
+            console.log(err.message);
             return res.status(400).send(err.message);
           }
           if (!doc) return res.status(404).json(doc);
@@ -39,6 +41,7 @@ router.post(`/${constants.newResponse}`, (req, res, next) => {
             );
           } catch (err) {
             if (err) {
+              console.log(err.message);
               return res.status(400).send(err.message);
             }
           }
