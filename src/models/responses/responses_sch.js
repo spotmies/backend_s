@@ -16,7 +16,7 @@ const newReponseSch = {
   schedule: timeStamp,
   loc: {
     type: [Number],
-    required: true,
+    required: false,
     validate: (v) => Array.isArray(v) && v.length > 1,
   },
   orderDetails: {
