@@ -143,7 +143,7 @@ router.get(`/:userType/:uId`, (req, res) => {
       : req.params.userType == constants.partner
       ? "pId"
       : null;
-  console.log(userType, uId);
+  // console.log(userType, uId);
   try {
     responsesDB
       .find({ [userType]: uId })

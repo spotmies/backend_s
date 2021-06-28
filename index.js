@@ -33,6 +33,6 @@ app.use(bodyParser.json());
 
 app.use("/api", mainRoute);
 
-server.listen(PORT, function () {
+server.listen(PORT, () => {
   console.log(`app running on port ${PORT}`);
 });
