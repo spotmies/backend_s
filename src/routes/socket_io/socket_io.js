@@ -1,5 +1,6 @@
 mongoose = require("mongoose");
 const partnerDB = require("../../models/partner/partner_registration_sch");
+const responsesDB = require("../../models/responses/responses_sch");
 const connection = mongoose.connection;
 function changeStrema(io) {
   connection.once("open", () => {
@@ -10,17 +11,27 @@ function changeStrema(io) {
     responsesChangeStream.on("change", (change) => {
       switch (change.operationType) {
         case "insert":
-          //   console.log(change);
-          //   const thought = {
-          //     _id: change.fullDocument._id,
-          //     name: change.fullDocument.name,
-          //     description: change.fullDocument.description,
-          //   };
+          console.log("new resp came >>>");
+          try {
+            responsesDB
+              .findById(change.fullDocument._id)
+              .populate("orderDetails")
+              .populate(
+                "pDetails",
+                "name eMail phNum partnerPic rate lang experience job loc businessName accountType availability"
+              )
+              .exec(function (err, data) {
+                if (err) {
+                  console.error(err);
+                }
+                if (data) {
+                  io.to(data.uId).emit("newResponse", data);
+                }
+              });
+          } catch (error) {
+            console.log(error);
+          }
 
-          io.to(change.fullDocument.uId).emit(
-            "newResponse",
-            change.fullDocument
-          );
           break;
 
         case "delete":
