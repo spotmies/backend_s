@@ -30,7 +30,9 @@ const partnerRegistration = {
   experience: nonReqNum,
   ref: [String],
   inComingOrders: [{ type: mongoose.Schema.Types.ObjectId, ref: "orders" }],
-  orders: [{ type: mongoose.Schema.Types.ObjectId, ref: "orders" }],
+  orders: [
+    { type: mongoose.Schema.Types.ObjectId, ref: "orders", unique: true },
+  ],
   rate: [nonReqNum],
   acceptance: [nonReqNum],
   availability: bool,

@@ -8,6 +8,7 @@ const {
   timeStamp,
   unChangeStr,
   ordIdSch,
+  nonReqTimeStamp,
 } = require("../../helpers/schema/schemaHelp");
 
 const newOrderSchema = {
@@ -41,6 +42,11 @@ const newOrderSchema = {
     immutable: true,
     ref: "users",
   },
+  //this below field used for accept or cancel order
+  acceptBy: nonReqStr,
+  cancelBy: nonReqStr,
+  acceptAt: nonReqTimeStamp,
+  cancelAt: nonReqTimeStamp,
 };
 
 module.exports = mongoose.model("orders", newOrderSchema);
