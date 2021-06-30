@@ -43,19 +43,42 @@ function changeStrema(io) {
       switch (change.operationType) {
         case "insert":
           console.log("new order came...", change.fullDocument);
-          partnerDB.updateMany(
-            { job: change.fullDocument.job, availability: true },
-            {
-              $push: { inComingOrders: change.fullDocument._id },
-            },
-            function (err, doc) {
-              if (err) {
-                console.log(`problem with assign order ${err}`);
-              } else {
-                console.log("order assigned : ");
+          try {
+            partnerDB.updateMany(
+              { job: change.fullDocument.job },
+              {
+                $push: { inComingOrders: change.fullDocument._id },
+              },
+              function (err, doc) {
+                if (err) {
+                  console.log(`problem with assign order ${err}`);
+                } else {
+                  console.log("order assigned : ");
+                }
               }
-            }
-          );
+            );
+            try {
+              partnerDB.find(
+                { job: change.fullDocument.job, availability: true },
+                (err, data) => {
+                  if (err) {
+                    console.error(err);
+                    return res.status(400).send(err.message);
+                  }
+                  console.log("socket on for incoming orders >>");
+                  data.forEach((element) => {
+                    io.to(element.pId).emit(
+                      "inComingOrders",
+                      change.fullDocument
+                    );
+                  });
+                  console.log("socket off for in orders >>>");
+                }
+              );
+            } catch (error) {}
+          } catch (error) {
+            console.log("error updating incoming order to partner", error);
+          }
           break;
         case "update":
           console.log("orders updated...", change);
@@ -74,6 +97,10 @@ module.exports = {
       socket.on("join-room", (data) => {
         socket.join(data);
         console.log("new room", data);
+      });
+      socket.on("join-partner", (data) => {
+        socket.join(data);
+        console.log("new partner joinded", data);
       });
     });
   },
