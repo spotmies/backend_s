@@ -19,6 +19,24 @@ const messaging = {
   uCount: reqNum,
   pCount: reqNum,
   lastModified: { type: Number, default: new Date().valueOf() },
+  orderDetails: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    immutable: true,
+    ref: "orders",
+  },
+  pDetails: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    immutable: true,
+    ref: "partners",
+  },
+  uDetails: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    immutable: true,
+    ref: "users",
+  },
 };
 
 module.exports = mongoose.model("messaging", messaging);

@@ -1,6 +1,7 @@
 mongoose = require("mongoose");
 const partnerDB = require("../../models/partner/partner_registration_sch");
 const responsesDB = require("../../models/responses/responses_sch");
+const chatDB = require("../../models/messaging/messaging_sch");
 const connection = mongoose.connection;
 function changeStrema(io) {
   connection.once("open", () => {
@@ -89,18 +90,47 @@ function changeStrema(io) {
     });
   });
 }
+
+function updateMsgsInDb(data) {
+  let msgId = data.target.msgId;
+  let newMessage = data.object;
+  try {
+    chatDB.findOneAndUpdate(
+      { msgId: msgId },
+      { $push: { msgs: newMessage }, lastModified: new Date().valueOf() },
+      { new: true },
+      (err, data) => {
+        if (err) {
+          console.log(err);
+        }
+      }
+    );
+  } catch (error) {
+    console.log(error);
+  }
+}
 module.exports = {
   start: function (io) {
     changeStrema(io);
     io.on("connection", function (socket) {
       console.log("coneting >>", socket.id);
+      //join user to socker room
       socket.on("join-room", (data) => {
         socket.join(data);
         console.log("new room", data);
       });
+
+      //join partner to socket room
       socket.on("join-partner", (data) => {
         socket.join(data);
         console.log("new partner joinded", data);
+      });
+
+      //message from user to partner
+      socket.on("sendNewMessage", (data) => {
+        console.log("new msg", data);
+        socket.to(data.target.uId).emit("recieveNewMessage", data);
+        updateMsgsInDb(data);
       });
     });
   },
