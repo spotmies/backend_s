@@ -143,12 +143,12 @@ module.exports = {
           .emit("recieveNewMessage", data);
         updateMsgsInDb(data);
       });
-      socket.on("sendNewMessage3", (data) => {
-        console.log("new msg", data);
+      socket.on("sendNewMessageCallback", function (data, callBack) {
         socket
-          // .to(data.target.uId)
+          .to(data.target.uId)
           .to(data.target.pId)
-          .emit("recieveNewMessage3", data);
+          .emit("recieveNewMessage", data);
+        callBack("all Ok");
         updateMsgsInDb(data);
       });
     });
