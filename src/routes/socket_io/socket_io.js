@@ -144,6 +144,7 @@ module.exports = {
         updateMsgsInDb(data);
       });
       socket.on("sendNewMessageCallback", function (data, callBack) {
+        console.log("ack", data);
         socket
           .to(data.target.uId)
           .to(data.target.pId)
