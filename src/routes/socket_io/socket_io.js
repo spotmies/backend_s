@@ -143,6 +143,14 @@ module.exports = {
           .emit("recieveNewMessage", data);
         updateMsgsInDb(data);
       });
+      socket.on("sendNewMessage3", (data) => {
+        console.log("new msg", data);
+        socket
+          // .to(data.target.uId)
+          .to(data.target.pId)
+          .emit("recieveNewMessage3", data);
+        updateMsgsInDb(data);
+      });
     });
   },
 };
