@@ -129,7 +129,7 @@ module.exports = {
       //message from user to partner
       socket.on("sendNewMessage", (data) => {
         console.log("new msg", data);
-        socket.to(data.target.uId).emit("recieveNewMessage", data);
+        socket.to(data.target.uId).to(data.target.pId).emit("recieveNewMessage", data);
         updateMsgsInDb(data);
       });
     });
