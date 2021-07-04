@@ -127,14 +127,6 @@ module.exports = {
       });
 
       //message from user to partner
-      socket.on("sendNewMessage2", (data) => {
-        console.log("new msg2", data);
-        socket
-          .to(data.target.pId)
-          .to(data.target.uId)
-          .emit("recieveNewMessage", data);
-        updateMsgsInDb(data);
-      });
       socket.on("sendNewMessage", (data) => {
         console.log("new msg", data);
         socket
@@ -143,13 +135,14 @@ module.exports = {
           .emit("recieveNewMessage", data);
         updateMsgsInDb(data);
       });
+
       socket.on("sendNewMessageCallback", function (data, callBack) {
         console.log("ack", data);
         socket
           .to(data.target.uId)
           .to(data.target.pId)
           .emit("recieveNewMessage", data);
-        callBack("all Ok");
+        callBack("success");
         updateMsgsInDb(data);
       });
     });
