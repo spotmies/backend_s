@@ -8,6 +8,7 @@ function changeStrema(io) {
     console.log("Setting change streams");
     const responsesChangeStream = connection.collection("responses").watch();
     const orderChangeStream = connection.collection("orders").watch();
+    const chatChangeStream = connection.collection("messagings").watch();
 
     responsesChangeStream.on("change", (change) => {
       switch (change.operationType) {
@@ -37,6 +38,24 @@ function changeStrema(io) {
 
         case "delete":
           io.of("/api/socket").emit("deletedThought", change.documentKey._id);
+          break;
+      }
+    });
+    chatChangeStream.on("change", (change) => {
+      switch (change.operationType) {
+        case "insert":
+          console.log("new chat conversion>>>>");
+          io.to(change.fullDocument.pId)
+            .to(change.fullDocument.uId)
+            .emit("newChat", change.fullDocument);
+          break;
+        case "delete":
+          console.log("chat deleted>>>");
+          io.to(change.fullDocument.pId)
+            .to(change.fullDocument.uId)
+            .emit("deleteChat", change.documentKey);
+
+        default:
           break;
       }
     });
