@@ -4,6 +4,7 @@ const orderDB = require("../../models/orders/create_service_sch");
 const userDb = require("../../models/users/userSch");
 const partnerDB = require("../../models/partner/partner_registration_sch");
 const constants = require("../../helpers/constants");
+const { parseParams } = require("../../helpers/query/parse_params");
 
 /* -------------------------------------------------------------------------- */
 /*                              create new order                              */
@@ -51,31 +52,10 @@ router.post(`/${constants.createOrder}/:uId`, (req, res, next) => {
 
 router.get(`/orders/:ordId`, (req, res) => {
   const ordId = req.params.ordId;
+  let originalUrl = parseParams(req.originalUrl);
   try {
-    orderDB.findOne({ ordId: ordId }, (err, data) => {
-      if (err) {
-        //console.error(err);
-        return res.status(400).send(err.message);
-      }
-      if (!data) return res.status(501).json(data);
-      return res.status(200).json(data);
-    });
-  } catch (error) {
-    return res.status(500).send(error.message);
-  }
-});
-
-/* -------------------------------------------------------------------------- */
-/*                            update or edit order                            */
-/* -------------------------------------------------------------------------- */
-router.put(`/${constants.orders}/:ordId`, (req, res, next) => {
-  const ordId = req.params.ordId;
-  const body = req.body;
-  try {
-    orderDB.findOneAndUpdate(
-      { ordId: ordId },
-      body,
-      { new: true },
+    orderDB.findOne(
+      { ordId: ordId, isDeleted: originalUrl.isDeleted ?? false },
       (err, data) => {
         if (err) {
           //console.error(err);
@@ -91,37 +71,63 @@ router.put(`/${constants.orders}/:ordId`, (req, res, next) => {
 });
 
 /* -------------------------------------------------------------------------- */
+/*                            update or edit order                            */
+/* -------------------------------------------------------------------------- */
+router.put(`/${constants.orders}/:ordId`, (req, res, next) => {
+  const ordId = req.params.ordId;
+  const body = req.body;
+  return updateOrder({
+    id: ordId,
+    updateBody: body,
+    tag: "update",
+    response: res,
+  });
+});
+
+function updateOrder({ id, updateBody, tag = "update", response }) {
+  try {
+    orderDB.findOneAndUpdate(
+      { ordId: id },
+      updateBody,
+      { new: true },
+      (err, data) => {
+        if (err) {
+          //console.error(err);
+          return response.status(400).send(err.message);
+        }
+        if (!data) return response.status(501).json(data);
+        return tag == "update"
+          ? response.status(200).json(data)
+          : response.status(204).send("204");
+      }
+    );
+  } catch (error) {
+    return response.status(500).send(error.message);
+  }
+}
+
+/* -------------------------------------------------------------------------- */
 /*                             DELETE ORDER BY ID                             */
 /* -------------------------------------------------------------------------- */
 
 router.delete(`/${constants.orders}/:ordId`, (req, res) => {
   //console.log("deleting");
   const ordId = req.params.ordId;
-  try {
-    orderDB.findOneAndRemove({ ordId: ordId }, (err) => {
-      if (err) {
-        //console.error(err);
-        return res.status(400).send(err.message);
-      } else {
-        orderDB.findOne({ ordId: ordId }, (err, doc) => {
-          if (!doc) {
-            //console.log("deleted");
-            return res.status(204).send();
-          } else return res.status(400).send("not deleted");
-        });
-      }
-    });
-  } catch (error) {
-    return res.status(500).send(error.message);
-  }
+  return updateOrder({
+    id: ordId,
+    updateBody: { isDeleted: true },
+    response: res,
+    tag: "delete",
+  });
 });
 
 /* -------------------------------------------------------------------------- */
 /*                               GET ALL ORDERS                               */
 /* -------------------------------------------------------------------------- */
 router.get(`/${constants.orders}`, (req, res) => {
+  let originalUrl = parseParams(req.originalUrl);
   try {
-    orderDB.find({}, (err, data) => {
+    orderDB.find({ isDeleted: originalUrl.isDeleted ?? false }, (err, data) => {
       if (err) {
         console.error(err);
         return res.status(400).send(err.message);
@@ -141,16 +147,20 @@ router.get(`/${constants.orders}`, (req, res) => {
 /* -------------------------------------------------------------------------- */
 router.get(`/user/:uId`, (req, res) => {
   const uId = req.params.uId;
+  let originalUrl = parseParams(req.originalUrl);
   try {
-    orderDB.find({ uId: uId }, (err, data) => {
-      if (err) {
-        //console.error(err);
-        return res.status(400).send(err.message);
+    orderDB.find(
+      { uId: uId, isDeleted: originalUrl.isDeleted ?? false },
+      (err, data) => {
+        if (err) {
+          //console.error(err);
+          return res.status(400).send(err.message);
+        }
+        if (!data || data == null || data == "")
+          return res.status(501).json(data);
+        return res.status(200).json(data);
       }
-      if (!data || data == null || data == "")
-        return res.status(501).json(data);
-      return res.status(200).json(data);
-    });
+    );
   } catch (error) {
     return res.status(500).send(error.message);
   }

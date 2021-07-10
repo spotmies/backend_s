@@ -42,6 +42,12 @@ const newOrderSchema = {
     immutable: true,
     ref: "users",
   },
+  //below field is used to check whether doc deleted or not
+  isDeleted: {
+    required: false,
+    type: Boolean,
+    default: false,
+  },
   //this below field used for accept or cancel order
   acceptBy: nonReqStr,
   cancelBy: nonReqStr,

@@ -44,12 +44,13 @@ const timstampValidate = (value) => {
   return false;
 };
 const timeStamp = {
-  required: true,
+  required: false,
   immutable: true,
   type: Number,
   min: 0000000000000,
   max: 9999999999999,
   validate: [timstampValidate, "timestamp must be length 13"],
+  default: new Date().valueOf(),
 };
 
 //non required timestamps
@@ -59,6 +60,7 @@ const nonReqTimeStamp = {
   type: Number,
   min: 0000000000000,
   max: 9999999999999,
+  default: new Date().valueOf(),
 };
 
 const altNum = {
