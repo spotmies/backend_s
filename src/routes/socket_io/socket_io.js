@@ -157,10 +157,12 @@ module.exports = {
 
       socket.on("sendNewMessageCallback", function (data, callBack) {
         console.log("ack", data);
-        socket
-          .to(data.target.uId)
-          .to(data.target.pId)
-          .emit("recieveNewMessage", data);
+        let object = JSON.parse(data.object);
+        if (object.sender === "user") {
+          socket.to(data.target.pId).emit("recieveNewMessage", data);
+        } else {
+          socket.to(data.target.uId).emit("recieveNewMessage", data);
+        }
         callBack("success");
         updateMsgsInDb(data);
       });
