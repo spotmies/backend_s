@@ -2,6 +2,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const connectdb = require("./src/config/db");
 const mainRoute = require("./src/routes/router");
+const { PythonShell } = require("python-shell");
+
 var bodyParser = require("body-parser");
 var cors = require("cors");
 
@@ -32,6 +34,26 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use("/api", mainRoute);
+app.get("/geocode/:id", (req, res) => {
+  let options = {
+    args: [req.params.id], //An argument which can be accessed in the script using sys.argv[1]
+  };
+  console.log("gecode api", req.params.id);
+
+  PythonShell.run("app.py", options, function (err, result) {
+    try {
+      if (err) throw err;
+      // result is an array consisting of messages collected
+      //during execution of script.
+      console.log("result: ", result);
+      res.send(result.toString());
+    } catch (error) {
+      console.log(error);
+      // res.send(error);
+      res.send("unknow place...");
+    }
+  });
+});
 
 server.listen(PORT, () => {
   console.log(`app running on port ${PORT}`);

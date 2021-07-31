@@ -28,6 +28,9 @@
     "dotenv": "^9.0.2",
     "express": "^4.17.1",
     "mongoose": "^5.12.10",
+    "node-geocoder": "^3.27.0",
+    "nodemon": "^2.0.12",
+    "python-shell": "^3.0.0",
     "querystring": "^0.2.1",
     "socket.io": "^2.4.1",
     "url": "^0.11.0"
