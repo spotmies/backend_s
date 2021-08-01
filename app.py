@@ -15,10 +15,10 @@ try:
     if loc:
       print(loc.latitude, loc.longitude)
     else:
-        print("not found")
+        print("404")
 
 except ValueError:
-    print("data not found")
+    print("500")
 
 # print(loc.latitude, loc.longitude)
 

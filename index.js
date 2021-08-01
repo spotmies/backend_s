@@ -14,6 +14,7 @@ const app = express();
 const server = require("http").createServer(app);
 var io = require("socket.io")(server);
 var webSocket = require("./src/routes/socket_io/socket_io");
+const { parseParams } = require("./src/helpers/query/parse_params");
 
 app.use(cors());
 app.use(function (req, res, next) {
@@ -34,6 +35,30 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use("/api", mainRoute);
+app.get("/placesapi", (req, res) => {
+  let startLat = "";
+  let startLong = "";
+  let endLat = "";
+  let endLong = "";
+  let targetCity = "";
+  let currentArea = "";
+  let currentPlace = "";
+  // let originalUrl = parseParams(req.originalUrl);
+  // console.log(originalUrl);
+  res.send(originalUrl);
+
+  // let startLat = 17.538455;
+  // let startLong = 83.087737;
+  // let endLat = 17.934493;
+  // let endLong = 83.41598;
+  // for (let j = 17.538455; j < endLat; j += j+=0.002000) {
+  //   for (var i = 83.087737; i < endLong; i += j+=0.002000) {
+  //     valstr1 = j.toString();
+  //     valstr2 = i.toString();
+  //     console.log(`${valstr1.substring(0, 9)},${valstr2.substring(0, 9)}`);
+  //   }
+  // }
+});
 app.get("/geocode/:id", (req, res) => {
   let options = {
     args: [req.params.id], //An argument which can be accessed in the script using sys.argv[1]
