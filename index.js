@@ -59,9 +59,29 @@ app.get("/placesapi", (req, res) => {
   //   }
   // }
 });
+app.get("/getplace/:id", (req, res) => {
+  let options = {
+    args: [req.params.id, "getplace"], //An argument which can be accessed in the script using sys.argv[1]
+  };
+  console.log("gecode api", req.params.id);
+
+  PythonShell.run("app.py", options, function (err, result) {
+    try {
+      if (err) throw err;
+      // result is an array consisting of messages collected
+      //during execution of script.
+      console.log("result: ", result);
+      res.send(result.toString());
+    } catch (error) {
+      console.log(error);
+      // res.send(error);
+      res.send("unknow place...");
+    }
+  });
+});
 app.get("/geocode/:id", (req, res) => {
   let options = {
-    args: [req.params.id], //An argument which can be accessed in the script using sys.argv[1]
+    args: [req.params.id, "getgeocode"], //An argument which can be accessed in the script using sys.argv[1]
   };
   console.log("gecode api", req.params.id);
 
