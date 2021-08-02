@@ -99,6 +99,42 @@ app.get("/geocode/:id", (req, res) => {
     }
   });
 });
+app.get("/geoJson/:id", (req, res) => {
+  res.send("work...");
+  let logs = [];
+  // let logs = ["17.742016, 83.331103", "17.744915,83.241529"];
+  let startLat = 17.538455;
+  let startLong = 83.087737;
+  let endLat = 17.934493;
+  let endLong = 83.41598;
+  for (let j = startLat; j < endLat; j += 0.202) {
+    for (var i = startLong; i < endLong; i += 0.202) {
+      valstr1 = j.toString();
+      valstr2 = i.toString();
+      console.log(`${valstr1.substring(0, 9)},${valstr2.substring(0, 9)}`);
+      logs.push(`${valstr1.substring(0, 9)},${valstr2.substring(0, 9)}`);
+    }
+  }
+  let jsonLogs = JSON.stringify(logs);
+  let options = {
+    args: [jsonLogs, "geoJson"], //An argument which can be accessed in the script using sys.argv[1]
+  };
+  console.log("gecode api geojson", jsonLogs);
+  let output;
+  PythonShell.run("app.py", options, function (err, result) {
+    try {
+      if (err) throw err;
+      console.log("result: ", result);
+      output = result[0];
+
+      //res.send(result.toString());
+    } catch (error) {
+      console.log(error);
+      // res.send(error);
+      //res.send("unknow place...");
+    }
+  });
+});
 
 server.listen(PORT, () => {
   console.log(`app running on port ${PORT}`);

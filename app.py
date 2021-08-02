@@ -1,4 +1,6 @@
 import sys
+import json
+from geopy.extra.rate_limiter import RateLimiter
 from geopy.geocoders import Nominatim
 placeName = sys.argv[1]
 trigger = sys.argv[2]
@@ -21,9 +23,20 @@ if trigger =="getgeocode":
 
   except ValueError:
       print("500")
-else:
+elif trigger == "getplace":
   locationInfo=Geolocator.reverse(placeName)
   print(locationInfo)
+elif trigger == "geoJsonRecover" :
+  # search = ["visakhapatnam", "hyderabad", "thatichetlapalem", "mumbai", "anakapalli"]
+  geocode = RateLimiter(Geolocator.geocode, min_delay_seconds=1)
+  locations = [geocode(s) for s in search]
+  print(locations)
+elif trigger == "geoJson":
+  search = json.loads(placeName)
+  # search = ["17.742016, 83.331103", "17.744915,83.241529"]
+  locationInfo=RateLimiter(Geolocator.geocode,min_delay_seconds=1/20)
+  locationss = [locationInfo(s) for s in search]
+  print(locationss)
 
 
 # print(loc.latitude, loc.longitude)
