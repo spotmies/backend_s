@@ -14,15 +14,20 @@ var counter = 0;
   parsedData.forEach(element => {
     // console.log(element.coordinates);
    geocodeSch.create(element).then((doc,err) =>{
+   
      if(err)console.log("went wrong");
     //  console.log(`doc>> ${doc}`);
      counter = counter +1;
+     if(counter==parsedData.length-1){
+      console.log("data saved");
+      return res.status(200).json(doc);
+    }
    })
   });
-  if(counter==parsedData.length-1){
-    console.log("data saved");
-    return res.status(200).json("doc");
-  }
+  // if(counter==parsedData.length-1){
+  //   console.log("data saved");
+  //   return res.status(200).json("doc");
+  // }
   // res.send('POST request to the homepage')
 })
 router.get('/newgeocode', (req, res) => {
