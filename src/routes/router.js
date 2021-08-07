@@ -8,6 +8,7 @@ const orderR = require("./orders/creat_service");
 const partnerR = require("./partner/partner_registration");
 const chatR = require("./messaging/messaging");
 const responsesR = require("./responses/responses");
+const geocodeLocator = require("./geocode/geocode");
 // const loggerR = require("./loggers/loggers");
 // const postR = require("./posts/post");
 
@@ -25,6 +26,7 @@ router.get("/stamp", (req, res) => {
   let stamp = new Date().valueOf();
   res.send(stamp.toString());
 });
+router.use("/geocode", geocodeLocator);
 
 // router.use("/logger", loggerR);
 // router.use("/post", postR);
