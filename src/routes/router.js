@@ -26,7 +26,7 @@ router.get("/stamp", (req, res) => {
   let stamp = new Date().valueOf();
   res.send(stamp.toString());
 });
-router.get("/geocode", geocodeLocator);
+router.use("/geocode", geocodeLocator);
 
 // router.use("/logger", loggerR);
 // router.use("/post", postR);

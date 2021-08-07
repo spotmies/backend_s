@@ -24,13 +24,14 @@ if trigger =="getgeocode":
   except ValueError:
       print("500")
 elif trigger == "getplace":
-  locationInfo=Geolocator.reverse(placeName)
+  locationInfo=RateLimiter(Geolocator.reverse,min_delay_seconds=1/20)
+  locationInfo = locationInfo(placeName)
   print(locationInfo)
-elif trigger == "geoJsonRecover" :
+# elif trigger == "geoJsonRecover" :
   # search = ["visakhapatnam", "hyderabad", "thatichetlapalem", "mumbai", "anakapalli"]
-  geocode = RateLimiter(Geolocator.geocode, min_delay_seconds=1)
-  locations = [geocode(s) for s in search]
-  print(locations)
+  # geocode = RateLimiter(Geolocator.geocode, min_delay_seconds=1)
+  # locations = [geocode(s) for s in search]
+  # print(locations)
 elif trigger == "geoJson":
   search = json.loads(placeName)
   # search = ["17.742016, 83.331103", "17.744915,83.241529"]

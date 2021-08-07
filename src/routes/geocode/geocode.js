@@ -1,26 +1,34 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
-const NodeGeocoder = require("node-geocoder");
-const { PythonShell } = require("python-shell");
-router.get("/:id", (req, res, next) => {
-  console.log("geocode running", req.params.id);
-  //Here are the option object in which arguments can be passed for the python_test.js.
-  let options = {
-    mode: "text",
-    pythonOptions: ["-u"], // get print results in real-time
-    scriptPath: "./",
-    //If you are having python_test.py script in same folder, then it's optional.
-    args: ["shubhamk314"], //An argument which can be accessed in the script using sys.argv[1]
-  };
+const geocodeSch = require("../../models/geocode/geocode_schema");
 
-  PythonShell.run("app.py", null, function (err, result) {
-    if (err) throw err;
-    // result is an array consisting of messages collected
-    //during execution of script.
-    console.log("result: ");
-    // res.send(result.toString());
+router.post('/newgeocode', function (req, res) {
+  // console.log(req.body);
+  console.log("new post");
+  var inputData = req.body;
+  // console.log(inputData);
+  var parsedData = JSON.parse(inputData.data);
+//  console.log(parsedData)
+var counter = 0;
+  parsedData.forEach(element => {
+    // console.log(element.coordinates);
+   geocodeSch.create(element).then((doc,err) =>{
+     if(err)console.log("went wrong");
+    //  console.log(`doc>> ${doc}`);
+     counter = counter +1;
+   })
   });
-});
+  if(counter==parsedData.length-1){
+    console.log("data saved");
+    return res.status(200).json("doc");
+  }
+  // res.send('POST request to the homepage')
+})
+router.get('/newgeocode', (req, res) => {
+  console.log("get request");
+  res.send('GET request to the homepage')
+})
+
 
 module.exports = router;
