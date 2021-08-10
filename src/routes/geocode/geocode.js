@@ -9,6 +9,7 @@ async function isDocExists(addressLane) {
   console.log("doc state>>", doesDocExist);
   return doesDocExist;
 }
+
 router.get("/addressLine/:line", (req, res) => {
   const line = req.params.line;
   console.log("ge api");
