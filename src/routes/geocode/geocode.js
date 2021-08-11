@@ -9,7 +9,24 @@ async function isDocExists(addressLane) {
   console.log("doc state>>", doesDocExist);
   return doesDocExist;
 }
+router.get("/all", (req, res) => {
+  console.log("all docs request");
+  // res.send('GET request to the homepage')
+  try {
+    geocodeSch.find({}, (err, docs) => {
+      if (err) {
+        console.error(err);
+        return res.status(400).send(err.message);
+      }
+      if (!docs || docs == null || docs == "")
+        return res.status(501).json(docs);
 
+      res.status(200).json(docs);
+    });
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+});
 router.get("/addressLine/:line", (req, res) => {
   const line = req.params.line;
   console.log("ge api");
