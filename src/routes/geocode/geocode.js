@@ -1,14 +1,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const { parseParams } = require("../../helpers/query/parse_params");
 const router = express.Router();
 const geocodeSch = require("../../models/geocode/geocode_schema");
 
-async function isDocExists(addressLane) {
-  if (addressLane == null || addressLane == undefined) return true;
-  const doesDocExist = await geocodeSch.exists({ addressLine: addressLane });
-  console.log("doc state>>", doesDocExist);
-  return doesDocExist;
-}
 router.get("/all", (req, res) => {
   console.log("all docs request");
   // res.send('GET request to the homepage')
@@ -27,18 +22,23 @@ router.get("/all", (req, res) => {
     return res.status(500).send(error.message);
   }
 });
+
 router.get("/addressLine/:line", (req, res) => {
-  const line = req.params.line;
-  console.log("ge api");
+  const addressLine = req.params.line;
+  let params = parseParams(req.originalUrl);
+  let limit = params.limit != undefined ? Number(params.limit) : 5;
+  let regex = new RegExp(addressLine, "i");
   geocodeSch.find(
-    { addressLine: { $regex: line, $options: "i" } },
+    {
+      $and: [{ $or: [{ addressLine: regex }, { subLocality: regex }] }],
+    },
+    null,
+    { limit: limit },
     function (err, docs) {
-      if (err) return res.status(400).json("something worng");
+      if (err) return res.status(400).json(err);
       return res.status(200).json(docs);
     }
   );
-
-  // res.send('GET request to the homepage')
 });
 router.post("/newgeocode", function async(req, res) {
   // console.log(req.body);
