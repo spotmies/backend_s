@@ -31,6 +31,8 @@ const newOrderSchema = {
     required: true,
     validate: (v) => Array.isArray(v) && v.length > 1,
   },
+  address: nonReqStr,
+
   media: [String],
   fBack: nonReqNum,
   pId: nonReqStr,
