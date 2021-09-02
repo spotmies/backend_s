@@ -155,7 +155,7 @@ function updateMsgStatesAndCountsInDb(data) {
     if(data.sender == "user"){
     chatDB.findOneAndUpdate(
       { msgId: msgId },
-      { updateBlock },
+       updateBlock ,
       { new: true },
       (err, data) => {
         if (err) {
