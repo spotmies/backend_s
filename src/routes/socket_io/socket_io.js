@@ -115,8 +115,8 @@ function updateMsgsInDb(data,sender) {
   let newMessage = data.object;
   let updateBlock = {       
   };
-  if(sender === "user") updateBlock.uCount = 1;
-  else updateBlock['pCount'] = 1;
+  if(sender === "user") updateBlock.pCount = 1;
+  else updateBlock.uCount = 1;
   try {
     chatDB.findOneAndUpdate(
       { msgId: msgId },
@@ -152,7 +152,7 @@ function updateMsgStatesAndCountsInDb(data) {
     updateBlock.pState = status;
   }
   try {
-    if(data.sender == "user"){
+    
     chatDB.findOneAndUpdate(
       { msgId: msgId },
        updateBlock ,
@@ -164,20 +164,8 @@ function updateMsgStatesAndCountsInDb(data) {
         console.log(data.uCount)
       }
     );
-    }
-    else{
+    
 
-        chatDB.findOneAndUpdate(
-      { msgId: msgId },
-      { pState:status,pCount: status === 3 ? 0 : 9, },
-      { new: true },
-      (err, data) => {
-        if (err) {
-          console.log(err);
-        }
-      }
-    );
-  }
   } catch (error) {
     console.log(error);
   }
