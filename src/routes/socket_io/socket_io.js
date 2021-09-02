@@ -135,11 +135,24 @@ function updateMsgsInDb(data,sender) {
 function updateMsgStatesAndCountsInDb(data) {
   let msgId = data.msgId;
   let status = data.status;
+  let updateBlock = {}
+  if(data.sender === "user"){
+    if(status===3){
+      updateBlock.uCount = 0 
+    }
+    updateBlock.uState = status;
+  }
+  else if(data.sender === "partner"){
+      if(status===3){
+      updateBlock.pCount = 0 
+    }
+    updateBlock.pState = status;
+  }
   try {
     if(data.sender == "user"){
     chatDB.findOneAndUpdate(
       { msgId: msgId },
-      { uState:status,uCount: status===3 ? 0 : 9, },
+      { updateBlock },
       { new: true },
       (err, data) => {
         if (err) {
