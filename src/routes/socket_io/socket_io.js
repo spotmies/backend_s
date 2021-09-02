@@ -115,7 +115,7 @@ function updateMsgsInDb(data,sender) {
   let newMessage = data.object;
   let updateBlock = {
         $inc: {
-        "pCount": 2,
+        pCount: 2,
         "uCount" : 3
     }
   };
