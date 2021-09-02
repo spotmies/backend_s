@@ -113,14 +113,10 @@ function changeStrema(io) {
 function updateMsgsInDb(data,sender) {
   let msgId = data.target.msgId;
   let newMessage = data.object;
-  let updateBlock = {
-      
-        pCount: 22,
-        uCount : 23
-   
+  let updateBlock = {       
   };
-  // if(sender === "user") updateBlock = { $inc :{'pCount':1}};
-  // else updateBlock = { $inc :{'uCount':1}};
+  if(sender === "user") updateBlock.uCount = 1;
+  else updateBlock['pCount'] = 1;
   try {
     chatDB.findOneAndUpdate(
       { msgId: msgId },
