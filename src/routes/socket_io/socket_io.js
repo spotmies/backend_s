@@ -115,8 +115,8 @@ function updateMsgsInDb(data,sender) {
   let newMessage = data.object;
   let updateBlock = {
         $inc: {
-        "pCount": 0,
-        "uCount" : 0
+        "pCount": 2,
+        "uCount" : 3
     }
   };
   if(sender === "user") updateBlock = { $inc :{'pCount':1}};
