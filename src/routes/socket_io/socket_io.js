@@ -123,7 +123,7 @@ function updateMsgsInDb(data,sender) {
   try {
     chatDB.findOneAndUpdate(
       { msgId: msgId },
-      { $push: { msgs: newMessage }, lastModified: new Date().valueOf(),$inc : updateBlock,updateBlock2},
+      { $push: { msgs: newMessage },pState:1,uState:1, lastModified: new Date().valueOf(),$inc : updateBlock},
       { new: true },
       (err, data) => {
         if (err) {
