@@ -161,6 +161,7 @@ function updateMsgStatesAndCountsInDb(data) {
         if (err) {
           console.log(err);
         }
+        console.log(data.uCount)
       }
     );
     }
