@@ -136,20 +136,17 @@ function updateMsgStatesAndCountsInDb(data) {
   let msgId = data.msgId;
   let status = data.status;
   let updateBlock = {}
-  console.log('data',data)
   if(data.sender === "user"){
-    console.log("user")
     if(status===3){
       updateBlock.uCount = 0 
     }
-    updateBlock.uState = status;
+    updateBlock.pState = status;
   }
   else if(data.sender === "partner"){
-     console.log("partner")
       if(status===3){
       updateBlock.pCount = 0 
     }
-    updateBlock.pState = status;
+    updateBlock.uState = status;
   }
   try {
     
