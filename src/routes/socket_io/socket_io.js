@@ -166,6 +166,15 @@ module.exports = {
         callBack("success");
         updateMsgsInDb(data);
       });
+      socket.on("sendReadReciept",function (data) {
+        console.log("got read reciept",data);
+        if (data.sender === "user") {
+          socket.to(data.pId).emit("recieveReadReciept", data);
+        } else {
+          socket.to(data.uId).emit("recieveReadReciept", data);
+        }
+        
+      });
     });
   },
 };
