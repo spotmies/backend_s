@@ -223,7 +223,7 @@ module.exports = {
         } else {
           socket.to(data.uId).emit("recieveReadReciept", data);
         }
-        
+        updateMsgStatesAndCountsInDb(data);
       });
     });
   },
