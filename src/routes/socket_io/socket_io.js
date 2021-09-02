@@ -110,13 +110,21 @@ function changeStrema(io) {
   });
 }
 
-function updateMsgsInDb(data) {
+function updateMsgsInDb(data,sender) {
   let msgId = data.target.msgId;
   let newMessage = data.object;
+  let updateBlock = {
+        $inc: {
+        "pCount": 0,
+        "uCount" : 0
+    }
+  };
+  if(sender === "user") updateBlock = { $inc :{'pCount':1}};
+  else updateBlock = { $inc :{'uCount':1}};
   try {
     chatDB.findOneAndUpdate(
       { msgId: msgId },
-      { $push: { msgs: newMessage }, lastModified: new Date().valueOf() },
+      { $push: { msgs: newMessage }, lastModified: new Date().valueOf(),updateBlock },
       { new: true },
       (err, data) => {
         if (err) {
@@ -124,6 +132,39 @@ function updateMsgsInDb(data) {
         }
       }
     );
+  } catch (error) {
+    console.log(error);
+  }
+}
+function updateMsgStatesAndCountsInDb(data) {
+  let msgId = data.msgId;
+  let status = data.status;
+  try {
+    if(data.sender == "user"){
+    chatDB.findOneAndUpdate(
+      { msgId: msgId },
+      { uState:status,uCount: status===3 ? 0 : 9, },
+      { new: true },
+      (err, data) => {
+        if (err) {
+          console.log(err);
+        }
+      }
+    );
+    }
+    else{
+
+        chatDB.findOneAndUpdate(
+      { msgId: msgId },
+      { pState:status,pCount: status === 3 ? 0 : 9, },
+      { new: true },
+      (err, data) => {
+        if (err) {
+          console.log(err);
+        }
+      }
+    );
+  }
   } catch (error) {
     console.log(error);
   }
@@ -164,7 +205,7 @@ module.exports = {
           socket.to(data.target.uId).emit("recieveNewMessage", data);
         }
         callBack("success");
-        updateMsgsInDb(data);
+        updateMsgsInDb(data,object.sender);
       });
       socket.on("sendReadReciept",function (data) {
         console.log("got read reciept",data);
