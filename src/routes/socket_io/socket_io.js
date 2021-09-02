@@ -115,16 +115,16 @@ function updateMsgsInDb(data,sender) {
   let newMessage = data.object;
   let updateBlock = {
         $inc: {
-        pCount: 2,
-        "uCount" : 3
+        pCount: 22,
+        uCount : 23
     }
   };
-  if(sender === "user") updateBlock = { $inc :{'pCount':1}};
-  else updateBlock = { $inc :{'uCount':1}};
+  // if(sender === "user") updateBlock = { $inc :{'pCount':1}};
+  // else updateBlock = { $inc :{'uCount':1}};
   try {
     chatDB.findOneAndUpdate(
       { msgId: msgId },
-      { $push: { msgs: newMessage }, lastModified: new Date().valueOf(),$inc:{pCount:1} },
+      { $push: { msgs: newMessage }, lastModified: new Date().valueOf(),updateBlock},
       { new: true },
       (err, data) => {
         if (err) {
