@@ -124,7 +124,7 @@ function updateMsgsInDb(data,sender) {
   try {
     chatDB.findOneAndUpdate(
       { msgId: msgId },
-      { $push: { msgs: newMessage }, lastModified: new Date().valueOf(),updateBlock },
+      { $push: { msgs: newMessage }, lastModified: new Date().valueOf(),$inc:{pCount:1} },
       { new: true },
       (err, data) => {
         if (err) {
