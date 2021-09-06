@@ -85,7 +85,7 @@ function changeStrema(io) {
                     console.error(err);
                     return res.status(400).send(err.message);
                   }
-                  console.log("socket on for incoming orders >>");
+                  console.log(`socket on for incoming orders ${change.fullDocument} >>`);
                   data.forEach((element) => {
                     io.to(element.pId).emit(
                       "inComingOrders",
