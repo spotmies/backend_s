@@ -2,6 +2,7 @@ mongoose = require("mongoose");
 const partnerDB = require("../../models/partner/partner_registration_sch");
 const responsesDB = require("../../models/responses/responses_sch");
 const chatDB = require("../../models/messaging/messaging_sch");
+const orderDB = require("../../models/orders/create_service_sch");
 const connection = mongoose.connection;
 function changeStrema(io) {
   connection.once("open", () => {
@@ -78,24 +79,44 @@ function changeStrema(io) {
               }
             );
             try {
-              partnerDB.find(
-                { job: change.fullDocument.job, availability: true },
-                (err, data) => {
+              orderDB
+                .findById(change.fullDocument._id)
+                .populate("uDetails")
+                .exec(function (err, orderData) {
                   if (err) {
                     console.error(err);
-                    return res.status(400).send(err.message);
                   }
-                  console.log(`socket on for incoming orders ${change.fullDocument} >>`);
-                  data.forEach((element) => {
-                    io.to(element.pId).emit(
-                      "inComingOrders",
-                      change.fullDocument
-                    );
-                  });
-                  console.log("socket off for in orders >>>");
-                }
-              );
-            } catch (error) {}
+                  if (orderData) {
+                    try {
+                      partnerDB.find(
+                        { job: change.fullDocument.job, availability: true },
+
+                        (err, data) => {
+                          if (err) {
+                            console.error(err);
+                            return res.status(400).send(err.message);
+                          }
+                          console.log(
+                            "socket on for incoming orders >>",
+                            orderData
+                          );
+                          data.forEach((element) => {
+                            io.to(element.pId).emit(
+                              "inComingOrders",
+                              orderData
+                            );
+                          });
+                          console.log("socket off for in orders >>>");
+                        }
+                      );
+                    } catch (error) {
+                      console.log("something went wrong110 ", error);
+                    }
+                  }
+                });
+            } catch (error) {
+              console.log("something went wrong at 115", error);
+            }
           } catch (error) {
             console.log("error updating incoming order to partner", error);
           }
@@ -110,20 +131,28 @@ function changeStrema(io) {
   });
 }
 
-function updateMsgsInDb(data,sender) {
+function updateMsgsInDb(data, sender) {
   let msgId = data.target.msgId;
   let newMessage = data.object;
-  let updateBlock = {       
-  };
-  let updateBlock2 = {}
-  if(sender === "user"){ updateBlock.pCount = 1;
+  let updateBlock = {};
+  let updateBlock2 = {};
+  if (sender === "user") {
+    updateBlock.pCount = 1;
     updateBlock2.uState = 1;
+  } else {
+    updateBlock.uCount = 1;
+    updateBlock2.pState = 1;
   }
-  else {updateBlock.uCount = 1;updateBlock2.pState = 1;}
   try {
     chatDB.findOneAndUpdate(
       { msgId: msgId },
-      { $push: { msgs: newMessage },pState:1,uState:1, lastModified: new Date().valueOf(),$inc : updateBlock},
+      {
+        $push: { msgs: newMessage },
+        pState: 1,
+        uState: 1,
+        lastModified: new Date().valueOf(),
+        $inc: updateBlock,
+      },
       { new: true },
       (err, data) => {
         if (err) {
@@ -138,34 +167,30 @@ function updateMsgsInDb(data,sender) {
 function updateMsgStatesAndCountsInDb(data) {
   let msgId = data.msgId;
   let status = data.status;
-  let updateBlock = {}
-  if(data.sender === "user"){
-    if(status===3){
-      updateBlock.uCount = 0 
+  let updateBlock = {};
+  if (data.sender === "user") {
+    if (status === 3) {
+      updateBlock.uCount = 0;
     }
     updateBlock.pState = status;
-  }
-  else if(data.sender === "partner"){
-      if(status===3){
-      updateBlock.pCount = 0 
+  } else if (data.sender === "partner") {
+    if (status === 3) {
+      updateBlock.pCount = 0;
     }
     updateBlock.uState = status;
   }
   try {
-    
     chatDB.findOneAndUpdate(
       { msgId: msgId },
-       updateBlock ,
+      updateBlock,
       { new: true },
       (err, data) => {
         if (err) {
           console.log(err);
         }
-        console.log(data.uCount)
+        console.log(data.uCount);
       }
     );
-    
-
   } catch (error) {
     console.log(error);
   }
@@ -206,10 +231,10 @@ module.exports = {
           socket.to(data.target.uId).emit("recieveNewMessage", data);
         }
         callBack("success");
-        updateMsgsInDb(data,object.sender);
+        updateMsgsInDb(data, object.sender);
       });
-      socket.on("sendReadReciept",function (data) {
-        console.log("got read reciept",data);
+      socket.on("sendReadReciept", function (data) {
+        console.log("got read reciept", data);
         if (data.sender === "user") {
           socket.to(data.pId).emit("recieveReadReciept", data);
         } else {
