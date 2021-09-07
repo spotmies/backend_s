@@ -137,7 +137,7 @@ router.put(`/${constants.getPartner}/:pId`, (req, res) => {
           } catch (error) {}
         }
         console.log("updated data>>>",data);
-        return res.status(200).json(data);
+        return res.status(200).send(data);
       }
     );
   } catch (error) {
