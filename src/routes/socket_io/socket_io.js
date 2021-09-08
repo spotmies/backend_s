@@ -46,15 +46,14 @@ function changeStrema(io) {
       switch (change.operationType) {
         case "insert":
           console.log("new chat conversion>>>>");
-          io.to(change.fullDocument.pId)
-            .to(change.fullDocument.uId)
+          io.to(change.fullDocument.pId)            
             .emit("newChat", change.fullDocument);
           break;
         case "delete":
           console.log("chat deleted>>>");
-          io.to(change.fullDocument.pId)
-            .to(change.fullDocument.uId)
-            .emit("deleteChat", change.documentKey);
+          // io.to(change.fullDocument.pId)
+          //   .to(change.fullDocument.uId)
+          //   .emit("deleteChat", change.documentKey);
 
         default:
           break;
