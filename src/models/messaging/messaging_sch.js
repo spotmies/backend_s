@@ -4,20 +4,21 @@ const {
   unChangeUniqueStr,
   timeStamp,
   unChangeStr,
+  upStatesAndCounts
 } = require("../../helpers/schema/schemaHelp");
 
 const messaging = {
   msgId: unChangeUniqueStr,
   msgs: { type: [String], validate: (v) => Array.isArray(v) && v.length > 0 },
-  cBuild: reqNum,
+  cBuild: upStatesAndCounts,
   join: timeStamp,
   ordId: unChangeStr,
   pId: unChangeStr,
   uId: unChangeStr,
-  pState: reqNum,
-  uState: reqNum,
-  uCount: reqNum,
-  pCount: reqNum,
+  pState: upStatesAndCounts,
+  uState: upStatesAndCounts,
+  uCount: upStatesAndCounts,
+  pCount: upStatesAndCounts,
   lastModified: { type: Number, default: new Date().valueOf() },
   orderDetails: {
     type: mongoose.Schema.Types.ObjectId,

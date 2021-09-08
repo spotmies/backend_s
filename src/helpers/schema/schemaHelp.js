@@ -52,7 +52,12 @@ const timeStamp = {
   validate: [timstampValidate, "timestamp must be length 13"],
   default: new Date().valueOf(),
 };
-
+const upStatesAndCounts = {
+   required: false,
+   type: Number,
+   default: 1
+}
+const u
 //non required timestamps
 const nonReqTimeStamp = {
   required: false,
@@ -174,4 +179,5 @@ module.exports = {
   nonReqTimeStamp,
   ordIdSch,
   unChangeNum,
+  upStatesAndCounts
 };
