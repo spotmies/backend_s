@@ -57,7 +57,6 @@ const upStatesAndCounts = {
    type: Number,
    default: 1
 }
-const u
 //non required timestamps
 const nonReqTimeStamp = {
   required: false,
