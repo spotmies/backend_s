@@ -121,8 +121,11 @@ router.delete(`/${constants.responses}/:ID`, (req, res) => {
   if(params.userType == constants.user){
     updateField = "isDeletedForUser"
   }
-  else{
+  else if(params.userType == constants.partner){
     updateField = "isDeletedForPartner"
+  }
+  else{
+    return res.status(400).send("please specify userType");
   }
   try {
     responsesDB.findOneAndUpdate({responseId: ID},{[updateField] : true},(err,data) => {
@@ -136,24 +139,6 @@ router.delete(`/${constants.responses}/:ID`, (req, res) => {
   } catch (error) {
       return res.status(500).send(error.message);
   }
-
-
-
-  // try {
-  //   responsesDB.findOneAndRemove({ responseId: ID }, (err) => {
-  //     if (err) {
-  //       return res.status(400).send(err.message);
-  //     } else {
-  //       responsesDB.findOne({ responseId: ID }, (err, doc) => {
-  //         if (!doc) {
-  //           return res.status(204).send();
-  //         } else return res.status(400).send("not deleted");
-  //       });
-  //     }
-  //   });
-  // } catch (error) {
-  //   return res.status(500).send(error.message);
-  // }
 });
 
 /* -------------------------------------------------------------------------- */
@@ -161,16 +146,27 @@ router.delete(`/${constants.responses}/:ID`, (req, res) => {
 /* -------------------------------------------------------------------------- */
 router.get(`/:userType/:uId`, (req, res) => {
   const uId = req.params.uId;
-  const userType =
-    req.params.userType == constants.user
-      ? "uId"
-      : req.params.userType == constants.partner
-      ? "pId"
-      : null;
+  let deleteQuery;
+  let userType;
+  //  =
+  //   req.params.userType == constants.user
+  //     ? "uId"
+  //     : req.params.userType == constants.partner
+  //     ? "pId"
+  //     : null;
+  if(req.params.userType ==  constants.user){
+      deleteQuery = "isDeletedForUser"
+  }
+  else if(req.params.userType ==  constants.partner){
+    deleteQuery = "isDeletedForPartner"
+  }
+    else{
+    return res.status(400).send("please specify userType");
+  }
   // console.log(userType, uId);
   try {
     responsesDB
-      .find({ [userType]: uId })
+      .find({ [userType]: uId, [deleteQuery] : false })
       .populate("orderDetails")
       .populate(
         "pDetails",
