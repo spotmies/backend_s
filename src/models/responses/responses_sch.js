@@ -5,6 +5,8 @@ const {
   timeStamp,
   ordIdSch,
   unChangeNum,
+  nonReqNum,
+  responseSchedule,
 } = require("../../helpers/schema/schemaHelp");
 
 const newReponseSch = {
@@ -12,8 +14,8 @@ const newReponseSch = {
   ordId: unChangeNum,
   uId: unChangeStr,
   pId: unChangeStr,
-  money: reqNum,
-  schedule: timeStamp,
+  money: nonReqNum,
+  schedule: responseSchedule,
   loc: {
     type: [Number],
     required: false,
@@ -38,13 +40,19 @@ const newReponseSch = {
     ref: "users",
   },
   join: timeStamp,
-      //below field is used to check whether doc deleted or not
+  //below field is used to check whether doc deleted or not
   isDeletedForUser: {
     required: false,
     type: Boolean,
     default: false,
   },
-    isDeletedForPartner: {
+  isDeletedForPartner: {
+    required: false,
+    type: Boolean,
+    default: false,
+  },
+  //this will updated to true when user accepted partner quote
+  isAccepted: {
     required: false,
     type: Boolean,
     default: false,

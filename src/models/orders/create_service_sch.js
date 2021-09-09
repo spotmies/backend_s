@@ -44,6 +44,11 @@ const newOrderSchema = {
     immutable: true,
     ref: "users",
   },
+  pDetails: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: false,
+    ref: "partners",
+  },
   //below field is used to check whether doc deleted or not
   isDeleted: {
     required: false,
@@ -55,6 +60,12 @@ const newOrderSchema = {
   cancelBy: nonReqStr,
   acceptAt: nonReqTimeStamp,
   cancelAt: nonReqTimeStamp,
+  // acceptMoney: nonReqNum,
+  acceptResponse: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: false,
+    ref: "responses",
+  },
 };
 
 module.exports = mongoose.model("orders", newOrderSchema);

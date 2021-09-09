@@ -52,6 +52,13 @@ const timeStamp = {
   validate: [timstampValidate, "timestamp must be length 13"],
   default: new Date().valueOf(),
 };
+const responseSchedule = {
+  required: false,
+  type: Number,
+  min: 0000000000000,
+  max: 9999999999999,
+  validate: [timstampValidate, "timestamp must be length 13"],
+}; 
 const upStatesAndCounts = {
    required: false,
    type: Number,
@@ -60,11 +67,9 @@ const upStatesAndCounts = {
 //non required timestamps
 const nonReqTimeStamp = {
   required: false,
-  immutable: true,
   type: Number,
   min: 0000000000000,
   max: 9999999999999,
-  default: new Date().valueOf(),
 };
 
 const altNum = {
@@ -178,5 +183,6 @@ module.exports = {
   nonReqTimeStamp,
   ordIdSch,
   unChangeNum,
-  upStatesAndCounts
+  upStatesAndCounts,
+  responseSchedule,
 };
