@@ -38,6 +38,17 @@ const messaging = {
     immutable: true,
     ref: "users",
   },
+    //below field is used to check whether doc deleted or not
+  isDeletedForUser: {
+    required: false,
+    type: Boolean,
+    default: false,
+  },
+    isDeletedForPartner: {
+    required: false,
+    type: Boolean,
+    default: false,
+  },
 };
 
 module.exports = mongoose.model("messaging", messaging);

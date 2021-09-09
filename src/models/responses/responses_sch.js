@@ -38,6 +38,17 @@ const newReponseSch = {
     ref: "users",
   },
   join: timeStamp,
+      //below field is used to check whether doc deleted or not
+  isDeletedForUser: {
+    required: false,
+    type: Boolean,
+    default: false,
+  },
+    isDeletedForPartner: {
+    required: false,
+    type: Boolean,
+    default: false,
+  },
 
   //add join attribute hehre
 };

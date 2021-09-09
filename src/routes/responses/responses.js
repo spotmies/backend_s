@@ -3,6 +3,7 @@ const router = express.Router();
 const responsesDB = require("../../models/responses/responses_sch");
 const orderDB = require("../../models/orders/create_service_sch");
 const constants = require("../../helpers/constants");
+const { parseParams } = require("../../helpers/query/parse_params");
 
 /* -------------------------------------------------------------------------- */
 /*                          CREATE RESPONSE FOR USER                          */
@@ -115,21 +116,44 @@ router.put(`/${constants.responses}/:ID`, (req, res, next) => {
 /* -------------------------------------------------------------------------- */
 router.delete(`/${constants.responses}/:ID`, (req, res) => {
   const ID = req.params.ID;
+  const params = parseParams(req.originalUrl);
+  var updateField;
+  if(params.userType == constants.user){
+    updateField = "isDeletedForUser"
+  }
+  else{
+    updateField = "isDeletedForPartner"
+  }
   try {
-    responsesDB.findOneAndRemove({ responseId: ID }, (err) => {
+    responsesDB.findOneAndUpdate({responseId: ID},{[updateField] : true},(err,data) => {
       if (err) {
         return res.status(400).send(err.message);
-      } else {
-        responsesDB.findOne({ responseId: ID }, (err, doc) => {
-          if (!doc) {
-            return res.status(204).send();
-          } else return res.status(400).send("not deleted");
-        });
       }
-    });
+      else {
+        return res.status(204).send();
+      }
+    })
   } catch (error) {
-    return res.status(500).send(error.message);
+      return res.status(500).send(error.message);
   }
+
+
+
+  // try {
+  //   responsesDB.findOneAndRemove({ responseId: ID }, (err) => {
+  //     if (err) {
+  //       return res.status(400).send(err.message);
+  //     } else {
+  //       responsesDB.findOne({ responseId: ID }, (err, doc) => {
+  //         if (!doc) {
+  //           return res.status(204).send();
+  //         } else return res.status(400).send("not deleted");
+  //       });
+  //     }
+  //   });
+  // } catch (error) {
+  //   return res.status(500).send(error.message);
+  // }
 });
 
 /* -------------------------------------------------------------------------- */
