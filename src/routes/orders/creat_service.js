@@ -96,10 +96,8 @@ function updateOrder({ id, updateBody, tag = "update", response }) {
           //console.error(err);
           return response.status(400).send(err.message);
         }
-        if (!data) return response.status(501).json(data);
-        return tag == "update"
-          ? response.status(200).json(data)
-          : response.status(204).send("204");
+        if (!data) return response.status(400).json(data);
+        return response.status(200).json(data)
       }
     );
   } catch (error) {
