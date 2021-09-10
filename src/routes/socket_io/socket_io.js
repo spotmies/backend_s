@@ -80,7 +80,7 @@ function changeStrema(io) {
             try {
               orderDB
                 .findById(change.fullDocument._id)
-                .populate("uDetails")
+                .populate("uDetails","name phNum uId userState altNum eMail pic lastLogin")
                 .exec(function (err, orderData) {
                   if (err) {
                     console.error(err);
