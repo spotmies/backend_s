@@ -196,16 +196,12 @@ router.get(`/:userType/:uId`, (req, res) => {
   const uId = req.params.uId;
   let deleteQuery;
   let userType;
-  //  =
-  //   req.params.userType == constants.user
-  //     ? "uId"
-  //     : req.params.userType == constants.partner
-  //     ? "pId"
-  //     : null;
   if (req.params.userType == constants.user) {
     deleteQuery = "isDeletedForUser";
+    userType = "uId"
   } else if (req.params.userType == constants.partner) {
     deleteQuery = "isDeletedForPartner";
+     userType = "pId"
   } else {
     return res.status(400).send("please specify userType");
   }
