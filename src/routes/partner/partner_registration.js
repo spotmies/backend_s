@@ -70,7 +70,10 @@ router.get(`/${constants.getPartner}/:pId`, (req, res) => {
         match: {
           ordState: originalUrl.ordState ?? "req",
         },
-        populate: { path: "uDetails", select:"name" },
+        populate: {
+          path: "uDetails",
+          select: "name phNum uId userState altNum eMail pic lastLogin",
+        },
       })
       .populate({
         path: originalUrl.extractData == "true" ? "orders" : "null",
