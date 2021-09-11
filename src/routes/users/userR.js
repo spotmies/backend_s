@@ -38,7 +38,7 @@ router.get(`/${constants.userDetails}/:id`, (req, res) => {
   try {
     userDb
       .findOne({ uId: uId })
-      .populate("orders")
+      .populate({path:"orders",match:{isDeleted : false}})
       .exec(function (err, data) {
         if (err) {
           console.error(err);
