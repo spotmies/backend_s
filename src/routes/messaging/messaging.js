@@ -120,8 +120,6 @@ router.get(`/:userType/:uId`, (req, res) => {
           console.error(err);
           return res.status(400).send(err.message);
         }
-        if (!data || data == null || data == "")
-          return res.status(501).json(data);
         return res.status(200).json(data);
       });
   } catch (error) {
