@@ -32,7 +32,7 @@ router.post(`/${constants.newResponse}`, (req, res) => {
                 console.log(err.message);
                 return res.status(400).send(err.message);
               }
-              if (!ordData) return res.status(404).json("invalid ordId");
+              if (!ordData) return res.status(400).json("invalid ordId");
               if (
                 data.responseType === "bid" ||
                 data.responseType === "accept"
@@ -67,6 +67,7 @@ router.post(`/${constants.newResponse}`, (req, res) => {
                     }
                     if (!doc) return res.status(404).json(doc);
                     updateBlock.responses.push(doc.id);
+                    updateBlock.acceptResponse = doc.id;
                     try {
                       orderDB.findOneAndUpdate(
                         { ordId: doc.ordId },
