@@ -47,11 +47,10 @@ function changeStrema(io) {
         case "insert":
           console.log("new chat conversion>>>>");
           let object = {
-            type:"insert",
-            doc:change.fullDocument
+            type: "insert",
+            doc: change.fullDocument,
           };
-          io.to(change.fullDocument.pId)            
-            .emit("chatStream", object);
+          io.to(change.fullDocument.pId).emit("chatStream", object);
           break;
         case "delete":
           console.log("chat deleted>>>");
@@ -81,7 +80,10 @@ function changeStrema(io) {
             try {
               orderDB
                 .findById(change.fullDocument._id)
-                .populate("uDetails","name phNum uId userState altNum eMail pic lastLogin")
+                .populate(
+                  "uDetails",
+                  "name phNum uId userState altNum eMail pic lastLogin"
+                )
                 .exec(function (err, orderData) {
                   if (err) {
                     console.error(err);
@@ -198,25 +200,22 @@ function updateMsgStatesAndCountsInDb(data) {
 
 function disableOrDeleteChat(object) {
   let msgId = object.msgId;
-  let updateBlock={};
-   updateBlock.cBuild = 0
-if(object.type == "delete"){
- 
-  if(object.sender == "user")updateBlock.isDeletedForUser = true;
-  else updateBlock.isDeletedForPartner = true;
-updateBlock.lastModified = new Date().valueOf();
-}
-try {
-    chatDB.findOneAndUpdate({msgId:msgId},updateBlock,(err,data) => {
-     if (err) {
-          console.log(err);
-        }
-  })
-} catch (error) {
-  console.log("error at 216",error)
-}
-
-  
+  let updateBlock = {};
+  updateBlock.cBuild = 0;
+  if (object.type == "delete") {
+    if (object.sender == "user") updateBlock.isDeletedForUser = true;
+    else updateBlock.isDeletedForPartner = true;
+    updateBlock.lastModified = new Date().valueOf();
+  }
+  try {
+    chatDB.findOneAndUpdate({ msgId: msgId }, updateBlock, (err, data) => {
+      if (err) {
+        console.log(err);
+      }
+    });
+  } catch (error) {
+    console.log("error at 216", error);
+  }
 }
 module.exports = {
   start: function (io) {
@@ -265,13 +264,20 @@ module.exports = {
         }
         updateMsgStatesAndCountsInDb(data);
       });
-      socket.on("chatStream",function (data,callBack) {
-        console.log("chatstream on sock",data);
-        socket.to(data.pId).emit("chatStream",data);
-        callBack("success");
-        disableOrDeleteChat(data)
-        
-      })
+      socket.on("chatStream", function (data, callBack) {
+        console.log("chatstream on sock", data);
+        switch (data.type) {
+          case "disable":
+          case "delete":
+            socket.to(data.pId).emit("chatStream", data);
+            callBack("success");
+            disableOrDeleteChat(data);
+            break;
+          default:
+            callBack("wentWrong");
+            break;
+        }
+      });
     });
   },
 };
