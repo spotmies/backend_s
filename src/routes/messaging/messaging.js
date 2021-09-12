@@ -18,7 +18,7 @@ router.post(`/${constants.newChat}`, (req, res, next) => {
           return res.status(400).send(err.message);
         }
         if (!doc) return res.status(404).json(doc);
-        return getChatById(res,doc.msgId);
+        return getChatById({res:res,msgId:doc.msgId,cBuild:"cBuild",cBuildValue:"1"});
       })
       .catch((err) => {
         if (err) {
@@ -33,7 +33,7 @@ router.post(`/${constants.newChat}`, (req, res, next) => {
 /* -------------------------------------------------------------------------- */
 /*                             GET CHAT BY CHAT ID                            */
 /* -------------------------------------------------------------------------- */
-function getChatById(res,msgId,{cBuild = "msgId",cBuildValue}){
+function getChatById({res,msgId,cBuild = "msgId",cBuildValue}={}){
   try {
     chatDB
       .findOne({ msgId: msgId,[cBuild]:cBuildValue ?? msgId})     
@@ -69,7 +69,7 @@ router.get(`/${constants.chats}/:ID`, (req, res) => {
     param1 = "msgId";
     cBuild = ID;
   }
-  return getChatById(res,ID,cBuild=param1,cBuildValue=cBuild)
+  return getChatById({res:res,msgId:ID,cBuild:param1,cBuildValue:cBuild})
   // try {
   //   chatDB.findOne({ msgId: ID, [param1]: cBuild }, (err, data) => {
   //     if (err) {
