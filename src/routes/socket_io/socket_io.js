@@ -199,7 +199,7 @@ function updateMsgStatesAndCountsInDb(data) {
 function disableOrDeleteChat(object) {
   let msgId = object.msgId;
   let updateBlock={};
-   updateBlock.cBuild = 1
+   updateBlock.cBuild = 0
 if(object.type == "delete"){
  
   if(object.sender == "user")updateBlock.isDeletedForUser = true;
