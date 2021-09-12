@@ -195,6 +195,29 @@ function updateMsgStatesAndCountsInDb(data) {
     console.log(error);
   }
 }
+
+function disableOrDeleteChat(object) {
+  let msgId = object.msgId;
+  let updateBlock={};
+   updateBlock.cBuild = 1
+if(object.type == "delete"){
+ 
+  if(object.sender == "user")updateBlock.isDeletedForUser = true;
+  else updateBlock.isDeletedForPartner = true;
+updateBlock.lastModified = new Date().valueOf();
+}
+try {
+    chatDB.findOneAndUpdate({msgId:msgId},updateBlock,(err,data) => {
+     if (err) {
+          console.log(err);
+        }
+  })
+} catch (error) {
+  console.log("error at 216",error)
+}
+
+  
+}
 module.exports = {
   start: function (io) {
     changeStrema(io);
@@ -242,6 +265,13 @@ module.exports = {
         }
         updateMsgStatesAndCountsInDb(data);
       });
+      socket.on("chatStream",function (data,callBack) {
+        console.log("chatstream on sock",data);
+        socket.to(data.pId).emit("chatStream",data);
+        callBack("success");
+        disableOrDeleteChat()
+        
+      })
     });
   },
 };
