@@ -269,7 +269,7 @@ module.exports = {
         console.log("chatstream on sock",data);
         socket.to(data.pId).emit("chatStream",data);
         callBack("success");
-        disableOrDeleteChat()
+        disableOrDeleteChat(data)
         
       })
     });
