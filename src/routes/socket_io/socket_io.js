@@ -134,7 +134,9 @@ function changeStrema(io) {
 }
 
 function updateMsgsInDb(data, sender) {
-  let msgId = data.target.msgId;
+  let msgId = data?.target?.msgId;
+  console.log("msg id ", msgId);
+  if (msgId === null || msgId === undefined || msgId === "") return;
   let newMessage = data.object;
   let updateBlock = {};
   let updateBlock2 = {};
