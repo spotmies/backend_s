@@ -163,6 +163,32 @@ router.get(`/user/:uId`, (req, res) => {
   }
 });
 
+
+
+/* -------------------------------------------------------------------------- */
+/*                         GET ALL PARTNER ORDERS HERE                        */
+/* -------------------------------------------------------------------------- */
+
+router.get(`/partner/:pId`, (req, res) => {
+  const pId = req.params.pId;
+  let originalUrl = parseParams(req.originalUrl);
+  try {
+    orderDB.find(
+      { pId: pId},
+      (err, data) => {
+        if (err) {
+          //console.error(err);
+          return res.status(400).send(err.message);
+        }
+        return res.status(200).json(data);
+      }
+    );
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+});
+
+
 /* -------------------------------------------------------------------------- */
 /*                 ORDER CONFIRM OR CANCEL BY USER OR PARTNER                 */
 /* -------------------------------------------------------------------------- */
