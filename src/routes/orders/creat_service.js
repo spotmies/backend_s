@@ -57,7 +57,7 @@ router.get(`/orders/:ordId`, (req, res) => {
   let originalUrl = parseParams(req.originalUrl);
   try {
     orderDB.findOne(
-      { ordId: ordId, isDeleted: originalUrl.isDeleted ?? false },
+      { ordId: ordId, isDeletedForUser: originalUrl.isDeletedForUser ?? false },
       (err, data) => {
         if (err) {
           //console.error(err);
@@ -128,7 +128,7 @@ router.delete(`/${constants.orders}/:ordId`, (req, res) => {
 router.get(`/${constants.orders}`, (req, res) => {
   let originalUrl = parseParams(req.originalUrl);
   try {
-    orderDB.find({ isDeleted: originalUrl.isDeleted ?? false }, (err, data) => {
+    orderDB.find({ isDeletedForUser: originalUrl.isDeletedForUser ?? false }, (err, data) => {
       if (err) {
         console.error(err);
         return res.status(400).send(err.message);
@@ -151,7 +151,7 @@ router.get(`/user/:uId`, (req, res) => {
   let originalUrl = parseParams(req.originalUrl);
   try {
     orderDB.find(
-      { uId: uId, isDeleted: originalUrl.isDeleted ?? false },
+      { uId: uId, isDeletedForUser: originalUrl.isDeletedForUser ?? false },
       (err, data) => {
         if (err) {
           //console.error(err);
@@ -176,7 +176,7 @@ router.get(`/partner/:pId`, (req, res) => {
   let originalUrl = parseParams(req.originalUrl);
   try {
     orderDB.find(
-      { pId: pId},
+      { pId: pId,isDeletedForPartner:originalUrl.isDeletedForPartner ?? false},
       (err, data) => {
         if (err) {
           //console.error(err);
@@ -200,7 +200,7 @@ router.post("/stateChange", function (req, res) {
   if (body.responseType === "accept") {
     try {
       orderDB.findOne(
-        { ordId: body.ordId, isDeleted: false },
+        { ordId: body.ordId, isDeletedForUser: false },
         (err, ordData) => {
           if (err) {
             //console.error(err);
@@ -218,7 +218,7 @@ router.post("/stateChange", function (req, res) {
               .send(`this order in status of ${ordData.ordState}`);
           }
           orderDB.findOneAndUpdate(
-            { ordId: body.ordId, isDeleted: false },
+            { ordId: body.ordId, isDeletedForUser: false },
             { $set: req.body },
             { new: true },
             (err, data) => {
