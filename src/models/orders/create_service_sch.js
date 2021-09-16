@@ -50,7 +50,12 @@ const newOrderSchema = {
     ref: "partners",
   },
   //below field is used to check whether doc deleted or not
-  isDeleted: {
+  isDeletedForUser: {
+    required: false,
+    type: Boolean,
+    default: false,
+  },
+    isDeletedForPartner: {
     required: false,
     type: Boolean,
     default: false,

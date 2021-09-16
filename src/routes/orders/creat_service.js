@@ -12,7 +12,8 @@ const { parseParams } = require("../../helpers/query/parse_params");
 /* -------------------------------------------------------------------------- */
 router.post(`/${constants.createOrder}/:uId`, (req, res, next) => {
   const uId = req.params.uId;
-  const data = req.body;
+  var data = req.body;
+    console.log("post data",data);
   try {
     orderDB
       .create(data)
@@ -112,9 +113,10 @@ function updateOrder({ id, updateBody, tag = "update", response }) {
 router.delete(`/${constants.orders}/:ordId`, (req, res) => {
   //console.log("deleting");
   const ordId = req.params.ordId;
+  const originalUrl =  parseParams(req.originalUrl);
   return updateOrder({
     id: ordId,
-    updateBody: { isDeleted: true },
+    updateBody: { [originalUrl.userType == "partner" ? "isDeletedForPartner" : "isDeletedForUser"]: true },
     response: res,
     tag: "delete",
   });
