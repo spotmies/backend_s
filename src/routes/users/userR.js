@@ -60,7 +60,7 @@ router.put("/users/:id", (req, res) => {
   const body = req.body;
 
   try {
-    userDb.findOneAndUpdate({ uId: uId }, body, { new: true }, (err, data) => {
+    userDb.findOneAndUpdate({ uId: uId }, { $set: body }, { new: true }, (err, data) => {
       if (err) {
         //console.error(err);
         return res.status(400).send(err.message);
