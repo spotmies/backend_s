@@ -121,8 +121,7 @@ router.put(`/${constants.getPartner}/:pId`, (req, res) => {
   try {
     partnerDB.findOneAndUpdate(
       { pId: pId },
-      body,
-      { new: true },
+      { $set: body }, { new: true },
       (err, data) => {
         if (err) {
           //console.error(err);
