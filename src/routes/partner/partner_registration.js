@@ -116,8 +116,17 @@ router.get(`/${constants.getPartner}/:pId`, (req, res) => {
 
 router.put(`/${constants.getPartner}/:pId`, (req, res) => {
   const pId = req.params.pId;
-  const body = req.body;
-
+  var body = req.body;
+    if (
+    req.body.docs != null ||
+    req.body.docs != "" ||
+    req.body.docs != undefined
+  ) {
+    if (typeof req.body.docs == "string") {
+      let newDoc = JSON.parse(req.body.docs);
+      body["docs"] = newDoc;
+    } else console.log("doc not a string");
+  }
   try {
     partnerDB.findOneAndUpdate(
       { pId: pId },
