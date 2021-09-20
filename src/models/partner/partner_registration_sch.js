@@ -20,7 +20,7 @@ const partnerRegistration = {
   tempAdd: nonReqStr,
   eMail: nonReqUniqueStr,
   phNum: uniqueNum,
-  atlNum: nonReqNum,
+  altNum: nonReqNum,
   job: reqNum,
   pId: uIdSch,
   join: timeStamp,
