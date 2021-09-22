@@ -326,7 +326,6 @@ router.post("/revealProfile", (req, res) => {
   const body = req.body;
   var updateBlock = "$push";
   if (body.revealProfile == "false" || !body.revealProfile) {
-    console.log("removing profile");
     updateBlock = "$pull";
   }
   try {
