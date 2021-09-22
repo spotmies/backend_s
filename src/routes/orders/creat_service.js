@@ -177,7 +177,10 @@ router.get(`/:userType/:uId`, (req, res) => {
     orderDB
       .find({ [userType]: uOrPId, [deleteQuery]: deleteField })
       .sort({ join: -1 })
-      .populate("uDetails")
+      .populate(
+        "uDetails",
+        "name phNum join pic eMail altNum uId userState lastLogin"
+      )
       .populate(
         "pDetails",
         "name eMail phNum partnerPic rate lang experience job loc businessName accountType availability"

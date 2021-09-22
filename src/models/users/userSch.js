@@ -1,18 +1,14 @@
 const mongoose = require("mongoose");
 const {
-  reqNum,
   reqStr,
   nonReqStr,
   nonReqNum,
-  uniqueNum,
-  reqUniqueStr,
+
   uIdSch,
   phoneNum,
   altNum,
-  nonReqEmail,
-  nonReqUniqueStr,
+
   timeStamp,
-  nonReqTimeStamp,
 } = require("../../helpers/schema/schemaHelp");
 
 const userSchema = {
