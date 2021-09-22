@@ -13,7 +13,7 @@ const { parseParams } = require("../../helpers/query/parse_params");
 router.post(`/${constants.createOrder}/:uId`, (req, res, next) => {
   const uId = req.params.uId;
   var data = req.body;
-    console.log("post data",data);
+  console.log("post data", data);
   try {
     orderDB
       .create(data)
@@ -98,7 +98,7 @@ function updateOrder({ id, updateBody, tag = "update", response }) {
           return response.status(400).send(err.message);
         }
         if (!data) return response.status(400).json(data);
-        return response.status(200).json(data)
+        return response.status(200).json(data);
       }
     );
   } catch (error) {
@@ -113,10 +113,14 @@ function updateOrder({ id, updateBody, tag = "update", response }) {
 router.delete(`/${constants.orders}/:ordId`, (req, res) => {
   //console.log("deleting");
   const ordId = req.params.ordId;
-  const originalUrl =  parseParams(req.originalUrl);
+  const originalUrl = parseParams(req.originalUrl);
   return updateOrder({
     id: ordId,
-    updateBody: { [originalUrl.userType == "partner" ? "isDeletedForPartner" : "isDeletedForUser"]: true },
+    updateBody: {
+      [originalUrl.userType == "partner"
+        ? "isDeletedForPartner"
+        : "isDeletedForUser"]: true,
+    },
     response: res,
     tag: "delete",
   });
@@ -128,16 +132,63 @@ router.delete(`/${constants.orders}/:ordId`, (req, res) => {
 router.get(`/${constants.orders}`, (req, res) => {
   let originalUrl = parseParams(req.originalUrl);
   try {
-    orderDB.find({ isDeletedForUser: originalUrl.isDeletedForUser ?? false }, (err, data) => {
-      if (err) {
-        console.error(err);
-        return res.status(400).send(err.message);
-      }
-      if (!data || data == null || data == "")
-        return res.status(501).json(data);
+    orderDB.find(
+      { isDeletedForUser: originalUrl.isDeletedForUser ?? false },
+      (err, data) => {
+        if (err) {
+          console.error(err);
+          return res.status(400).send(err.message);
+        }
+        if (!data || data == null || data == "")
+          return res.status(501).json(data);
 
-      res.status(200).json(data);
-    });
+        res.status(200).json(data);
+      }
+    );
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+});
+
+/* -------------------------------------------------------------------------- */
+/*                       GET ALL ORDERS BY USER/PARTNER                       */
+/* -------------------------------------------------------------------------- */
+router.get(`/:userType/:uId`, (req, res) => {
+  let originalUrl = parseParams(req.originalUrl);
+  const uOrPId = req.params.uId;
+  let deleteQuery;
+  let deleteField = false;
+  let userType;
+  if (req.params.userType == constants.user) {
+    userType = "uId";
+    deleteQuery = "isDeletedForUser";
+    deleteField = originalUrl.isDeletedForUser ?? false;
+  } else if (req.params.userType == constants.partner) {
+    userType = "pId";
+    deleteQuery = "isDeletedForPartner";
+    deleteField = originalUrl.isDeletedForPartner ?? false;
+  } else {
+    userType = "unknown";
+    deleteQuery = "unknown";
+    deleteField = true;
+  }
+
+  try {
+    orderDB
+      .find({ [userType]: uOrPId, [deleteQuery]: deleteField })
+      .sort({ join: -1 })
+      .populate("uDetails")
+      .populate(
+        "pDetails",
+        "name eMail phNum partnerPic rate lang experience job loc businessName accountType availability"
+      )
+      .exec(function (err, data) {
+        if (err) {
+          console.error(err);
+          return res.status(400).send(err.message);
+        }
+        return res.status(200).json(data);
+      });
   } catch (error) {
     return res.status(500).send(error.message);
   }
@@ -146,50 +197,47 @@ router.get(`/${constants.orders}`, (req, res) => {
 /* -------------------------------------------------------------------------- */
 /*                             GET ALL USER ORDERS                            */
 /* -------------------------------------------------------------------------- */
-router.get(`/user/:uId`, (req, res) => {
-  const uId = req.params.uId;
-  let originalUrl = parseParams(req.originalUrl);
-  try {
-    orderDB.find(
-      { uId: uId, isDeletedForUser: originalUrl.isDeletedForUser ?? false },
-      (err, data) => {
-        if (err) {
-          //console.error(err);
-          return res.status(400).send(err.message);
-        }
-        return res.status(200).json(data);
-      }
-    );
-  } catch (error) {
-    return res.status(500).send(error.message);
-  }
-});
-
-
+// router.get(`/user/:uId`, (req, res) => {
+//   const uId = req.params.uId;
+//   let originalUrl = parseParams(req.originalUrl);
+//   try {
+//     orderDB.find(
+//       { uId: uId, isDeletedForUser: originalUrl.isDeletedForUser ?? false },
+//       (err, data) => {
+//         if (err) {
+//           //console.error(err);
+//           return res.status(400).send(err.message);
+//         }
+//         return res.status(200).json(data);
+//       }
+//     );
+//   } catch (error) {
+//     return res.status(500).send(error.message);
+//   }
+// });
 
 /* -------------------------------------------------------------------------- */
 /*                         GET ALL PARTNER ORDERS HERE                        */
 /* -------------------------------------------------------------------------- */
 
-router.get(`/partner/:pId`, (req, res) => {
-  const pId = req.params.pId;
-  let originalUrl = parseParams(req.originalUrl);
-  try {
-    orderDB.find(
-      { pId: pId,isDeletedForPartner:originalUrl.isDeletedForPartner ?? false},
-      (err, data) => {
-        if (err) {
-          //console.error(err);
-          return res.status(400).send(err.message);
-        }
-        return res.status(200).json(data);
-      }
-    );
-  } catch (error) {
-    return res.status(500).send(error.message);
-  }
-});
-
+// router.get(`/partner/:pId`, (req, res) => {
+//   const pId = req.params.pId;
+//   let originalUrl = parseParams(req.originalUrl);
+//   try {
+//     orderDB.find(
+//       { pId: pId,isDeletedForPartner:originalUrl.isDeletedForPartner ?? false},
+//       (err, data) => {
+//         if (err) {
+//           //console.error(err);
+//           return res.status(400).send(err.message);
+//         }
+//         return res.status(200).json(data);
+//       }
+//     );
+//   } catch (error) {
+//     return res.status(500).send(error.message);
+//   }
+// });
 
 /* -------------------------------------------------------------------------- */
 /*                 ORDER CONFIRM OR CANCEL BY USER OR PARTNER                 */
