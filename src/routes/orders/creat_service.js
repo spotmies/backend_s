@@ -338,6 +338,8 @@ router.post("/revealProfile", (req, res) => {
           //console.error(err);
           return res.status(400).send(err.message);
         }
+        if (data == null || !data || data == undefined)
+          return res.status(400).send("check ordId");
         return res.status(200).send(data);
       }
     );
