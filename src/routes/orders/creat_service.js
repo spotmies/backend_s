@@ -322,6 +322,35 @@ router.post("/stateChange", function (req, res) {
   } else return res.status(400).send("please check responseType");
 });
 
+router.post("/revealProfile",(req,res) => {
+  const body = req.body;
+  var updateBlock ="$push";
+       if (body.revealProfile == false) {
+         log("removing profile");
+         updateBlock = "$pull";
+       }
+   try {
+
+     orderDB.findOneAndUpdate(
+       { ordId: body.ordId },
+       { [updateBlock]: { revealProfileTo: body.pId } },
+       (err, data) => {
+         if (err) {
+           //console.error(err);
+           return res.status(400).send(err.message);
+         }
+         return res.status(200).send(data);
+       }
+     );
+   } catch (error) {
+     return res.status(500).send(error.message);
+   }
+})
+
+
+
+
+
 // router.post("/stateChange", (req, res) => {
 //   console.log("stateChange");
 //   const body = req.body;

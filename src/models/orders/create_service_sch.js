@@ -71,6 +71,7 @@ const newOrderSchema = {
     required: false,
     ref: "responses",
   },
+  revealProfileTo : [String]
 };
 
 module.exports = mongoose.model("orders", newOrderSchema);
