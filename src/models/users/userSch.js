@@ -27,6 +27,15 @@ const userSchema = {
   orders: [{ type: mongoose.Schema.Types.ObjectId, ref: "orders" }],
   lastLogin: nonReqNum,
   logs: [String],
+  referalCode:{
+    type:String,
+    unique:true,
+  },
+    location: {
+    type: [Number],
+  },
+  address: nonReqStr,
+
 };
 
 module.exports = mongoose.model("users", userSchema);
