@@ -87,28 +87,28 @@ router.get(`/${constants.chats}/:ID`, (req, res) => {
 /*                           GET ALL CHATLIST BY UID & PID                    */
 /* -------------------------------------------------------------------------- */
 router.get(`/:userType/:uId`, (req, res) => {
-  const uId = req.params.uId;
-  const userType =
-    req.params.userType == constants.user
-      ? "uId"
-      : req.params.userType == constants.partner
-      ? "pId"
-      : null;
-  console.log(userType, uId);
-  let sekhar = parseParams(req.originalUrl);
-  let param1;
-  let cBuild;
-  if (sekhar.cBuild != null) {
-    cBuild = sekhar.cBuild;
-    param1 = "cBuild";
+  let originalUrl = parseParams(req.originalUrl);
+  const uOrPId = req.params.uId;
+  let deleteQuery;
+  let deleteField = false;
+  let userType;
+  if (req.params.userType == constants.user) {
+    userType = "uId";
+    deleteQuery = "isDeletedForUser";
+    deleteField = originalUrl.isDeletedForUser ?? false;
+  } else if (req.params.userType == constants.partner) {
+    userType = "pId";
+    deleteQuery = "isDeletedForPartner";
+    deleteField = originalUrl.isDeletedForPartner ?? false;
   } else {
-    param1 = userType;
-    cBuild = uId;
+    userType = "unknown";
+    deleteQuery = "unknown";
+    deleteField = true;
   }
 
   try {
     chatDB
-      .find({ [userType]: uId, [param1]: cBuild })
+      .find({ [userType]: uOrPId, [deleteQuery]: deleteField })
       .sort({ lastModified: -1 })
       .populate("orderDetails")
       .populate("uDetails")
