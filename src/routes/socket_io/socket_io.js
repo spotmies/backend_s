@@ -275,6 +275,9 @@ module.exports = {
             callBack("success");
             disableOrDeleteChat(data);
             break;
+          case "revealProfile":
+            callBack("success");
+            socket.to(data.pId).emit("chatStream", data);
           default:
             callBack("wentWrong");
             break;
