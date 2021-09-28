@@ -7,7 +7,7 @@ const connectdb = async () => {
     .connect(dburi, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      useFindAndModify: false,
+      // useFindAndModify: false,
     })
     .then((result) => console.log("mongodb connected"))
     .catch((err) => console.log(err));
