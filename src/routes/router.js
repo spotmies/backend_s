@@ -9,6 +9,7 @@ const partnerR = require("./partner/partner_registration");
 const chatR = require("./messaging/messaging");
 const responsesR = require("./responses/responses");
 const geocodeLocator = require("./geocode/geocode");
+const notificationR = require("./notifications/notifications");
 // const loggerR = require("./loggers/loggers");
 // const postR = require("./posts/post");
 
@@ -22,6 +23,7 @@ router.use("/order", orderR);
 router.use("/partner", partnerR);
 router.use(`/${constants.mainChatRoute}`, chatR);
 router.use(`/${constants.mainRouteResponse}`, responsesR);
+router.use("/notification", notificationR);
 router.get("/stamp", (req, res) => {
   let stamp = new Date().valueOf();
   res.send(stamp.toString());

@@ -14,6 +14,7 @@ const app = express();
 const server = require("http").createServer(app);
 var io = require("socket.io")(server);
 var webSocket = require("./src/routes/socket_io/socket_io");
+var firebaseFcm = require('./src/routes/firebase_admin/firebase_admin');
 const { parseParams } = require("./src/helpers/query/parse_params");
 
 app.use(cors());
@@ -25,6 +26,7 @@ app.use(function (req, res, next) {
   next();
 });
 webSocket.start(io);
+firebaseFcm.start();
 
 // app.use(bodyParser.urlencoded({ extended: true }));
 
