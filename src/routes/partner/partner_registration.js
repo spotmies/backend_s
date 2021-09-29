@@ -72,7 +72,7 @@ router.get(`/${constants.getPartner}/:pId`, (req, res) => {
         },
         populate: {
           path: "uDetails",
-          select: "name phNum uId userState altNum eMail pic lastLogin",
+          select: "name phNum uId userState altNum eMail pic lastLogin userDeviceToken",
         },
       })
       .populate({

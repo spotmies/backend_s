@@ -179,11 +179,11 @@ router.get(`/:userType/:uId`, (req, res) => {
       .sort({ join: -1 })
       .populate(
         "uDetails",
-        "name phNum join pic eMail altNum uId userState lastLogin"
+        "name phNum join pic eMail altNum uId userState lastLogin userDeviceToken"
       )
       .populate(
         "pDetails",
-        "name eMail phNum partnerPic rate lang experience job loc businessName accountType availability pId"
+        "name eMail phNum partnerPic rate lang experience job loc businessName accountType availability pId partnerDeviceToken"
       )
       .exec(function (err, data) {
         if (err) {

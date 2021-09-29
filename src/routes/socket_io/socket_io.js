@@ -21,7 +21,7 @@ function changeStrema(io) {
               .populate("orderDetails")
               .populate(
                 "pDetails",
-                "name eMail phNum partnerPic rate lang experience job loc businessName accountType availability"
+                "name eMail phNum partnerPic rate lang experience job loc businessName accountType availability partnerDeviceToken"
               )
               .exec(function (err, data) {
                 if (err) {
@@ -82,7 +82,7 @@ function changeStrema(io) {
                 .findById(change.fullDocument._id)
                 .populate(
                   "uDetails",
-                  "name phNum uId userState altNum eMail pic lastLogin"
+                  "name phNum uId userState altNum eMail pic lastLogin userDeviceToken"
                 )
                 .exec(function (err, orderData) {
                   if (err) {
