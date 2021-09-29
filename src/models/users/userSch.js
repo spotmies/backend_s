@@ -27,10 +27,7 @@ const userSchema = {
   orders: [{ type: mongoose.Schema.Types.ObjectId, ref: "orders" }],
   lastLogin: nonReqNum,
   logs: [String],
-  referalCode:{
-    type:String,
-    unique:true,
-  },
+  referalCode:{ type: String, trim: true, index: true, unique: true, sparse: true },
     location: {
     type: [Number],
   },
