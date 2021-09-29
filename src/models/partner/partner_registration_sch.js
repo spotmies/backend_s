@@ -61,5 +61,6 @@ const partnerRegistration = {
     { type: mongoose.Schema.Types.ObjectId, ref: "partnerComplaints" },
   ],
   isTermsAccepted: { type: Boolean, required: true },
+  partnerDeviceToken:nonReqStr
 };
 module.exports = mongoose.model("partners", partnerRegistration);

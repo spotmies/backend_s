@@ -35,6 +35,7 @@ const userSchema = {
     type: [Number],
   },
   address: nonReqStr,
+  userDeviceToken:nonReqStr
 
 };
 
