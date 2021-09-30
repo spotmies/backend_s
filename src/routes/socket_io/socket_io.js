@@ -250,6 +250,9 @@ module.exports = {
       socket.on("sendNewMessageCallback", function (data, callBack) {
         console.log("ack", data);
         let object = JSON.parse(data.object);
+        let notificationData = data.target;
+        delete notificationData.deviceToken;
+        console.log("not data", notificationData);
         if (object.sender === "user") {
           socket.to(data.target.pId).emit("recieveNewMessage", data);
         } else {
