@@ -6,6 +6,7 @@ const partnerDB = require("../../models/partner/partner_registration_sch");
 const responsesDB = require("../../models/responses/responses_sch");
 const constants = require("../../helpers/constants");
 const { parseParams } = require("../../helpers/query/parse_params");
+const { notificationByToken } = require("../firebase_admin/firebase_admin");
 
 /* -------------------------------------------------------------------------- */
 /*                              create new order                              */
@@ -247,7 +248,9 @@ router.get(`/:userType/:uId`, (req, res) => {
 /* -------------------------------------------------------------------------- */
 
 router.post("/stateChange", function (req, res) {
-  const body = req.body;
+  let body = req.body;
+  let deviceToken = body?.deviceToken;
+  delete body.deviceToken;
   if (body.responseType === "accept") {
     try {
       orderDB.findOne(
@@ -298,6 +301,14 @@ router.post("/stateChange", function (req, res) {
           );
         }
       );
+      deviceToken?.forEach((element) => {
+        notificationByToken({
+          token: element,
+          title: `${body.userName ?? ""} accepted your request `,
+          body: "Order accepted click here for more infomation",
+          data: body,
+        });
+      });
     } catch (error) {
       return res.status(500).send(error.message);
     }
