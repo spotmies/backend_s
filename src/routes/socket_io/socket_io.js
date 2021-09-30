@@ -252,7 +252,7 @@ module.exports = {
         let object = JSON.parse(data.object);
         let notificationData = data.target;
         delete notificationData.deviceToken;
-        console.log("not data", notificationData);
+        console.log("not data", notificationData,data);
         if (object.sender === "user") {
           socket.to(data.target.pId).emit("recieveNewMessage", data);
         } else {
@@ -260,6 +260,7 @@ module.exports = {
         }
         callBack("success");
         updateMsgsInDb(data, object.sender);
+        console.log("token loop", data.target.deviceToken);
         data.target.deviceToken.forEach((element, key) => {
           notificationByToken({
             title: data.target.name,
