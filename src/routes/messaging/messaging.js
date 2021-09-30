@@ -41,7 +41,7 @@ function getChatById({res,msgId,cBuild = "msgId",cBuildValue}={}){
       .populate("uDetails")
       .populate(
         "pDetails",
-        "name eMail phNum partnerPic rate lang experience job loc businessName accountType availability"
+        "name eMail phNum partnerPic rate lang experience job loc businessName accountType availability partnerDeviceToken"
       )
       .exec(function (err, data) {
         if (err) {
@@ -114,7 +114,7 @@ router.get(`/:userType/:uId`, (req, res) => {
       .populate("uDetails")
       .populate(
         "pDetails",
-        "name eMail phNum partnerPic rate lang experience job loc businessName accountType availability"
+        "name eMail phNum partnerPic rate lang experience job loc businessName accountType availability partnerDeviceToken"
       )
       .exec(function (err, data) {
         if (err) {
