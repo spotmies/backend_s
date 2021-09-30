@@ -220,6 +220,25 @@ function disableOrDeleteChat(object) {
     console.log("error at 216", error);
   }
 }
+function notificationBodyType({msg,type} = {}) {
+  switch (type) {
+    case "text":
+    case "message":
+      return msg;
+    case "call":
+      return "Incoming Call"
+    case "file":
+      return "send a file"
+    case "image":
+      return "send a image"
+    case "video":
+      return "send a video"
+  
+    default:
+      return msg
+  }
+  
+}
 module.exports = {
   start: function (io) {
     changeStrema(io);
@@ -270,8 +289,9 @@ module.exports = {
           )
             return;
           notificationByToken({
-            title: data?.target?.name,
-            body: object?.msg,
+            title: data?.target?.incomingName,
+            // body: object?.msg,
+            body: notificationBodyType({ msg: object?.msg, type: object.type }),
             data: data?.target,
             token: singleToken,
           });
