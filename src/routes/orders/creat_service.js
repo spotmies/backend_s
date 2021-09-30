@@ -248,9 +248,7 @@ router.get(`/:userType/:uId`, (req, res) => {
 /* -------------------------------------------------------------------------- */
 
 router.post("/stateChange", function (req, res) {
-  let body = req.body;
-  let deviceToken = body?.deviceToken;
-  delete body.deviceToken;
+  const body = req.body;
   if (body.responseType === "accept") {
     try {
       orderDB.findOne(
@@ -301,13 +299,12 @@ router.post("/stateChange", function (req, res) {
           );
         }
       );
-      deviceToken?.forEach((element) => {
-        notificationByToken({
-          token: element,
-          title: `${body.userName ?? ""} accepted your request `,
-          body: "Order accepted click here for more infomation",
-          data: body,
-        });
+
+      notificationByToken({
+        token: body.deviceToken,
+        title: `${body.userName ?? ""} accepted your request `,
+        body: "Order accepted click here for more infomation",
+        data: body,
       });
     } catch (error) {
       return res.status(500).send(error.message);
