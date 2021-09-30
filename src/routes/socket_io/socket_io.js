@@ -263,6 +263,12 @@ module.exports = {
         updateMsgsInDb(data, object?.sender);
 
         deviceTokens?.forEach((singleToken) => {
+          if (
+            singleToken == null ||
+            singleToken == undefined ||
+            singleToken == ""
+          )
+            return;
           notificationByToken({
             title: data?.target?.name,
             body: object?.msg,
