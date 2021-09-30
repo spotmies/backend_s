@@ -84,23 +84,25 @@ module.exports = {
     };
     sendPayload(payload);
   },
-  notificationByToken: function ({ token, title, body } = {}) {
+  notificationByToken: function ({ token, title, body,data } = {}) {
     let payload = {
       notification: {
         title: title,
         body: body,
       },
+      data:data ?? {},
       android: androidOptions,
       token: token,
     };
     sendPayload(payload);
   },
-  notificationByTopic: function ({ topic, title, body } = {}) {
+  notificationByTopic: function ({ topic, title, body,data } = {}) {
     let payload = {
       notification: {
         title: title,
         body: body,
       },
+      data:data ?? {},
       android: androidOptions,
       topic: topic,
     };

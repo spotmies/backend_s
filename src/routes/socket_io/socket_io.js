@@ -3,6 +3,7 @@ const partnerDB = require("../../models/partner/partner_registration_sch");
 const responsesDB = require("../../models/responses/responses_sch");
 const chatDB = require("../../models/messaging/messaging_sch");
 const orderDB = require("../../models/orders/create_service_sch");
+const { notificationByToken } = require("../firebase_admin/firebase_admin");
 const connection = mongoose.connection;
 function changeStrema(io) {
   connection.once("open", () => {
@@ -256,6 +257,14 @@ module.exports = {
         }
         callBack("success");
         updateMsgsInDb(data, object.sender);
+        data.target.deviceToken.forEach((element, key) => {
+          notificationByToken({
+            title: data.target.name,
+            body: object.msg,
+            data: data.target,
+            token: element[key],
+          });
+        });
       });
       socket.on("sendReadReciept", function (data) {
         console.log("got read reciept", data);
