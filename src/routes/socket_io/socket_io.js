@@ -251,21 +251,22 @@ module.exports = {
         console.log("ack", data);
         let object = JSON.parse(data.object);
         let notificationData = data.target;
+        let deviceTokens = data.target.deviceToken;
         delete notificationData.deviceToken;
-        console.log("not data", notificationData,data);
+        console.log("not data", notificationData, data);
         if (object.sender === "user") {
           socket.to(data.target.pId).emit("recieveNewMessage", data);
         } else {
           socket.to(data.target.uId).emit("recieveNewMessage", data);
         }
         callBack("success");
-        updateMsgsInDb(data, object.sender);
-        console.log("token loop", data.target.deviceToken);
-        data.target.deviceToken.forEach((element, key) => {
+        updateMsgsInDb(data, object?.sender);
+        console.log("token loop", deviceTokens);
+        deviceTokens?.forEach((element, key) => {
           notificationByToken({
-            title: data.target.name,
-            body: object.msg,
-            data: data.target,
+            title: data?.target?.name,
+            body: object?.msg,
+            data: data?.target,
             token: element[key],
           });
         });
