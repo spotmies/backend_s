@@ -63,6 +63,9 @@ function changeStrema(io) {
     orderChangeStream.on("change", (change) => {
       switch (change.operationType) {
         case "insert":
+          let docForNotification = change.fullDocument;
+          delete docForNotification.loc;
+          docForNotification.media = docForNotification.media[0] ?? "";
           console.log("new order came...", change.fullDocument);
           try {
             partnerDB.updateMany(
@@ -108,6 +111,12 @@ function changeStrema(io) {
                               "inComingOrders",
                               orderData
                             );
+                            notificationByToken({
+                              token: element.partnerDeviceToken,
+                              title: "New order For you",
+                              body: docForNotification.problem,
+                              data: docForNotification,
+                            });
                           });
                           console.log("socket off for in orders >>>");
                         }
@@ -220,24 +229,23 @@ function disableOrDeleteChat(object) {
     console.log("error at 216", error);
   }
 }
-function notificationBodyType({msg,type} = {}) {
+function notificationBodyType({ msg, type } = {}) {
   switch (type) {
     case "text":
     case "message":
       return msg;
     case "call":
-      return "Incoming Call"
+      return "Incoming Call";
     case "file":
-      return "send a file"
+      return "send a file";
     case "image":
-      return "send a image"
+      return "send a image";
     case "video":
-      return "send a video"
-  
+      return "send a video";
+
     default:
-      return msg
+      return msg;
   }
-  
 }
 module.exports = {
   start: function (io) {
