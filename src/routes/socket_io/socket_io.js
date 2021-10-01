@@ -113,11 +113,15 @@ function changeStrema(io) {
                               title: "New order For you",
                               body: change.fullDocument.problem,
                               data: {
-                                problem: "change.fullDocument.problem",
-                                money: "change.fullDocument.money",
-                                ordId: "change.fullDocument.ordId",
-                                media: "change.fullDocument.media[0]",
-                                schedule: "change.fullDocument.schedule",
+                                problem: `${change.fullDocument.problem}`,
+                                money: change.fullDocument.money
+                                  ? `${change.fullDocument.money}`
+                                  : "",
+                                ordId: `${change.fullDocument.ordId}`,
+                                media: change.fullDocument.media[0]
+                                  ? `${change.fullDocument.media[0]}`
+                                  : "",
+                                schedule: `${change.fullDocument.schedule}`,
                               },
                             });
                           });
