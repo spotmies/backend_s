@@ -5,12 +5,15 @@ const orderDB = require("../../models/orders/create_service_sch");
 const partnerDB = require("../../models/partner/partner_registration_sch");
 const constants = require("../../helpers/constants");
 const { parseParams } = require("../../helpers/query/parse_params");
+const { notificationByToken } = require("../firebase_admin/firebase_admin");
 
 /* -------------------------------------------------------------------------- */
 /*                          CREATE RESPONSE FOR USER                          */
 /* -------------------------------------------------------------------------- */
 router.post(`/${constants.newResponse}`, (req, res) => {
   let data = req.body;
+  let deviceTokens = data.deviceToken;
+  delete data.deviceToken;
   let updateBlock = {};
   console.log("post resp", data);
 
@@ -97,6 +100,14 @@ router.post(`/${constants.newResponse}`, (req, res) => {
               } else {
                 return res.status(400).send("check responseType");
               }
+            });
+            deviceTokens.forEach((singleToken) => {
+              notificationByToken({
+                token: singleToken,
+                title: "New response",
+                body: "Got recieved a new response",
+                data: data,
+              });
             });
           } catch (error) {
             return res.status(500).send(error.message);
@@ -199,10 +210,10 @@ router.get(`/:userType/:uId`, (req, res) => {
   let userType;
   if (req.params.userType == constants.user) {
     deleteQuery = "isDeletedForUser";
-    userType = "uId"
+    userType = "uId";
   } else if (req.params.userType == constants.partner) {
     deleteQuery = "isDeletedForPartner";
-     userType = "pId"
+    userType = "pId";
   } else {
     return res.status(400).send("please specify userType");
   }

@@ -84,25 +84,26 @@ module.exports = {
     };
     sendPayload(payload);
   },
-  notificationByToken: function ({ token, title, body,data } = {}) {
+  notificationByToken: function ({ token, title, body, data } = {}) {
+    if (token == null || token == undefined || token == "") return;
     let payload = {
       notification: {
         title: title,
         body: body,
       },
-      data:data ?? {},
+      data: data ?? {},
       android: androidOptions,
       token: token,
     };
     sendPayload(payload);
   },
-  notificationByTopic: function ({ topic, title, body,data } = {}) {
+  notificationByTopic: function ({ topic, title, body, data } = {}) {
     let payload = {
       notification: {
         title: title,
         body: body,
       },
-      data:data ?? {},
+      data: data ?? {},
       android: androidOptions,
       topic: topic,
     };
