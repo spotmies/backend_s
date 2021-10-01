@@ -12,8 +12,6 @@ const { notificationByToken } = require("../firebase_admin/firebase_admin");
 /* -------------------------------------------------------------------------- */
 router.post(`/${constants.newResponse}`, (req, res) => {
   let data = req.body;
-  let deviceTokens = data.deviceToken;
-  delete data.deviceToken;
   let updateBlock = {};
   console.log("post resp", data);
 
@@ -101,13 +99,12 @@ router.post(`/${constants.newResponse}`, (req, res) => {
                 return res.status(400).send("check responseType");
               }
             });
-            deviceTokens.forEach((singleToken) => {
-              notificationByToken({
-                token: singleToken,
-                title: "New response",
-                body: "Got recieved a new response",
-                data: data,
-              });
+
+            notificationByToken({
+              token: data.deviceToken,
+              title: "New response",
+              body: "Got recieved a new response",
+              data: data,
             });
           } catch (error) {
             return res.status(500).send(error.message);
