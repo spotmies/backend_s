@@ -63,9 +63,6 @@ function changeStrema(io) {
     orderChangeStream.on("change", (change) => {
       switch (change.operationType) {
         case "insert":
-          let docForNotification = change.fullDocument;
-          delete docForNotification.loc;
-          docForNotification.media = docForNotification.media[0] ?? "";
           console.log("new order came...", change.fullDocument);
           try {
             partnerDB.updateMany(
@@ -114,8 +111,14 @@ function changeStrema(io) {
                             notificationByToken({
                               token: element.partnerDeviceToken,
                               title: "New order For you",
-                              body: docForNotification.problem,
-                              data: docForNotification,
+                              body: change.fullDocument.problem,
+                              data: {
+                                problem: change.fullDocument.problem,
+                                money: change.fullDocument.money ?? "",
+                                ordId: change.fullDocument.ordId,
+                                media: change.fullDocument.media[0] ?? "",
+                                schedule: change.fullDocument.schedule,
+                              },
                             });
                           });
                           console.log("socket off for in orders >>>");
