@@ -102,8 +102,8 @@ router.post(`/${constants.newResponse}`, (req, res) => {
 
             notificationByToken({
               token: data.deviceToken,
-              title: "New response",
-              body: "Got recieved a new response",
+              title: data.notificationTitle ?? "New response",
+              body: data.notificationBody ?? "Got recieved a new response",
               data: data,
             });
           } catch (error) {

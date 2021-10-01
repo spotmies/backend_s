@@ -302,8 +302,12 @@ router.post("/stateChange", function (req, res) {
 
       notificationByToken({
         token: body.deviceToken,
-        title: `${body.userName ?? ""} accepted your request `,
-        body: "Order accepted click here for more infomation",
+        title:
+          body.notificationTitle ??
+          `${body.userName ?? ""} accepted your request `,
+        body:
+          body.notificationBody ??
+          "Order accepted click here for more infomation",
         data: body,
       });
     } catch (error) {
