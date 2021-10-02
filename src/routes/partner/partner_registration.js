@@ -72,7 +72,8 @@ router.get(`/${constants.getPartner}/:pId`, (req, res) => {
         },
         populate: {
           path: "uDetails",
-          select: "name phNum uId userState altNum eMail pic lastLogin userDeviceToken",
+          select:
+            "name phNum uId userState altNum eMail pic lastLogin userDeviceToken",
         },
       })
       .populate({
@@ -111,13 +112,39 @@ router.get(`/${constants.getPartner}/:pId`, (req, res) => {
 });
 
 /* -------------------------------------------------------------------------- */
+/*                              PARTNER LOGIN API                             */
+/* -------------------------------------------------------------------------- */
+router.post("/login/:id", function (req, res) {
+  const pId = req.params.id;
+  const body = req.body;
+
+  try {
+    partnerDB.findOneAndUpdate(
+      { pId: pId },
+      {
+        $push: { logs: body.lastLogin },
+        partnerDeviceToken: body.partnerDeviceToken,
+      },
+      { new: true },
+      (err, doc) => {
+        if (err) return res.status(400).json(err);
+        if (!doc) return res.status(404).json(doc);
+        return res.status(200).json(doc);
+      }
+    );
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+});
+
+/* -------------------------------------------------------------------------- */
 /*                           UPDATE PARTNER DETAILS                           */
 /* -------------------------------------------------------------------------- */
 
 router.put(`/${constants.getPartner}/:pId`, (req, res) => {
   const pId = req.params.pId;
   var body = req.body;
-    if (
+  if (
     req.body.docs != null ||
     req.body.docs != "" ||
     req.body.docs != undefined
@@ -130,7 +157,8 @@ router.put(`/${constants.getPartner}/:pId`, (req, res) => {
   try {
     partnerDB.findOneAndUpdate(
       { pId: pId },
-      { $set: body }, { new: true },
+      { $set: body },
+      { new: true },
       (err, data) => {
         if (err) {
           //console.error(err);
@@ -147,7 +175,7 @@ router.put(`/${constants.getPartner}/:pId`, (req, res) => {
             );
           } catch (error) {}
         }
-        console.log("updated data>>>",data);
+        console.log("updated data>>>", data);
         return res.status(200).send(data);
       }
     );
