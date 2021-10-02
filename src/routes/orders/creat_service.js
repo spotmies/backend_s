@@ -55,19 +55,28 @@ router.post(`/${constants.createOrder}/:uId`, (req, res, next) => {
 
 router.get(`/orders/:ordId`, (req, res) => {
   const ordId = req.params.ordId;
-  let originalUrl = parseParams(req.originalUrl);
+  // let originalUrl = parseParams(req.originalUrl);
   try {
-    orderDB.findOne(
-      { ordId: ordId, isDeletedForUser: originalUrl.isDeletedForUser ?? false },
-      (err, data) => {
+    orderDB
+      .findOne({
+        ordId: ordId,
+        // isDeletedForUser: originalUrl.isDeletedForUser ?? false,
+      })
+      .populate(
+        "uDetails",
+        "name phNum join pic eMail altNum uId userState lastLogin userDeviceToken"
+      )
+      .populate(
+        "pDetails",
+        "name eMail phNum partnerPic rate lang experience job loc businessName accountType availability pId partnerDeviceToken"
+      )
+      .exec(function (err, data) {
         if (err) {
-          //console.error(err);
+          console.error(err);
           return res.status(400).send(err.message);
         }
-        if (!data) return res.status(501).json(data);
         return res.status(200).json(data);
-      }
-    );
+      });
   } catch (error) {
     return res.status(500).send(error.message);
   }
