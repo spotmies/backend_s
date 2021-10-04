@@ -38,14 +38,14 @@ router.post(`/${constants.newResponse}`, (req, res) => {
                 data.responseType === "bid" ||
                 data.responseType === "accept"
               ) {
-                if (
-                  ordData.ordState === "onGoing" ||
-                  ordData.ordState === "completed"
-                ) {
-                  return res
-                    .status(400)
-                    .send(`this order in status of ${ordData.ordState}`);
-                }
+                // if (
+                //   ordData.ordState === "onGoing" ||
+                //   ordData.ordState === "completed"
+                // ) {
+                //   return res
+                //     .status(400)
+                //     .send(`this order in status of ${ordData.ordState}`);
+                // }
                 if (ordData.orderState > 6) {
                   return res
                     .status(400)

@@ -270,14 +270,14 @@ router.post("/stateChange", function (req, res) {
           if (!ordData) {
             return res.status(501).json(ordData);
           }
-          if (
-            ordData.ordState === "onGoing" ||
-            ordData.ordState === "completed"
-          ) {
-            return res
-              .status(400)
-              .send(`this order in status of ${ordData.ordState}`);
-          }
+          // if (
+          //   ordData.ordState === "onGoing" ||
+          //   ordData.ordState === "completed"
+          // ) {
+          //   return res
+          //     .status(400)
+          //     .send(`this order in status of ${ordData.ordState}`);
+          // }
           if (ordData.orderState > 6) {
             return res
               .status(400)
