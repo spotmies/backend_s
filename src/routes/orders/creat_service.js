@@ -278,6 +278,11 @@ router.post("/stateChange", function (req, res) {
               .status(400)
               .send(`this order in status of ${ordData.ordState}`);
           }
+          if (ordData.orderState > 6) {
+            return res
+              .status(400)
+              .send(`this order in status of ${ordData.orderState}`);
+          }
           orderDB.findOneAndUpdate(
             { ordId: body.ordId, isDeletedForUser: false },
             { $set: req.body },

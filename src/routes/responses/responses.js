@@ -46,6 +46,11 @@ router.post(`/${constants.newResponse}`, (req, res) => {
                     .status(400)
                     .send(`this order in status of ${ordData.ordState}`);
                 }
+                if (ordData.orderState > 6) {
+                  return res
+                    .status(400)
+                    .send(`this order in status of ${ordData.orderState}`);
+                }
                 updateBlock = ordData;
                 if (data.responseType === "accept") {
                   updateBlock["acceptBy"] = "partner";
@@ -54,6 +59,7 @@ router.post(`/${constants.newResponse}`, (req, res) => {
                   updateBlock.pId = data.pId;
                   updateBlock.pDetails = data.pDetails;
                   updateBlock.ordState = "onGoing";
+                  updateBlock.orderState = 8;
 
                   data.money = ordData.money;
                   data.isAccepted = true;
