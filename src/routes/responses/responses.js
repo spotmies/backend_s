@@ -74,7 +74,9 @@ router.post(`/${constants.newResponse}`, (req, res) => {
                     }
                     if (!doc) return res.status(404).json(doc);
                     updateBlock.responses.push(doc.id);
-                    updateBlock.acceptResponse = doc.id;
+                    if (data.responseType === "accept")
+                      updateBlock['acceptResponse'] = doc.id;
+
                     try {
                       orderDB.findOneAndUpdate(
                         { ordId: doc.ordId },
