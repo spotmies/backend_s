@@ -101,14 +101,15 @@ function updateOrder({ id, updateBody, tag = "update", response }) {
   try {
     orderDB.findOneAndUpdate(
       { ordId: id },
-      updateBody,
+      { $set: updateBody },
+      
       { new: true },
       (err, data) => {
         if (err) {
           //console.error(err);
           return response.status(400).send(err.message);
         }
-        if (!data) return response.status(400).json(data);
+        if (!data) return response.status(404).json(data);
         return response.status(200).json(data);
       }
     );
