@@ -66,7 +66,7 @@ function changeStrema(io) {
           console.log("new order came...", change.fullDocument);
           try {
             partnerDB.updateMany(
-              { job: change.fullDocument.job },
+              { job: change.fullDocument.job, availability: true },
               {
                 $push: { inComingOrders: change.fullDocument._id },
               },
