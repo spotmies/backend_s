@@ -75,7 +75,7 @@ router.post(`/${constants.newResponse}`, (req, res) => {
                     if (!doc) return res.status(404).json(doc);
                     updateBlock.responses.push(doc.id);
                     if (data.responseType === "accept")
-                      updateBlock['acceptResponse'] = doc.id;
+                      updateBlock["acceptResponse"] = doc.id;
 
                     try {
                       orderDB.findOneAndUpdate(
@@ -160,7 +160,7 @@ router.put(`/${constants.responses}/:ID`, (req, res, next) => {
   try {
     responsesDB.findOneAndUpdate(
       { responseId: ID },
-      body,
+      { $set: body },
       { new: true },
       (err, data) => {
         if (err) {
