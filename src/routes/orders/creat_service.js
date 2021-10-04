@@ -70,6 +70,7 @@ router.get(`/orders/:ordId`, (req, res) => {
         "pDetails",
         "name eMail phNum partnerPic rate lang experience job loc businessName accountType availability pId partnerDeviceToken"
       )
+      .populate("acceptResponse")
       .exec(function (err, data) {
         if (err) {
           console.error(err);
