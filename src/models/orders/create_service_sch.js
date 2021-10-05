@@ -4,10 +4,10 @@ const {
   reqStr,
   nonReqStr,
   nonReqNum,
-  unChangeUniqueStr,
   timeStamp,
   unChangeStr,
   ordIdSch,
+  orderSchedule,
   nonReqTimeStamp,
 } = require("../../helpers/schema/schemaHelp");
 
@@ -29,7 +29,7 @@ const newOrderSchema = {
     default:0
   },
   join: timeStamp,
-  schedule: timeStamp,
+  schedule: orderSchedule,
   uId: unChangeStr,
   views: nonReqNum,
   loc: {
