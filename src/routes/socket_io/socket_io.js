@@ -156,7 +156,7 @@ function changeStrema(io) {
 function updateSendpIdToOrder(docId, pIdsArray) {
   console.log(docId, pIdsArray);
   orderDB.updateOne(
-    docId,
+    { _id: docId },
     { $pushAll: { orderSendTo: pIdsArray } },
     function (err) {
       if (err) {
