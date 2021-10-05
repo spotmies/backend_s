@@ -31,7 +31,7 @@ const partnerRegistration = {
   ref: [String],
   inComingOrders: [{ type: mongoose.Schema.Types.ObjectId, ref: "orders" }],
   orders: [
-    { type: mongoose.Schema.Types.ObjectId, ref: "orders", unique: true },
+    { type: mongoose.Schema.Types.ObjectId, ref: "orders" },
   ],
   rate: [nonReqNum],
   acceptance: [nonReqNum],
