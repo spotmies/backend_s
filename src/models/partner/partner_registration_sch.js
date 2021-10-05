@@ -29,9 +29,9 @@ const partnerRegistration = {
   businessName: nonReqStr,
   experience: nonReqNum,
   ref: [String],
-  inComingOrders: [{ type: mongoose.Schema.Types.ObjectId, ref: "orders" }],
+  inComingOrders: [{ type: mongoose.Schema.Types.ObjectId, ref: "orders",required:false }],
   orders: [
-    { type: mongoose.Schema.Types.ObjectId, ref: "orders" },
+    { type: mongoose.Schema.Types.ObjectId, ref: "orders",required:false },
   ],
   rate: [nonReqNum],
   acceptance: [nonReqNum],
@@ -53,12 +53,12 @@ const partnerRegistration = {
   feedBack: [],
   reports: [
     {
-      reportedBy: { type: mongoose.Schema.Types.ObjectId, ref: "users" },
+      reportedBy: { type: mongoose.Schema.Types.ObjectId, ref: "users",required:false },
       reportedAt: reqNum,
     },
   ],
   complaints: [
-    { type: mongoose.Schema.Types.ObjectId, ref: "partnerComplaints" },
+    { type: mongoose.Schema.Types.ObjectId, ref: "partnerComplaints",required:false },
   ],
   isTermsAccepted: { type: Boolean, required: true },
   partnerDeviceToken:nonReqStr
