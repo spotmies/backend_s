@@ -157,7 +157,7 @@ function updateSendpIdToOrder(docId, pIdsArray) {
   console.log(docId, pIdsArray);
   orderDB.updateOne(
     { _id: docId },
-    { $pushAll: { orderSendTo: pIdsArray } },
+    { $addToSet: { orderSendTo: { $each: pIdsArray } } },
     function (err) {
       if (err) {
         console.log("error while adding incoming partner");
