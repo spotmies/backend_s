@@ -155,11 +155,14 @@ function changeStrema(io) {
 
 function orderUpdateStream(io, orderData) {
   console.log("update data is ",orderData)
-  if(orderData.orderState == undefined || orderData.orderState == null){
+  try {
+    
+
+  if(orderData.updatedFields?.orderState == undefined || orderData.updatedFields?.orderState == null){
     console.log("return ing");
     return;
   }
-  switch (orderData.orderState) {
+  switch (orderData.updatedFields.orderState) {
     case 0:
     case 1:
     case 2:
@@ -181,6 +184,9 @@ function orderUpdateStream(io, orderData) {
 
     default:
       break;
+  }
+    } catch (error) {
+    console.log("error 189",error);
   }
 }
 
