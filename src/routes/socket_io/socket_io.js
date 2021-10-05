@@ -97,7 +97,6 @@ function changeStrema(io) {
                         (err, partnersData) => {
                           if (err) {
                             console.error(err);
-                            return res.status(400).send(err.message);
                           }
                           console.log(
                             "socket on for incoming orders >>",
@@ -105,10 +104,10 @@ function changeStrema(io) {
                           );
                           let pIdsArray = [];
                           partnersData.forEach((element) => {
-                            io.to(element.pId).emit(
-                              "inComingOrders",
-                              orderData
-                            );
+                            io.to(element.pId).emit("inComingOrders", {
+                              action: "new",
+                              payload: orderData,
+                            });
                             pIdsArray.push(element.pId);
                             notificationByToken({
                               token: element.partnerDeviceToken,
@@ -145,12 +144,37 @@ function changeStrema(io) {
           break;
         case "update":
           console.log("orders updated...", change);
+          orderUpdateStream(io, change.fullDocument);
 
         default:
           break;
       }
     });
   });
+}
+
+function orderUpdateStream(io, orderData) {
+  switch (orderData.orderState) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 9:
+    case 10:
+      break;
+    case 8:
+      orderData.orderSendTo.forEach((pid) => {
+        io.to(pid).emit("inComingOrders", { action: "refress" });
+      });
+      break;
+
+    default:
+      break;
+  }
 }
 
 function updateSendpIdToOrder(docId, pIdsArray) {
