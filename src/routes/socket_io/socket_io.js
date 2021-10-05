@@ -144,7 +144,7 @@ function changeStrema(io) {
           break;
         case "update":
           console.log("orders updated...", change);
-          orderUpdateStream(io, change.updateDescription);
+          orderUpdateStream(io, change);
 
         default:
           break;
@@ -153,40 +153,48 @@ function changeStrema(io) {
   });
 }
 
-function orderUpdateStream(io, orderData) {
-  console.log("update data is ",orderData)
+function orderUpdateStream(io, updateData) {
   try {
-    
+    if (
+      updateData.updateDescription?.updatedFields?.orderState == undefined ||
+      updateData.updateDescription?.updatedFields?.orderState == null
+    ) {
+      console.log("return ing");
+      return;
+    }
+    switch (updateData.updateDescription?.updatedFields?.orderState) {
+      case 0:
+      case 1:
+      case 2:
+      case 3:
+      case 4:
+      case 5:
+      case 6:
+      case 7:
+      case 9:
+      case 10:
+        break;
+      case 8:
+        orderDB.findById(updateData?.documentKey?._id, (err, docData) => {
+          if (err) return;
+          if (docData) {
+            docData.orderSendTo.forEach((pid) => {
+              console.log("notifying partners");
+              io.to(pid).emit("inComingOrders", { action: "refress" });
+            });
+          }
+        });
+        // array.forEach((pid) => {
+        //   console.log("notifying partners");
+        //   io.to(pid).emit("inComingOrders", { action: "refress" });
+        // });
+        break;
 
-  if(orderData.updatedFields?.orderState == undefined || orderData.updatedFields?.orderState == null){
-    console.log("return ing");
-    return;
-  }
-  switch (orderData.updatedFields.orderState) {
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-    case 6:
-    case 7:
-    case 9:
-    case 10:
-      break;
-    case 8:
-      console.log("send to ",orderData.orderSendTo)
-      orderData.orderSendTo.forEach((pid) => {
-        console.log("notifying partners");
-        io.to(pid).emit("inComingOrders", { action: "refress" });
-      });
-      break;
-
-    default:
-      break;
-  }
-    } catch (error) {
-    console.log("error 189",error);
+      default:
+        break;
+    }
+  } catch (error) {
+    console.log("error 189", error);
   }
 }
 
