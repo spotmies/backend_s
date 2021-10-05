@@ -154,12 +154,24 @@ function changeStrema(io) {
 }
 
 function updateSendpIdToOrder(docId, pIdsArray) {
-  orderDB.findByIdAndUpdate(docId, { $pushAll: { orderSendTo: pIdsArray } });
-  // orderDB.findOneAndUpdate(
-  //   { ordId: ordId },
-  //   { $pushAll: { orderSendTo: pIdsArray } }
-  // );
+  console.log(docId, pIdsArray);
+  orderDB.findByIdAndUpdate(
+    docId,
+    { $pushAll: { orderSendTo: pIdsArray } },
+    function (err) {
+      if (err) {
+        console.log("error while adding incoming partner");
+        console.log(err);
+      } else {
+        console.log("Successfully added");
+      }
+    }
+  );
 }
+// orderDB.findOneAndUpdate(
+//   { ordId: ordId },
+//   { $pushAll: { orderSendTo: pIdsArray } }
+// );
 
 function updateMsgsInDb(data, sender) {
   let msgId = data?.target?.msgId;
