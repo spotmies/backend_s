@@ -155,7 +155,11 @@ function changeStrema(io) {
 
 function orderUpdateStream(io, orderData) {
   console.log("update data is ",orderData)
-  switch (orderData?.orderState) {
+  if(orderData.orderState == undefined || orderData.orderState == null){
+    console.log("return ing");
+    return;
+  }
+  switch (orderData.orderState) {
     case 0:
     case 1:
     case 2:
@@ -168,6 +172,7 @@ function orderUpdateStream(io, orderData) {
     case 10:
       break;
     case 8:
+      console.log("send to ",orderData.orderSendTo)
       orderData.orderSendTo.forEach((pid) => {
         console.log("notifying partners");
         io.to(pid).emit("inComingOrders", { action: "refress" });
