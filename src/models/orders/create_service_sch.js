@@ -22,11 +22,11 @@ const newOrderSchema = {
     required: true,
     enum: ["req", "noPartner", "updated", "onGoing", "completed", "cancel"],
   },
-  orderState:{
-    type:Number,
-    required:false,
-    enum:[0,1,2,3,4,5,6,7,8,9,10,11,12],
-    default:0
+  orderState: {
+    type: Number,
+    required: false,
+    enum: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    default: 0,
   },
   join: timeStamp,
   schedule: orderSchedule,
@@ -42,6 +42,7 @@ const newOrderSchema = {
   media: [String],
   fBack: nonReqNum,
   pId: nonReqStr,
+  orderSendTo: [nonReqStr],
   messages: [{ type: mongoose.Schema.Types.ObjectId, ref: "messaging" }],
   responses: [{ type: mongoose.Schema.Types.ObjectId, ref: "responses" }],
   uDetails: {
@@ -61,7 +62,7 @@ const newOrderSchema = {
     type: Boolean,
     default: false,
   },
-    isDeletedForPartner: {
+  isDeletedForPartner: {
     required: false,
     type: Boolean,
     default: false,
@@ -77,7 +78,7 @@ const newOrderSchema = {
     required: false,
     ref: "responses",
   },
-  revealProfileTo : [String]
+  revealProfileTo: [String],
 };
 
 module.exports = mongoose.model("orders", newOrderSchema);

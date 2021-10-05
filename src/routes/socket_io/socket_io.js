@@ -94,7 +94,7 @@ function changeStrema(io) {
                       partnerDB.find(
                         { job: change.fullDocument.job, availability: true },
 
-                        (err, data) => {
+                        (err, partnersData) => {
                           if (err) {
                             console.error(err);
                             return res.status(400).send(err.message);
@@ -103,11 +103,13 @@ function changeStrema(io) {
                             "socket on for incoming orders >>",
                             orderData
                           );
-                          data.forEach((element) => {
+                          let pIdsArray = [];
+                          partnersData.forEach((element) => {
                             io.to(element.pId).emit(
                               "inComingOrders",
                               orderData
                             );
+                            pIdsArray.push(element.pId);
                             notificationByToken({
                               token: element.partnerDeviceToken,
                               title: "New order For you",
@@ -125,6 +127,7 @@ function changeStrema(io) {
                               },
                             });
                           });
+                          updateSendpIdToOrder(orderData._id, pIdsArray);
                           console.log("socket off for in orders >>>");
                         }
                       );
@@ -148,6 +151,14 @@ function changeStrema(io) {
       }
     });
   });
+}
+
+function updateSendpIdToOrder(docId, pIdsArray) {
+  orderDB.findByIdAndUpdate(docId, { $pushAll: { orderSendTo: pIdsArray } });
+  // orderDB.findOneAndUpdate(
+  //   { ordId: ordId },
+  //   { $pushAll: { orderSendTo: pIdsArray } }
+  // );
 }
 
 function updateMsgsInDb(data, sender) {
