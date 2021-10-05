@@ -169,6 +169,7 @@ function orderUpdateStream(io, orderData) {
       break;
     case 8:
       orderData.orderSendTo.forEach((pid) => {
+        console.log("notifying partners");
         io.to(pid).emit("inComingOrders", { action: "refress" });
       });
       break;
