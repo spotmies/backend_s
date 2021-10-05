@@ -144,7 +144,7 @@ function changeStrema(io) {
           break;
         case "update":
           console.log("orders updated...", change);
-          orderUpdateStream(io, change.fullDocument);
+          orderUpdateStream(io, change.updateDescription);
 
         default:
           break;
@@ -154,7 +154,8 @@ function changeStrema(io) {
 }
 
 function orderUpdateStream(io, orderData) {
-  switch (orderData.orderState) {
+  console.log("update data is ",orderData)
+  switch (orderData?.orderState) {
     case 0:
     case 1:
     case 2:
