@@ -167,13 +167,13 @@ router.get(`/${constants.chats}`, (req, res) => {
 /* -------------------------------------------------------------------------- */
 /*                                 UPDATE CHAT                                */
 /* -------------------------------------------------------------------------- */
-router.put(`/${constants.chats}/:msgId`, (req, res, next) => {
+router.put(`/${constants.chats}/:msgId`, (req, res) => {
   const msgId = req.params.msgId;
   const body = req.body;
   try {
     chatDB.findOneAndUpdate(
       { msgId: msgId },
-      body,
+      {$set : body},
       { new: true },
       (err, data) => {
         if (err) {
