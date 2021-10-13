@@ -23,7 +23,7 @@ const serivcecatelog = {
   },
   createdAt: timeStamp,
   itemCode: reqNum,
-  modifiedAt: modifiedAt,
+  lastModified: modifiedAt,
   pId: reqStr,
   views: {
     type: Number,

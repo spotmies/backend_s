@@ -3,7 +3,7 @@ const {
   reqStr,
   nonReqStr,
   nonReqNum,
-
+  modifiedAt,
   uIdSch,
   phoneNum,
   altNum,
@@ -16,7 +16,16 @@ const userSchema = {
   phNum: phoneNum,
   join: timeStamp,
   pic: nonReqStr,
-  eMail: { type: String, trim: true, index: true, unique: true, sparse: true },
+  lastModified: modifiedAt,
+  eMail: { type: String, trim: true },
+  isEmailVerified: {
+    type: Boolean,
+    default: false,
+  },
+  isAltNumVerified: {
+    type: Boolean,
+    default: false,
+  },
   altNum: altNum,
   uId: uIdSch,
   userState: {
@@ -27,13 +36,18 @@ const userSchema = {
   orders: [{ type: mongoose.Schema.Types.ObjectId, ref: "orders" }],
   lastLogin: nonReqNum,
   logs: [String],
-  referalCode:{ type: String, trim: true, index: true, unique: true, sparse: true },
-    location: {
+  referalCode: {
+    type: String,
+    trim: true,
+    index: true,
+    unique: true,
+    sparse: true,
+  },
+  location: {
     type: [Number],
   },
   address: nonReqStr,
-  userDeviceToken:nonReqStr
-
+  userDeviceToken: nonReqStr,
 };
 
 module.exports = mongoose.model("users", userSchema);
