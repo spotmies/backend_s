@@ -5,14 +5,14 @@ const {
   timeStamp,
   nonReqStr,
   modifiedAt,
-  reqNum
+  reqNum,
 } = require("../../helpers/schema/schemaHelp");
-const serivceCatelogue = {
+const serivcecatelog = {
   name: reqStr,
   media: [String],
   hide: {
     type: Boolean,
-    default: true,
+    default: false,
   },
   qty: nonReqNum,
   price: nonReqNum,
@@ -24,13 +24,16 @@ const serivceCatelogue = {
   createdAt: timeStamp,
   itemCode: reqNum,
   modifiedAt: modifiedAt,
-  pId:reqStr,
-  views:{
-      type:Number,
-      default:0
+  pId: reqStr,
+  views: {
+    type: Number,
+    default: 0,
   },
-  category:reqNum,
-
+  category: reqNum,
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
 };
 
-module.exports = mongoose.model("catelogue", serivceCatelogue);
+module.exports = mongoose.model("catelogs", serivcecatelog);

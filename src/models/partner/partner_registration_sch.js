@@ -29,9 +29,11 @@ const partnerRegistration = {
   businessName: nonReqStr,
   experience: nonReqNum,
   ref: [String],
-  inComingOrders: [{ type: mongoose.Schema.Types.ObjectId, ref: "orders",required:false }],
+  inComingOrders: [
+    { type: mongoose.Schema.Types.ObjectId, ref: "orders", required: false },
+  ],
   orders: [
-    { type: mongoose.Schema.Types.ObjectId, ref: "orders",required:false },
+    { type: mongoose.Schema.Types.ObjectId, ref: "orders", required: false },
   ],
   rate: [nonReqNum],
   acceptance: [nonReqNum],
@@ -53,14 +55,29 @@ const partnerRegistration = {
   feedBack: [],
   reports: [
     {
-      reportedBy: { type: mongoose.Schema.Types.ObjectId, ref: "users",required:false },
+      reportedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "users",
+        required: false,
+      },
       reportedAt: reqNum,
     },
   ],
   complaints: [
-    { type: mongoose.Schema.Types.ObjectId, ref: "partnerComplaints",required:false },
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "partnerComplaints",
+      required: false,
+    },
+  ],
+  catelogs: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "catelogs",
+      required: false,
+    },
   ],
   isTermsAccepted: { type: Boolean, required: true },
-  partnerDeviceToken:nonReqStr
+  partnerDeviceToken: nonReqStr,
 };
 module.exports = mongoose.model("partners", partnerRegistration);

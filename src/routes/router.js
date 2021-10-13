@@ -10,8 +10,9 @@ const chatR = require("./messaging/messaging");
 const responsesR = require("./responses/responses");
 const geocodeLocator = require("./geocode/geocode");
 const notificationR = require("./notifications/notifications");
+const catelogR = require("./service_catelogue/catelogue");
 // const loggerR = require("./loggers/loggers");
-// const postR = require("./posts/post");
+//const postR = require("./posts/post");
 
 /* -------------------------------------------------------------------------- */
 /*                                MAIN ROUTERS                                */
@@ -24,6 +25,7 @@ router.use("/partner", partnerR);
 router.use(`/${constants.mainChatRoute}`, chatR);
 router.use(`/${constants.mainRouteResponse}`, responsesR);
 router.use("/notification", notificationR);
+router.use("/catelog", catelogR);
 router.get("/stamp", (req, res) => {
   let stamp = new Date().valueOf();
   res.send(stamp.toString());

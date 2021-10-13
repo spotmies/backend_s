@@ -38,7 +38,7 @@ router.get(`/${constants.userDetails}/:id`, (req, res) => {
   try {
     userDb
       .findOne({ uId: uId })
-      .populate({path:"orders",match:{isDeletedForUser : false}})
+      .populate({ path: "orders", match: { isDeletedForUser: false } })
       .exec(function (err, data) {
         if (err) {
           console.error(err);
@@ -60,26 +60,31 @@ router.put("/users/:id", (req, res) => {
   const body = req.body;
 
   try {
-    userDb.findOneAndUpdate({ uId: uId }, { $set: body }, { new: true }, (err, data) => {
-      if (err) {
-        console.error(err);
-        return res.status(400).send(err.message);
-      }
-      if (!data) return res.status(404).json(data);
-      if (body.lastLogin) {
-        try {
-          userDb.findOneAndUpdate(
-            { uId: uId },
-            { $push: { logs: body.lastLogin } },
-            { new: true },
-            (err, doc) => {}
-          );
-        } catch (error) {
-          //console.log("79", error);
+    userDb.findOneAndUpdate(
+      { uId: uId },
+      { $set: body },
+      { new: true },
+      (err, data) => {
+        if (err) {
+          console.error(err);
+          return res.status(400).send(err.message);
         }
+        if (!data) return res.status(404).json(data);
+        if (body.lastLogin) {
+          try {
+            userDb.findOneAndUpdate(
+              { uId: uId },
+              { $push: { logs: body.lastLogin } },
+              { new: true },
+              (err, doc) => {}
+            );
+          } catch (error) {
+            //console.log("79", error);
+          }
+        }
+        return res.status(200).json(data);
       }
-      return res.status(200).json(data);
-    });
+    );
   } catch (error) {
     return res.status(500).send(error.message);
   }
