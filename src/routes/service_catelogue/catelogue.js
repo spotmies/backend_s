@@ -97,6 +97,10 @@ router.get("/partner/:pId", (req, res) => {
   }
 });
 
+/* -------------------------------------------------------------------------- */
+/*                           DELETE CATELOG BY DOCID                          */
+/* -------------------------------------------------------------------------- */
+
 router.delete("/catelogs/:docId", (req, res) => {
   const docId = req.params.docId;
   let originalUrl = parseParams(req.originalUrl);

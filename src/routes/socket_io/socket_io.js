@@ -64,6 +64,8 @@ function changeStrema(io) {
       switch (change.operationType) {
         case "insert":
           console.log("new order came...", change.fullDocument);
+          broadCastOrder({ orderData: change.fullDocument,io:io });
+          break;
           try {
             partnerDB.updateMany(
               { job: change.fullDocument.job, availability: true },
@@ -126,7 +128,23 @@ function changeStrema(io) {
                               },
                             });
                           });
-                          updateSendpIdToOrder(orderData._id, pIdsArray);
+                          // updateSendpIdToOrder(orderData._id, pIdsArray);
+                          orderDB.updateOne(
+                            { _id: orderData._id },
+                            {
+                              $addToSet: { orderSendTo: { $each: pIdsArray } },
+                            },
+                            function (err) {
+                              if (err) {
+                                console.log(
+                                  "error while adding incoming partner"
+                                );
+                                console.log(err);
+                              } else {
+                                console.log("Successfully added");
+                              }
+                            }
+                          );
                           console.log("socket off for in orders >>>");
                         }
                       );
@@ -197,7 +215,112 @@ function orderUpdateStream(io, updateData) {
     console.log("error 189", error);
   }
 }
+function broadCastOrder({ orderData, res, io } = {}) {
+  try {
+    partnerDB.updateMany(
+      { job: orderData.job, availability: true },
+      {
+        $push: { inComingOrders: orderData._id },
+      },
+      function (err, doc) {
+        if (err) {
+          console.log(`problem with assign order ${err}`);
+          if (res != undefined || res != null)
+            return res.status(400).send(err.message);
+        } else {
+          console.log("order assigned : ");
+        }
+      }
+    );
+    try {
+      orderDB
+        .findById(orderData._id)
+        .populate(
+          "uDetails",
+          "name phNum uId userState altNum eMail pic lastLogin userDeviceToken"
+        )
+        .exec(function (err, orderData) {
+          if (err) {
+            console.error(err);
+            if (res != undefined || res != null)
+              return res.status(400).send(err.message);
+          }
+          if (orderData) {
+            try {
+              partnerDB.find(
+                { job: orderData.job, availability: true },
 
+                (err, partnersData) => {
+                  if (err) {
+                    console.error(err);
+                    if (res != undefined || res != null)
+                      return res.status(400).send(err.message);
+                  }
+                  console.log("socket on for incoming orders >>", orderData);
+                  let pIdsArray = [];
+                  partnersData.forEach((element) => {
+                    io.to(element.pId).emit("inComingOrders", {
+                      action: "new",
+                      payload: orderData,
+                    });
+                    pIdsArray.push(element.pId);
+                    notificationByToken({
+                      token: element.partnerDeviceToken,
+                      title: "New order For you",
+                      body: orderData.problem,
+                      data: {
+                        problem: `${orderData.problem}`,
+                        money: orderData.money ? `${orderData.money}` : "",
+                        ordId: `${orderData.ordId}`,
+                        media: orderData.media[0]
+                          ? `${orderData.media[0]}`
+                          : "",
+                        schedule: `${orderData.schedule}`,
+                      },
+                    });
+                  });
+                  // updateSendpIdToOrder(orderData._id, pIdsArray);
+                  orderDB.updateOne(
+                    { _id: orderData._id },
+                    {
+                      $addToSet: {
+                        orderSendTo: { $each: pIdsArray },
+                      },
+                    },
+                    function (err) {
+                      if (err) {
+                        console.log("error while adding incoming partner");
+                        console.log(err);
+                        if (res != undefined || res != null)
+                          return res.status(400).send(err.message);
+                      } else {
+                        console.log("Successfully added");
+                        if (res != undefined || res != null)
+                          return res.statusCode(204);
+                      }
+                    }
+                  );
+                  console.log("socket off for in orders >>>");
+                }
+              );
+            } catch (error) {
+              console.log("something went wrong110 ", error);
+              if (res != undefined || res != null)
+                return res.status(500).send(error.message);
+            }
+          }
+        });
+    } catch (error) {
+      console.log("something went wrong at 115", error);
+      if (res != undefined || res != null)
+        return res.status(500).send(error.message);
+    }
+  } catch (error) {
+    console.log("error updating incoming order to partner", error);
+    if (res != undefined || res != null)
+      return res.status(500).send(error.message);
+  }
+}
 function updateSendpIdToOrder(docId, pIdsArray) {
   console.log(docId, pIdsArray);
   orderDB.updateOne(
@@ -335,6 +458,7 @@ function notificationBodyType({ msg, type } = {}) {
   }
 }
 module.exports = {
+  broadCastanOrder: broadCastOrder,
   start: function (io) {
     changeStrema(io);
     io.on("connection", function (socket) {
