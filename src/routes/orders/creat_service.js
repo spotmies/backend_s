@@ -2,12 +2,10 @@ const express = require("express");
 const router = express.Router();
 const orderDB = require("../../models/orders/create_service_sch");
 const userDb = require("../../models/users/userSch");
-const partnerDB = require("../../models/partner/partner_registration_sch");
 const responsesDB = require("../../models/responses/responses_sch");
 const constants = require("../../helpers/constants");
 const { parseParams } = require("../../helpers/query/parse_params");
 const { notificationByToken } = require("../firebase_admin/firebase_admin");
-const { broadCastanOrder } = require("../socket_io/socket_io");
 
 /* -------------------------------------------------------------------------- */
 /*                              create new order                              */
@@ -50,25 +48,6 @@ router.post(`/${constants.createOrder}/:uId`, (req, res, next) => {
   }
 });
 
-/* -------------------------------------------------------------------------- */
-/*                             BROADCAST THE ORDER                            */
-/* -------------------------------------------------------------------------- */
-
-router.get("/broadcast/:ordId", (req, res) => {
-  const ordId = req.params.ordId;
-  console.log("broadcase api hit");
-  try {
-    orderDB.findOne({ ordId: ordId }).exec(function (err, data) {
-      if (err) {
-        console.error(err);
-        return res.status(400).send(err.message);
-      }
-      return broadCastanOrder({ orderData: data, res: res });
-    });
-  } catch (error) {
-    return res.status(500).send(error.message);
-  }
-});
 /* -------------------------------------------------------------------------- */
 /*                               GET ORDER BY ID                              */
 /* -------------------------------------------------------------------------- */

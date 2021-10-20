@@ -26,7 +26,7 @@ app.use(function (req, res, next) {
   next();
 });
 webSocket.start(io);
-//firebaseFcm.start();
+firebaseFcm.start();
 
 // app.use(bodyParser.urlencoded({ extended: true }));
 

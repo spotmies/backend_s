@@ -64,7 +64,7 @@ function changeStrema(io) {
       switch (change.operationType) {
         case "insert":
           console.log("new order came...", change.fullDocument);
-          broadCastOrder({ orderData: change.fullDocument,io:io });
+          broadCastOrder({ orderData: change.fullDocument, io: io });
           break;
           try {
             partnerDB.updateMany(
@@ -462,6 +462,7 @@ module.exports = {
   start: function (io) {
     changeStrema(io);
     io.on("connection", function (socket) {
+
       console.log("coneting >>", socket.id);
       //join user to socker room
       socket.on("join-room", (data) => {
@@ -542,6 +543,22 @@ module.exports = {
             break;
         }
       });
+      socket.on("broadCastOrder",function (data,callBack){
+          try {
+            orderDB.findOne({ ordId: data.ordId }).exec(function (err, doc) {
+              if (err) {
+                console.error(err);
+                callBack(err.message)
+                // return res.status(400).send(err.message);
+              }
+              callBack("success")
+             broadCastOrder({ orderData: doc, io: io });
+            });
+          } catch (error) {
+            console.log(error.message);
+            callBack(error.message);
+          }
+      })
     });
   },
 };
