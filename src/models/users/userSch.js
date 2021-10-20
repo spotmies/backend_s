@@ -7,6 +7,7 @@ const {
   uIdSch,
   phoneNum,
   altNum,
+  isVerifedSch,
 
   timeStamp,
 } = require("../../helpers/schema/schemaHelp");
@@ -18,14 +19,8 @@ const userSchema = {
   pic: nonReqStr,
   lastModified: modifiedAt,
   eMail: { type: String, trim: true },
-  isEmailVerified: {
-    type: Boolean,
-    default: false,
-  },
-  isAltNumVerified: {
-    type: Boolean,
-    default: false,
-  },
+  isEmailVerified: isVerifedSch,
+  isAltNumVerified: isVerifedSch,
   altNum: altNum,
   uId: uIdSch,
   userState: {

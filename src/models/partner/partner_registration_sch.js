@@ -6,6 +6,7 @@ const {
   nonReqNum,
   uniqueNum,
   nonReqUniqueStr,
+  isVerifedSch,
   dobSch,
   timeStamp,
   bool,
@@ -18,7 +19,9 @@ const partnerRegistration = {
   dob: dobSch,
   perAdd: nonReqStr,
   tempAdd: nonReqStr,
-  eMail: nonReqUniqueStr,
+  eMail: nonReqStr,
+  isEmailVerified: isVerifedSch,
+  isAltNumVerifed: isVerifedSch,
   phNum: uniqueNum,
   altNum: nonReqNum,
   job: reqNum,
@@ -79,5 +82,11 @@ const partnerRegistration = {
   ],
   isTermsAccepted: { type: Boolean, required: true },
   partnerDeviceToken: nonReqStr,
+  workLocation: {
+    required: true,
+    type: [Number],
+  },
+  homeLocation: [Number],
+  currentLocation: [Number],
 };
 module.exports = mongoose.model("partners", partnerRegistration);

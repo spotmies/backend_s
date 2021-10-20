@@ -169,15 +169,17 @@ const uIdSch = {
 const dobSch = {
   required: true,
   type: String,
-  minlength: 13,
-  maxlength: 14,
 };
 const unChangeNum = {
   type: Number,
   immutable: true,
   required: true,
 };
-
+const isVerifedSch={
+  required:false,
+  default:false,
+  type:Boolean
+}
 module.exports = {
   reqNum,
   nonReqStr,
@@ -204,4 +206,5 @@ module.exports = {
   upStatesAndCounts,
   responseSchedule,
   orderSchedule,
+  isVerifedSch,
 };
