@@ -462,7 +462,6 @@ module.exports = {
   start: function (io) {
     changeStrema(io);
     io.on("connection", function (socket) {
-
       console.log("coneting >>", socket.id);
       //join user to socker room
       socket.on("join-room", (data) => {
@@ -495,7 +494,10 @@ module.exports = {
 
         if (object.sender === "user") {
           socket.to(data.target.pId).emit("recieveNewMessage", data);
+        } else if (object.sender === "partner") {
+          socket.to(data.target.uId).emit("recieveNewMessage", data);
         } else {
+          socket.to(data.target.pId).emit("recieveNewMessage", data);
           socket.to(data.target.uId).emit("recieveNewMessage", data);
         }
         callBack("success");
@@ -543,22 +545,22 @@ module.exports = {
             break;
         }
       });
-      socket.on("broadCastOrder",function (data,callBack){
-          try {
-            orderDB.findOne({ ordId: data.ordId }).exec(function (err, doc) {
-              if (err) {
-                console.error(err);
-                callBack(err.message)
-                // return res.status(400).send(err.message);
-              }
-              callBack("success")
-             broadCastOrder({ orderData: doc, io: io });
-            });
-          } catch (error) {
-            console.log(error.message);
-            callBack(error.message);
-          }
-      })
+      socket.on("broadCastOrder", function (data, callBack) {
+        try {
+          orderDB.findOne({ ordId: data.ordId }).exec(function (err, doc) {
+            if (err) {
+              console.error(err);
+              callBack(err.message);
+              // return res.status(400).send(err.message);
+            }
+            callBack("success");
+            broadCastOrder({ orderData: doc, io: io });
+          });
+        } catch (error) {
+          console.log(error.message);
+          callBack(error.message);
+        }
+      });
     });
   },
 };
