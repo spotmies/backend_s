@@ -79,6 +79,11 @@ const newOrderSchema = {
     ref: "responses",
   },
   revealProfileTo: [String],
+  feedBackDetails: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: false,
+    ref: "partnerfeedbacks",
+  },
 };
 
 module.exports = mongoose.model("orders", newOrderSchema);

@@ -11,6 +11,7 @@ const responsesR = require("./responses/responses");
 const geocodeLocator = require("./geocode/geocode");
 const notificationR = require("./notifications/notifications");
 const catelogR = require("./service_catelogue/catelogue");
+const partnerFeedbackRoute = require("./feedBack/partner_feedback");
 // const loggerR = require("./loggers/loggers");
 //const postR = require("./posts/post");
 
@@ -19,6 +20,7 @@ const catelogR = require("./service_catelogue/catelogue");
 /* -------------------------------------------------------------------------- */
 
 router.use("/feed", feedB);
+router.use("/partner-feedback", partnerFeedbackRoute);
 router.use("/user", userR);
 router.use("/order", orderR);
 router.use("/partner", partnerR);
