@@ -1,4 +1,28 @@
 var array;
+var schemaObject = 
+  {
+    unitName: "Unit 1",
+    topics: [
+      {
+        topicName: "topic1",
+        data: {
+          media: [
+            {
+              mediaType: "video",
+              mediaUrl: "http://www.youtube.com/embed/dQw4w9WgXcQ",
+              imageTag: "tag1",
+            },
+            {
+              mediaType: "image",
+              mediaUrl: "http://www.google.com/images/srpr/logo3w.png",
+              imageTag: "tag2",
+            },
+          ],
+          content: "This is the first topic of unit 1",
+        },
+      },      
+    ],
+  }
 array = [
   {
     //unit 1
@@ -79,3 +103,6 @@ array = [
     ],
   },
 ];
+
+
+

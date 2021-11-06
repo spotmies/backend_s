@@ -3,12 +3,37 @@ const mongoose = require("mongoose");
 const connectdb = require("./src/config/db");
 const mainRoute = require("./src/routes/router");
 const { PythonShell } = require("python-shell");
+var GenerateSchema = require('generate-schema');
+var schemaObject = 
+  {
+    unitName: "Unit 1",
+    topics: [
+      {
+        topicName: "topic1",
+        data: {
+          media: [
+            {
+              mediaType: "video",
+              mediaUrl: "http://www.youtube.com/embed/dQw4w9WgXcQ",
+              imageTag: "tag1",
+            },
+            {
+              mediaType: "image",
+              mediaUrl: "http://www.google.com/images/srpr/logo3w.png",
+              imageTag: "tag2",
+            },
+          ],
+          content: "This is the first topic of unit 1",
+        },
+      },      
+    ],
+  }
 
 var bodyParser = require("body-parser");
 var cors = require("cors");
 
 var PORT = process.env.PORT || 4000;
-connectdb();
+//connectdb();
 
 const app = express();
 const server = require("http").createServer(app);
@@ -26,7 +51,7 @@ app.use(function (req, res, next) {
   next();
 });
 webSocket.start(io);
-firebaseFcm.start();
+//firebaseFcm.start();
 
 // app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -140,4 +165,20 @@ app.get("/geoJson/:id", (req, res) => {
 
 server.listen(PORT, () => {
   console.log(`app running on port ${PORT}`);
+
+  // var schema = GenerateSchema.json('Product',schemaObject);
+  // console.log(schema);
+  // console.log(schema.properties.topics);
+  // console.log(JSON.stringify(schema));
+
+  // var schema ={
+  //   title: 'Product',
+  //   type: 'object',
+  //   properties: {
+  //     unitName: { type: 'string' },
+  //     topics: { items: [
+        
+  //     ] }
+  //   }
+  // }
 });
