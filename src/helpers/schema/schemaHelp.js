@@ -10,6 +10,12 @@ const nonReqStr = {
   required: false,
 };
 
+const defaultString = {
+  type: String,
+  default: "",
+  required:false
+}
+
 //string
 const reqStr = {
   type: String,
@@ -195,6 +201,7 @@ module.exports = {
   bool,
   uIdSch,
   dobSch,
+  defaultString,
   phoneNum,
   altNum,
   nonReqEmail,

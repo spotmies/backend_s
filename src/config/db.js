@@ -11,9 +11,9 @@ const connectdb = async () => {
     })
     .then((result) => console.log("mongodb connected"))
     .catch((err) => console.log(err));
-  mongoose.set("useNewUrlParser", true);
-  mongoose.set("useFindAndModify", false);
-  mongoose.set("useCreateIndex", true);
+ // mongoose.set("useNewUrlParser", true);
+ // mongoose.set("useFindAndModify", false);
+ // mongoose.set("useCreateIndex", true);
 };
 
 module.exports = connectdb;

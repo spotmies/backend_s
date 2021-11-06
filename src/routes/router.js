@@ -12,6 +12,7 @@ const geocodeLocator = require("./geocode/geocode");
 const notificationR = require("./notifications/notifications");
 const catelogR = require("./service_catelogue/catelogue");
 const partnerFeedbackRoute = require("./feedBack/partner_feedback");
+const internsRoute = require("./career/interns");
 // const loggerR = require("./loggers/loggers");
 //const postR = require("./posts/post");
 
@@ -28,6 +29,7 @@ router.use(`/${constants.mainChatRoute}`, chatR);
 router.use(`/${constants.mainRouteResponse}`, responsesR);
 router.use("/notification", notificationR);
 router.use("/catelog", catelogR);
+router.use("/career/intern", internsRoute);
 router.get("/stamp", (req, res) => {
   let stamp = new Date().valueOf();
   res.send(stamp.toString());
