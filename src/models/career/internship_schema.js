@@ -6,6 +6,7 @@ const {
   timeStamp,
   modifiedAt,
   reqStr,
+  nonReqStr,
 } = require("../../helpers/schema/schemaHelp");
 
 const internshipSchema = new mongoose.Schema({
@@ -65,6 +66,8 @@ const internshipSchema = new mongoose.Schema({
     required: false,
     default: false,
   },
+  monthsOfExperience: nonReqStr,
+  rateYourselfOnTechnology: nonReqStr,
 });
 
 module.exports = mongoose.model("interns", internshipSchema);
