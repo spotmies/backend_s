@@ -3,10 +3,15 @@ const {
   reqStr,
   nonReqStr,
   uIdSch,
+  reqNum,
+  createdAt,
+  modifiedAt,
+  nonReqBool,
 } = require("../../helpers/schema/schemaHelp");
 
 var topicSchema = new mongoose.Schema({
-  TopicName: reqStr,
+  topicName: reqStr,
+  sort:reqNum,
   data: {
     media: [
       {
@@ -21,9 +26,13 @@ var topicSchema = new mongoose.Schema({
 });
 
 const unitSchema = new mongoose.Schema({
+  sort:reqNum,
   unitId: uIdSch,
-  required: true,
   unitName: reqStr,
   topics: [topicSchema],
-});
+  createdAt:createdAt,
+  lastModified:modifiedAt,
+  isDeleted:nonReqBool
+},  { timestamps: true }
+);
 module.exports = mongoose.model("tutorial_units", unitSchema);

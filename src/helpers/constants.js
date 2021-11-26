@@ -12,4 +12,10 @@ module.exports = {
   mainRouteResponse: "response",
   responses: "responses",
   newResponse: "newResponse",
+
+  /* ----------------------------- TUTORIAL UNITS ----------------------------- */
+  newUnit: "/new-unit",
+  units: "/units",
+  newTopic: "/add-new-topic-to-unit",
+  removeTopic: "/remove-topic-from-unit",
 };

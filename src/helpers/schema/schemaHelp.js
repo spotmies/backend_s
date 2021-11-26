@@ -1,3 +1,10 @@
+//required timestamps
+const timstampValidate = (value) => {
+  var n = value.toString();
+  if (n.length === 13) return true;
+  return false;
+};
+
 //number
 const reqNum = {
   type: Number,
@@ -10,11 +17,21 @@ const nonReqStr = {
   required: false,
 };
 
+const createdAt = {
+  required: false,
+  immutable: true,
+  type: Number,
+  min: 0000000000000,
+  max: 9999999999999,
+  validate: [timstampValidate, "createdAt must be length 13"],
+  default: Date.now,
+};
+
 const defaultString = {
   type: String,
   default: "",
-  required:false
-}
+  required: false,
+};
 
 //string
 const reqStr = {
@@ -43,12 +60,6 @@ const phoneNum = {
   max: 9999999999,
 };
 
-//required timestamps
-const timstampValidate = (value) => {
-  var n = value.toString();
-  if (n.length === 13) return true;
-  return false;
-};
 const timeStamp = {
   required: false,
   immutable: true,
@@ -58,6 +69,7 @@ const timeStamp = {
   validate: [timstampValidate, "timestamp must be length 13"],
   default: new Date().valueOf(),
 };
+
 const modifiedAt = {
   required: false,
   immutable: false,
@@ -65,8 +77,9 @@ const modifiedAt = {
   min: 0000000000000,
   max: 9999999999999,
   validate: [timstampValidate, "modifiedAt must be length 13"],
-  default: new Date().valueOf(),
+  default: Date.now,
 };
+
 const orderSchedule = {
   required: false,
   type: Number,
@@ -182,11 +195,16 @@ const unChangeNum = {
   immutable: true,
   required: true,
 };
-const isVerifedSch={
-  required:false,
-  default:false,
-  type:Boolean
-}
+const isVerifedSch = {
+  required: false,
+  default: false,
+  type: Boolean,
+};
+const nonReqBool = {
+  required: false,
+  default: false,
+  type: Boolean,
+};
 module.exports = {
   reqNum,
   nonReqStr,
@@ -215,4 +233,6 @@ module.exports = {
   responseSchedule,
   orderSchedule,
   isVerifedSch,
+  createdAt,
+  nonReqBool,
 };

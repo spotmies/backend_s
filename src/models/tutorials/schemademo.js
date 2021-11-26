@@ -3,9 +3,11 @@ array = [
   {
     //unit 1
     unitName: "Unit 1",
+    sort: 1,
     topics: [
       {
         topicName: "topic1",
+        sort: 1,
         data: {
           media: [
             {
@@ -22,6 +24,7 @@ array = [
       },
       {
         topicName: "topic2",
+        sort: 2,
         data: {
           media: [
             {
@@ -42,6 +45,7 @@ array = [
   {
     //unit 2
     unitName: "Unit 2",
+    sort: 2,
     topics: [
       {
         topicName: "topic1",
