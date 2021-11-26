@@ -170,6 +170,7 @@ const uIdSch = {
   unique: true,
   immutable: true,
   required: true,
+  minlength: 4,
 };
 
 const dobSch = {
