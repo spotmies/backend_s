@@ -27,11 +27,28 @@ const createdAt = {
   default: Date.now,
 };
 
+
+
 const defaultString = {
   type: String,
   default: "",
   required: false,
 };
+
+const settingId = {
+  type: String,
+  required: true,
+  minlength: 4,
+
+}
+
+const constantsId = {
+  type:String,
+  required:true,
+  minlength:4,
+  unique:true,
+  immutable:true,
+}
 
 //string
 const reqStr = {
@@ -219,6 +236,7 @@ module.exports = {
   arrSch,
   bool,
   uIdSch,
+  constantsId,
   dobSch,
   defaultString,
   phoneNum,
@@ -235,4 +253,5 @@ module.exports = {
   isVerifedSch,
   createdAt,
   nonReqBool,
+  settingId,
 };
