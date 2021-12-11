@@ -212,6 +212,12 @@ const unChangeNum = {
   immutable: true,
   required: true,
 };
+const uniqueNumImmutable = {
+  type: Number,
+  immutable: true,
+  required: true,
+  unique: true,
+}
 const isVerifedSch = {
   required: false,
   default: false,
@@ -254,4 +260,5 @@ module.exports = {
   createdAt,
   nonReqBool,
   settingId,
+  uniqueNumImmutable,
 };

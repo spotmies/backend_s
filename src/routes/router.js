@@ -16,6 +16,7 @@ const internsRoute = require("./career/interns");
 const tutorialUnitRouter = require("./tutorials/single_unit");
 const tutorialCoursesRouter = require("./tutorials/courses");
 const constantsR = require("./constants/constants");
+const serviceListRoute = require("../routes/services_list/services_list");
 // const loggerR = require("./loggers/loggers");
 //const postR = require("./posts/post");
 
@@ -36,6 +37,7 @@ router.use("/career/intern", internsRoute);
 router.use("/tutorial/unit", tutorialUnitRouter);
 router.use("/tutorial/course", tutorialCoursesRouter);
 router.use("/constant", constantsR);
+router.use("/services", serviceListRoute);
 router.get("/stamp", (req, res) => {
   let stamp = new Date().valueOf();
   res.send(stamp.toString());
