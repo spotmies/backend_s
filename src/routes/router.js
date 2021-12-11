@@ -14,6 +14,7 @@ const catelogR = require("./service_catelogue/catelogue");
 const partnerFeedbackRoute = require("./feedBack/partner_feedback");
 const internsRoute = require("./career/interns");
 const tutorialUnitRouter = require("./tutorials/single_unit");
+const tutorialCoursesRouter = require("./tutorials/courses");
 const constantsR = require("./constants/constants");
 // const loggerR = require("./loggers/loggers");
 //const postR = require("./posts/post");
@@ -32,7 +33,8 @@ router.use(`/${constants.mainRouteResponse}`, responsesR);
 router.use("/notification", notificationR);
 router.use("/catelog", catelogR);
 router.use("/career/intern", internsRoute);
-router.use("/tutorial", tutorialUnitRouter);
+router.use("/tutorial/unit", tutorialUnitRouter);
+router.use("/tutorial/course", tutorialCoursesRouter);
 router.use("/constant", constantsR);
 router.get("/stamp", (req, res) => {
   let stamp = new Date().valueOf();
