@@ -16,7 +16,7 @@ const {
   nonReqBool,
 } = require("../../helpers/schema/schemaHelp");
 
-const partnerRegistration = {
+const partnerRegistration = new mongoose.Schema({
   name: reqStr,
   dob: dobSch,
   perAdd: nonReqStr,
@@ -91,9 +91,12 @@ const partnerRegistration = {
   homeLocation: [Number],
   currentLocation: [Number],
   isDocumentsVerified: nonReqBool,
+  appConfig:nonReqBool,
+  isActive:nonReqBool,
+
   //common fields
   createdAt: createdAt,
   lastModified: modifiedAt,
   isDeleted: nonReqBool,
-};
+},{timestamps:true});
 module.exports = mongoose.model("partners", partnerRegistration);
