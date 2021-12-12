@@ -5,13 +5,15 @@ const {
   nonReqStr,
   nonReqNum,
   uniqueNum,
-  nonReqUniqueStr,
   isVerifedSch,
   dobSch,
   timeStamp,
   bool,
   uIdSch,
   nonReqTimeStamp,
+  createdAt,
+  modifiedAt,
+  nonReqBool,
 } = require("../../helpers/schema/schemaHelp");
 
 const partnerRegistration = {
@@ -88,5 +90,10 @@ const partnerRegistration = {
   },
   homeLocation: [Number],
   currentLocation: [Number],
+  isDocumentsVerified: nonReqBool,
+  //common fields
+  createdAt: createdAt,
+  lastModified: modifiedAt,
+  isDeleted: nonReqBool,
 };
 module.exports = mongoose.model("partners", partnerRegistration);

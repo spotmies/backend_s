@@ -84,4 +84,17 @@ router.put("/admins/:id", (req, res) => {
   }
 });
 
+/* ------------------------- SET PASSWORD FOR ADMIN ------------------------- */
+
+router.post("/admin/set-password/:id", (req, res) => {
+  const body = req.body;
+  const id = req.params.id;
+  try {
+    //need to create hash function here
+    //and check with the hash function
+  } catch (error) {
+    return catchFunc(error, res);
+  }
+});
+
 module.exports = router;
