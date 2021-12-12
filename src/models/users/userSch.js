@@ -10,6 +10,8 @@ const {
   isVerifedSch,
 
   timeStamp,
+  nonReqBool,
+  createdAt,
 } = require("../../helpers/schema/schemaHelp");
 
 const userSchema = {
@@ -17,7 +19,6 @@ const userSchema = {
   phNum: phoneNum,
   join: timeStamp,
   pic: nonReqStr,
-  lastModified: modifiedAt,
   eMail: { type: String, trim: true },
   isEmailVerified: isVerifedSch,
   isAltNumVerified: isVerifedSch,
@@ -43,6 +44,13 @@ const userSchema = {
   },
   address: nonReqStr,
   userDeviceToken: nonReqStr,
+  appConfig:nonReqBool,
+  isActive:nonReqBool,
+  // common fields
+  isDeleted:nonReqBool,
+  createdAt:createdAt,
+  lastModified: modifiedAt,
+
 };
 
 module.exports = mongoose.model("users", userSchema);
