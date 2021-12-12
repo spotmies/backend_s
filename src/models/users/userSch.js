@@ -14,43 +14,45 @@ const {
   createdAt,
 } = require("../../helpers/schema/schemaHelp");
 
-const userSchema = new mongoose.Schema({
-  name: reqStr,
-  phNum: phoneNum,
-  join: timeStamp,
-  pic: nonReqStr,
-  eMail: { type: String, trim: true },
-  isEmailVerified: isVerifedSch,
-  isAltNumVerified: isVerifedSch,
-  altNum: altNum,
-  uId: uIdSch,
-  userState: {
-    type: String,
-    required: true,
-    enum: ["active", "inActive", "blocked"],
+const userSchema = new mongoose.Schema(
+  {
+    name: reqStr,
+    phNum: phoneNum,
+    join: timeStamp,
+    pic: nonReqStr,
+    eMail: { type: String, trim: true },
+    isEmailVerified: isVerifedSch,
+    isAltNumVerified: isVerifedSch,
+    altNum: altNum,
+    uId: uIdSch,
+    userState: {
+      type: String,
+      required: true,
+      enum: ["active", "inActive", "blocked"],
+    },
+    orders: [{ type: mongoose.Schema.Types.ObjectId, ref: "orders" }],
+    lastLogin: nonReqNum,
+    logs: [String],
+    referalCode: {
+      type: String,
+      trim: true,
+      index: true,
+      unique: true,
+      sparse: true,
+    },
+    location: {
+      type: [Number],
+    },
+    address: nonReqStr,
+    userDeviceToken: nonReqStr,
+    appConfig: nonReqBool,
+    isActive: nonReqBool,
+    // common fields
+    isDeleted: nonReqBool,
+    createdAt: createdAt,
+    lastModified: modifiedAt,
   },
-  orders: [{ type: mongoose.Schema.Types.ObjectId, ref: "orders" }],
-  lastLogin: nonReqNum,
-  logs: [String],
-  referalCode: {
-    type: String,
-    trim: true,
-    index: true,
-    unique: true,
-    sparse: true,
-  },
-  location: {
-    type: [Number],
-  },
-  address: nonReqStr,
-  userDeviceToken: nonReqStr,
-  appConfig:nonReqBool,
-  isActive:nonReqBool,
-  // common fields
-  isDeleted:nonReqBool,
-  createdAt:createdAt,
-  lastModified: modifiedAt,
-
-},{timestamps:true});
+  { timestamps: true }
+);
 
 module.exports = mongoose.model("users", userSchema);
