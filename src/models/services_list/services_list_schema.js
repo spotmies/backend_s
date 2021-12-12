@@ -1,29 +1,39 @@
 const mongoose = require("mongoose");
 const {
   reqStr,
-  defaultString,
   reqNum,
   nonReqBool,
   modifiedAt,
   createdAt,
   arrSch,
   uniqueNumImmutable,
+  nonReqStr,
 } = require("../../helpers/schema/schemaHelp");
 
 const servicesListSchema = new mongoose.Schema(
   {
     nameOfService: reqStr,
-    smallNameOfService: defaultString,
-    description: defaultString,
+    smallNameOfService: nonReqStr,
+    description: nonReqStr,
     serviceId: uniqueNumImmutable,
     sort: reqNum,
-    userAppIcon: defaultString,
-    userWebIcon: defaultString,
-    adminIcon: defaultString,
-    partnerAppIcon: defaultString,
-    listOfSubServices: arrSch,
-    primaryColor: defaultString,
-    secondaryColor: defaultString,
+    userAppIcon: nonReqStr,
+    userWebIcon: nonReqStr,
+    adminIcon: nonReqStr,
+    partnerAppIcon: nonReqStr,
+    subServices: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "services_list" },
+    ],
+    isMainService: nonReqBool,
+    userWebPrimaryColor: nonReqStr,
+    userWebSecondaryColor: nonReqStr,
+    userAppPrimaryColor: nonReqStr,
+    userAppSecondaryColor: nonReqStr,
+    adminPrimaryColor: nonReqStr,
+    adminSecondaryColor: nonReqStr,
+    partnerAppPrimaryColor: nonReqStr,
+    partnerAppSecondaryColor: nonReqStr,
+
     images: arrSch,
 
     isActive: nonReqBool,
