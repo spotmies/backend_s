@@ -14,7 +14,7 @@ const {
   createdAt,
 } = require("../../helpers/schema/schemaHelp");
 
-const userSchema = {
+const userSchema = new mongoose.Schema({
   name: reqStr,
   phNum: phoneNum,
   join: timeStamp,
@@ -51,6 +51,6 @@ const userSchema = {
   createdAt:createdAt,
   lastModified: modifiedAt,
 
-};
+},{timestamps:true});
 
 module.exports = mongoose.model("users", userSchema);

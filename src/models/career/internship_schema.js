@@ -68,6 +68,6 @@ const internshipSchema = new mongoose.Schema({
   },
   monthsOfExperience: nonReqStr,
   rateYourselfOnTechnology: nonReqStr,
-});
+},{timestamps: true});
 
 module.exports = mongoose.model("interns", internshipSchema);

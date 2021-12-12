@@ -47,6 +47,6 @@ const adminSchema = new Mongoose.Schema({
   createdAt: createdAt,
   lastModified: modifiedAt,
   isDeleted: nonReqBool,
-});
+},{timestamps: true});
 
 module.exports = Mongoose.model("Admins", adminSchema);
