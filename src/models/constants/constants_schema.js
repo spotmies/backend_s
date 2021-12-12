@@ -69,7 +69,14 @@ const constantsSchema = new Mongoose.Schema(
     serviceRequest: [idSchema],
     calling: [idSchema],
     maps: [idSchema],
+    others: [idSchema],
+    others2: [idSchema],
+    others3: [idSchema],
+    others4: [idSchema],
+    others5: [idSchema],
+
     /* ----------------- PARTNER APP SCHEMA FOR EXTRA VARIABLES ----------------- */
+    catelogs: [idSchema],
     learn: [idSchema],
     courseHome: [idSchema],
     courseList: [idSchema],
