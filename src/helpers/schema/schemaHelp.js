@@ -77,6 +77,18 @@ const phoneNum = {
   max: 9999999999,
 };
 
+const reqArrOfNum = {
+  type: [Number],
+  required: true,
+
+};
+
+const arrOfNum = {
+  type: [Number],
+  required: false,
+};
+
+
 const timeStamp = {
   required: false,
   immutable: true,
@@ -189,6 +201,16 @@ const nonReqEmail = {
   index: true,
 };
 
+const reqEmail = {
+  required: true,
+  type: String,
+  unique: true,
+  validate: [validateEmail, "Please fill a valid email address"],
+  sparse: true,
+  index: true,
+};
+
+
 const arrSch = [{ type: String }];
 
 const bool = {
@@ -261,4 +283,7 @@ module.exports = {
   nonReqBool,
   settingId,
   uniqueNumImmutable,
+  reqEmail,
+  reqArrOfNum,
+  arrOfNum
 };
