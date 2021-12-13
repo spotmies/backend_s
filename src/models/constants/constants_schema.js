@@ -69,6 +69,7 @@ const constantsSchema = new Mongoose.Schema(
     serviceRequest: [idSchema],
     calling: [idSchema],
     maps: [idSchema],
+    utilities: [idSchema],
     others: [idSchema],
     others2: [idSchema],
     others3: [idSchema],
