@@ -41,7 +41,6 @@ const adminSchema = new Mongoose.Schema({
     required: false,
     trim: true,
     minlength: 8,
-    maxlength: 32,
   },
 
   createdAt: createdAt,
