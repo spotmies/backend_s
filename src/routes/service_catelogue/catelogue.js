@@ -43,6 +43,7 @@ router.post("/newCatelog/:pId", function (req, res) {
 router.put("/catelogs/:docId", (req, res) => {
   const docId = req.params.docId;
   const body = req.body;
+  body.lastModified = new Date().valueOf();
   try {
     catelogDB.findByIdAndUpdate(
       docId,
@@ -107,7 +108,10 @@ router.delete("/catelogs/:docId", (req, res) => {
   try {
     catelogDB.findByIdAndUpdate(
       docId,
-      { isDeleted: originalUrl.isDeleted ?? true },
+      {
+        isDeleted: originalUrl.isDeleted ?? true,
+        $set: { lastModified: new Date().valueOf() },
+      },
       { new: true },
       (err, data) => {
         if (err) {
@@ -115,7 +119,7 @@ router.delete("/catelogs/:docId", (req, res) => {
           return res.status(400).json(err.message);
         }
         if (!data) return res.status(404).json(data);
-        return res.sendStatus(204)
+        return res.sendStatus(204);
       }
     );
   } catch (error) {

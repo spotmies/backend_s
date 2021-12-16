@@ -80,7 +80,7 @@ router.get(`/${constants.getPartner}/:pId`, (req, res) => {
         path: originalUrl.extractData == "true" ? "orders" : "null",
       })
       .populate({
-        path: originalUrl.extractData == "true" ? "catelogs" : "null",
+        path: originalUrl.extractData == "true" ? "catelogs" : "null",match: { isDeleted: false }
       })
 
       // .populate({

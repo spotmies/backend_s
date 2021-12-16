@@ -4,7 +4,6 @@ const {
   createdAt,
   modifiedAt,
   nonReqBool,
-  uIdSch,
   nonReqStr,
   reqNum,
 } = require("../../helpers/schema/schemaHelp");
