@@ -91,6 +91,7 @@ const partnerRegistration = new mongoose.Schema({
   homeLocation: [Number],
   currentLocation: [Number],
   isDocumentsVerified: nonReqBool,
+  enableModifications: nonReqBool,
   appConfig:nonReqBool,
   isActive:nonReqBool,
 
