@@ -47,7 +47,7 @@ router.get("/doc-id/:docId", (req, res) => {
   let isDeleted = originalUrl.isDeleted ?? false;
   try {
     constantsSchema.findOne(
-      { docId: docId, isDeleted: isDeleted },
+      { constantsId: docId, isDeleted: isDeleted },
       (err, data) => {
         return processRequest(err, data, res);
       }
