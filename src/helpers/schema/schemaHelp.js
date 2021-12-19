@@ -10,6 +10,11 @@ const reqNum = {
   type: Number,
   required: true,
 };
+const defaultNum = {
+  type: Number,
+  default: 0,
+  required:false
+};
 
 //string notRequired
 const nonReqStr = {
@@ -285,5 +290,6 @@ module.exports = {
   uniqueNumImmutable,
   reqEmail,
   reqArrOfNum,
-  arrOfNum
+  arrOfNum,
+  defaultNum
 };

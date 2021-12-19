@@ -1,13 +1,13 @@
 const mongoose = require("mongoose");
 const {
   reqStr,
-  reqNum,
   nonReqBool,
   modifiedAt,
   createdAt,
   arrSch,
   uniqueNumImmutable,
   nonReqStr,
+  defaultNum,
 } = require("../../helpers/schema/schemaHelp");
 
 const servicesListSchema = new mongoose.Schema(
@@ -16,7 +16,9 @@ const servicesListSchema = new mongoose.Schema(
     smallNameOfService: nonReqStr,
     description: nonReqStr,
     serviceId: uniqueNumImmutable,
-    sort: reqNum,
+    sort: defaultNum,
+    sort2: defaultNum,
+    sort3: defaultNum,
     userAppIcon: nonReqStr,
     userWebIcon: nonReqStr,
     adminIcon: nonReqStr,
