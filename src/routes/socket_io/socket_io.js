@@ -220,7 +220,7 @@ function broadCastOrder({ orderData, res, io } = {}) {
     partnerDB.updateMany(
       { job: orderData.job, availability: true },
       {
-        $push: { inComingOrders: orderData._id },
+        $addToSet: { inComingOrders: orderData._id },
       },
       function (err, doc) {
         if (err) {

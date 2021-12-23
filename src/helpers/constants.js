@@ -2,6 +2,7 @@ module.exports = {
   createOrder: "Create-Ord",
   userDetails: "users",
   orders: "orders",
+  allOrders: "all-orders",
   newPartner: "newPartner",
   getPartner: "partners",
   mainChatRoute: "chat",
