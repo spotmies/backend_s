@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const constants = require("../../helpers/constants");
 const unitDB = require("../../models/tutorials/single_unit_schema");
-const { parseParams } = require("../../helpers/query/parse_params");
 
 /* ---------------------- CREATE NEW UNIT FOR TUTORIAL ---------------------- */
 
@@ -21,7 +20,7 @@ router.post(constants.newUnit, (req, res) => {
 
 router.get(`${constants.units}/:unitId`, (req, res) => {
   const unitId = req.params.unitId;
-  let originalUrl = parseParams(req.originalUrl);
+  let originalUrl = req.query;
   let isDeleted = originalUrl.isDeleted ?? false;
   try {
     unitDB.findOne({ unitId: unitId, isDeleted: isDeleted }, (err, data) => {
@@ -37,7 +36,7 @@ router.get(`${constants.units}/:unitId`, (req, res) => {
 router.put(`${constants.units}/:unitId`, (req, res) => {
   const unitId = req.params.unitId;
   const body = req.body;
-  let originalUrl = parseParams(req.originalUrl);
+  let originalUrl = req.query;
   let isDeleted = originalUrl.isDeleted ?? false;
   try {
     unitDB.findOneAndUpdate(
@@ -57,13 +56,13 @@ router.put(`${constants.units}/:unitId`, (req, res) => {
 router.post(`${constants.newTopic}/:unitId`, (req, res) => {
   const unitId = req.params.unitId;
   const body = req.body;
-  let originalUrl = parseParams(req.originalUrl);
+  let originalUrl = req.query;
   let isDeleted = originalUrl.isDeleted ?? false;
   try {
     unitDB.findOneAndUpdate(
       { unitId: unitId, isDeleted: isDeleted },
       { $push: { topics: body } },
-      {new : true},
+      { new: true },
       (err, data) => {
         return processRequest(err, data, res);
       }
@@ -78,13 +77,13 @@ router.post(`${constants.newTopic}/:unitId`, (req, res) => {
 router.delete(`${constants.removeTopic}/:unitId`, (req, res) => {
   const unitId = req.params.unitId;
   const topicName = req.body.topicName;
-  let originalUrl = parseParams(req.originalUrl);
+  let originalUrl = req.query;
   let isDeleted = originalUrl.isDeleted ?? false;
   try {
     unitDB.findOneAndUpdate(
       { unitId: unitId, isDeleted: isDeleted },
       { $pull: { topics: { topicName: topicName } } },
-        { new: true },
+      { new: true },
       (err, data) => {
         return processRequest(err, data, res);
       }
@@ -96,23 +95,21 @@ router.delete(`${constants.removeTopic}/:unitId`, (req, res) => {
 
 /* ------------------------- DELETE UNIT BY UNIT ID ------------------------- */
 
-
 router.delete(`${constants.units}/:unitId`, (req, res) => {
-    const unitId = req.params.unitId;
-    try {
-        unitDB.findOneAndUpdate(
-            { unitId: unitId},
-            { $set: { isDeleted: true } },
-            { new: true },
-            (err, data) => {
-                return processRequest(err, data, res);
-            }
-        );
-    } catch (error) {
-        return catchFunc(error, res);
-    }
+  const unitId = req.params.unitId;
+  try {
+    unitDB.findOneAndUpdate(
+      { unitId: unitId },
+      { $set: { isDeleted: true } },
+      { new: true },
+      (err, data) => {
+        return processRequest(err, data, res);
+      }
+    );
+  } catch (error) {
+    return catchFunc(error, res);
+  }
 });
-
 
 function processRequest(err, data, res) {
   if (err) {

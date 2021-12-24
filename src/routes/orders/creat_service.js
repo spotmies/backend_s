@@ -4,7 +4,6 @@ const orderDB = require("../../models/orders/create_service_sch");
 const userDb = require("../../models/users/userSch");
 const responsesDB = require("../../models/responses/responses_sch");
 const constants = require("../../helpers/constants");
-const { parseParams } = require("../../helpers/query/parse_params");
 const { notificationByToken } = require("../firebase_admin/firebase_admin");
 
 /* -------------------------------------------------------------------------- */
@@ -54,7 +53,7 @@ router.post(`/${constants.createOrder}/:uId`, (req, res, next) => {
 
 router.get(`/orders/:ordId`, (req, res) => {
   const ordId = req.params.ordId;
-  // let originalUrl = parseParams(req.originalUrl);
+  // let originalUrl = req.query;
   try {
     orderDB
       .findOne({
@@ -124,7 +123,7 @@ function updateOrder({ id, updateBody, tag = "update", response }) {
 router.delete(`/${constants.orders}/:ordId`, (req, res) => {
   //console.log("deleting");
   const ordId = req.params.ordId;
-  const originalUrl = parseParams(req.originalUrl);
+  const originalUrl = req.query;
   return updateOrder({
     id: ordId,
     updateBody: {
@@ -141,7 +140,7 @@ router.delete(`/${constants.orders}/:ordId`, (req, res) => {
 /*                               GET ALL ORDERS                               */
 /* -------------------------------------------------------------------------- */
 router.get(`/${constants.orders}`, (req, res) => {
-  let originalUrl = parseParams(req.originalUrl);
+  let originalUrl = req.query;
   console.log("all orders api hit");
   try {
     orderDB.find(
@@ -166,7 +165,7 @@ router.get(`/${constants.orders}`, (req, res) => {
 /*                       GET ALL ORDERS BY USER/PARTNER                       */
 /* -------------------------------------------------------------------------- */
 router.get(`/:userType/:uId`, (req, res) => {
-  let originalUrl = parseParams(req.originalUrl);
+  let originalUrl = req.query;
   const uOrPId = req.params.uId;
   let deleteQuery;
   let deleteField = false;
@@ -215,7 +214,7 @@ router.get(`/:userType/:uId`, (req, res) => {
 /* -------------------------------------------------------------------------- */
 // router.get(`/user/:uId`, (req, res) => {
 //   const uId = req.params.uId;
-//   let originalUrl = parseParams(req.originalUrl);
+//   let originalUrl = req.query;
 //   try {
 //     orderDB.find(
 //       { uId: uId, isDeletedForUser: originalUrl.isDeletedForUser ?? false },
@@ -238,7 +237,7 @@ router.get(`/:userType/:uId`, (req, res) => {
 
 // router.get(`/partner/:pId`, (req, res) => {
 //   const pId = req.params.pId;
-//   let originalUrl = parseParams(req.originalUrl);
+//   let originalUrl = req.query;
 //   try {
 //     orderDB.find(
 //       { pId: pId,isDeletedForPartner:originalUrl.isDeletedForPartner ?? false},

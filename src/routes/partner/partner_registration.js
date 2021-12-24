@@ -3,7 +3,6 @@ const router = express.Router();
 const partnerDB = require("../../models/partner/partner_registration_sch");
 const constants = require("../../helpers/constants");
 const complaintR = require("./complaints");
-const { parseParams } = require("../../helpers/query/parse_params");
 
 /* -------------------------------------------------------------------------- */
 /*                                 NEW PARTNER                                */
@@ -53,7 +52,7 @@ router.post(`/${constants.newPartner}`, (req, res, next) => {
 /* -------------------------------------------------------------------------- */
 router.get(`/${constants.getPartner}/:pId`, (req, res) => {
   const pId = req.params.pId;
-  let originalUrl = parseParams(req.originalUrl);
+  let originalUrl = req.query;
   console.log(originalUrl);
   //commentt
   try {
@@ -80,7 +79,8 @@ router.get(`/${constants.getPartner}/:pId`, (req, res) => {
         path: originalUrl.extractData == "true" ? "orders" : "null",
       })
       .populate({
-        path: originalUrl.extractData == "true" ? "catelogs" : "null",match: { isDeleted: false }
+        path: originalUrl.extractData == "true" ? "catelogs" : "null",
+        match: { isDeleted: false },
       })
 
       // .populate({

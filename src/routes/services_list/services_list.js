@@ -3,7 +3,6 @@ const {
   processRequest,
   catchFunc,
 } = require("../../helpers/error_handling/process_request");
-const { parseParams } = require("../../helpers/query/parse_params");
 const router = express.Router();
 const listDB = require("../../models/services_list/services_list_schema");
 
@@ -23,7 +22,7 @@ router.post("/new-service-list", (req, res) => {
 /* -------------------------- GET ALL SERVICE LIST -------------------------- */
 
 router.get("/all-service-list", (req, res) => {
-  const parmas = parseParams(req.originalUrl);
+  const parmas = req.query;
   const isDeleted = parmas.isDeleted ?? false;
   const isActive = parmas.isActive ?? true;
   try {

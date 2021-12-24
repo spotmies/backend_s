@@ -22,16 +22,13 @@
   },
   "homepage": "https://github.com/modernsilpi/backend_s#readme",
   "dependencies": {
-    "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "dotenv": "^9.0.2",
-    "express": "^4.17.1",
+    "express": "^4.17.2",
     "fcm-node": "^1.6.1",
     "firebase-admin": "^9.11.1",
     "mongoose": "^6.0.7",
     "nodemon": "^2.0.12",
-    "querystring": "^0.2.1",
-    "socket.io": "^2.4.1",
-    "url": "^0.11.0"
+    "socket.io": "^2.4.1"
   }
 }

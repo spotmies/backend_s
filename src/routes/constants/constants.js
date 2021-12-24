@@ -1,7 +1,6 @@
 const Router = require("express");
 const router = Router();
 const constantsSchema = require("../../models/constants/constants_schema");
-const { parseParams } = require("../../helpers/query/parse_params");
 const {
   catchFunc,
   processRequest,
@@ -26,7 +25,7 @@ router.post("/new-constants", (req, res) => {
 /* -------------------------------------------------------------------------- */
 router.get("/constants/:id", (req, res) => {
   let id = req.params.id;
-  let originalUrl = parseParams(req.originalUrl);
+  let originalUrl = req.query;
   let isDeleted = originalUrl.isDeleted ?? false;
 
   try {
@@ -43,7 +42,7 @@ router.get("/constants/:id", (req, res) => {
 /* -------------------------------------------------------------------------- */
 router.get("/doc-id/:docId", (req, res) => {
   let docId = req.params.docId;
-  let originalUrl = parseParams(req.originalUrl);
+  let originalUrl = req.query;
   let isDeleted = originalUrl.isDeleted ?? false;
   try {
     constantsSchema.findOne(
@@ -61,7 +60,7 @@ router.get("/doc-id/:docId", (req, res) => {
 /*                              GET ALL CONSTANTS                              */
 /* -------------------------------------------------------------------------- */
 router.get("/all-constants", (req, res) => {
-  let originalUrl = parseParams(req.originalUrl);
+  let originalUrl = req.query;
   let isDeleted = originalUrl.isDeleted ?? false;
   try {
     constantsSchema.find({ isDeleted: isDeleted }, (err, data) => {
@@ -77,7 +76,7 @@ router.get("/all-constants", (req, res) => {
 /* -------------------------------------------------------------------------- */
 router.post("/constants-to-screen/:id", (req, res) => {
   let id = req.params.id;
-  let originalUrl = parseParams(req.originalUrl);
+  let originalUrl = req.query;
   let isDeleted = originalUrl.isDeleted ?? false;
   let updateBody = req.body.payload;
   let screenName = req.body.screenName;
@@ -101,7 +100,7 @@ router.post("/constants-to-screen/:id", (req, res) => {
 
 router.put("/constants-to-screen/:id", (req, res) => {
   let id = req.params.id;
-  let originalUrl = parseParams(req.originalUrl);
+  let originalUrl = req.query;
   let isDeleted = originalUrl.isDeleted ?? false;
   let updateBody = req.body.payload;
   let screenName = req.body.screenName;
@@ -116,7 +115,10 @@ router.put("/constants-to-screen/:id", (req, res) => {
         if (!data) return res.status(404).json("No data found");
         constantsSchema.findOneAndUpdate(
           { _id: id, isDeleted: isDeleted },
-          { $push: { [screenName]: updateBody },$set:{lastModified:Date.now().toString()} },
+          {
+            $push: { [screenName]: updateBody },
+            $set: { lastModified: Date.now().toString() },
+          },
           { new: true },
           (err, data) => {
             return processRequest(err, data, res);
@@ -134,14 +136,17 @@ router.put("/constants-to-screen/:id", (req, res) => {
 /* -------------------------------------------------------------------------- */
 router.delete("/constants-to-screen/:id", (req, res) => {
   let id = req.params.id;
-  let originalUrl = parseParams(req.originalUrl);
+  let originalUrl = req.query;
   let isDeleted = originalUrl.isDeleted ?? false;
   let screenName = req.body.screenName;
   let objId = req.body.objId;
   try {
     constantsSchema.findOneAndUpdate(
       { _id: id, isDeleted: isDeleted },
-      { $pull: { [screenName]: { objId: objId } },$set:{lastModified:Date.now().toString()} },
+      {
+        $pull: { [screenName]: { objId: objId } },
+        $set: { lastModified: Date.now().toString() },
+      },
       { new: true },
       (err, data) => {
         return processRequest(err, data, res);
@@ -156,7 +161,7 @@ router.delete("/constants-to-screen/:id", (req, res) => {
 /*                               UPDATE CONSTANTS                              */
 /* -------------------------------------------------------------------------- */
 router.put("/constants/:id", (req, res) => {
-  let originalUrl = parseParams(req.originalUrl);
+  let originalUrl = req.query;
 
   let isDeleted = originalUrl.isDeleted ?? false;
   try {

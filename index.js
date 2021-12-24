@@ -2,7 +2,6 @@ const express = require("express");
 const connectdb = require("./src/config/db");
 const mainRoute = require("./src/routes/router");
 
-var bodyParser = require("body-parser");
 var cors = require("cors");
 
 var PORT = process.env.PORT || 4000;
@@ -13,7 +12,6 @@ const server = require("http").createServer(app);
 var io = require("socket.io")(server);
 var webSocket = require("./src/routes/socket_io/socket_io");
 var firebaseFcm = require("./src/routes/firebase_admin/firebase_admin");
-const { parseParams } = require("./src/helpers/query/parse_params");
 
 app.use(cors());
 app.use(function (req, res, next) {
@@ -24,15 +22,13 @@ app.use(function (req, res, next) {
   next();
 });
 webSocket.start(io);
-//firebaseFcm.start();
-
-// app.use(bodyParser.urlencoded({ extended: true }));
+firebaseFcm.start();
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false }));
 
 // parse application/json
-app.use(bodyParser.json());
+app.use(express.json());
 
 app.use("/api", mainRoute);
 

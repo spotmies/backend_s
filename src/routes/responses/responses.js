@@ -4,7 +4,6 @@ const responsesDB = require("../../models/responses/responses_sch");
 const orderDB = require("../../models/orders/create_service_sch");
 const partnerDB = require("../../models/partner/partner_registration_sch");
 const constants = require("../../helpers/constants");
-const { parseParams } = require("../../helpers/query/parse_params");
 const { notificationByToken } = require("../firebase_admin/firebase_admin");
 
 /* -------------------------------------------------------------------------- */
@@ -180,7 +179,7 @@ router.put(`/${constants.responses}/:ID`, (req, res, next) => {
 /* -------------------------------------------------------------------------- */
 router.delete(`/${constants.responses}/:ID`, (req, res) => {
   const ID = req.params.ID;
-  const params = parseParams(req.originalUrl);
+  const params = req.query;
   var updateField;
   if (params.userType == constants.user) {
     updateField = "isDeletedForUser";

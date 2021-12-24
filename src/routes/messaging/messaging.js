@@ -1,4 +1,3 @@
-const { parseParams } = require("../../helpers/query/parse_params");
 
 const express = require("express");
 const router = express.Router();
@@ -18,7 +17,12 @@ router.post(`/${constants.newChat}`, (req, res, next) => {
           return res.status(400).send(err.message);
         }
         if (!doc) return res.status(404).json(doc);
-        return getChatById({res:res,msgId:doc.msgId,cBuild:"cBuild",cBuildValue:"1"});
+        return getChatById({
+          res: res,
+          msgId: doc.msgId,
+          cBuild: "cBuild",
+          cBuildValue: "1",
+        });
       })
       .catch((err) => {
         if (err) {
@@ -33,10 +37,10 @@ router.post(`/${constants.newChat}`, (req, res, next) => {
 /* -------------------------------------------------------------------------- */
 /*                             GET CHAT BY CHAT ID                            */
 /* -------------------------------------------------------------------------- */
-function getChatById({res,msgId,cBuild = "msgId",cBuildValue}={}){
+function getChatById({ res, msgId, cBuild = "msgId", cBuildValue } = {}) {
   try {
     chatDB
-      .findOne({ msgId: msgId,[cBuild]:cBuildValue ?? msgId})     
+      .findOne({ msgId: msgId, [cBuild]: cBuildValue ?? msgId })
       .populate("orderDetails")
       .populate("uDetails")
       .populate(
@@ -59,7 +63,7 @@ function getChatById({res,msgId,cBuild = "msgId",cBuildValue}={}){
 
 router.get(`/${constants.chats}/:ID`, (req, res) => {
   const ID = req.params.ID;
-  let sekhar = parseParams(req.originalUrl);
+  let sekhar = req.query;
   let param1;
   let cBuild;
   if (sekhar.cBuild != null) {
@@ -69,7 +73,12 @@ router.get(`/${constants.chats}/:ID`, (req, res) => {
     param1 = "msgId";
     cBuild = ID;
   }
-  return getChatById({res:res,msgId:ID,cBuild:param1,cBuildValue:cBuild})
+  return getChatById({
+    res: res,
+    msgId: ID,
+    cBuild: param1,
+    cBuildValue: cBuild,
+  });
   // try {
   //   chatDB.findOne({ msgId: ID, [param1]: cBuild }, (err, data) => {
   //     if (err) {
@@ -87,7 +96,7 @@ router.get(`/${constants.chats}/:ID`, (req, res) => {
 /*                           GET ALL CHATLIST BY UID & PID                    */
 /* -------------------------------------------------------------------------- */
 router.get(`/:userType/:uId`, (req, res) => {
-  let originalUrl = parseParams(req.originalUrl);
+  let originalUrl = req.query;
   const uOrPId = req.params.uId;
   let deleteQuery;
   let deleteField = false;
@@ -173,7 +182,7 @@ router.put(`/${constants.chats}/:msgId`, (req, res) => {
   try {
     chatDB.findOneAndUpdate(
       { msgId: msgId },
-      {$set : body},
+      { $set: body },
       { new: true },
       (err, data) => {
         if (err) {

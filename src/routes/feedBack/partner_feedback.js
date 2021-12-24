@@ -1,7 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const partnerFeedBack = require("../../models/partner_feedback/partner_feedback_sch");
-const { parseParams } = require("../../helpers/query/parse_params");
 const router = express.Router();
 
 /* -------------------------------------------------------------------------- */
@@ -59,7 +58,7 @@ router.put("/feedbacks/:objectId", (req, res) => {
 /* -------------------------------------------------------------------------- */
 router.get("/feedbacks/:objectId", (req, res) => {
   const objectId = req.params.objectId;
-  let originalUrl = parseParams(req.originalUrl);
+  let originalUrl = req.query;
   try {
     partnerFeedBack
       .findById(objectId, { isDeleted: originalUrl.isDeleted ?? false })
@@ -81,7 +80,8 @@ router.get("/feedbacks/:objectId", (req, res) => {
 /*                              GET ALL FEEDBACKS                             */
 /* -------------------------------------------------------------------------- */
 router.get("/all-feedbacks", (req, res) => {
-  let originalUrl = parseParams(req.originalUrl);
+  // let originalUrl = req.query;
+  let originalUrl = req.query;
   try {
     partnerFeedBack
       .find({
@@ -107,7 +107,7 @@ router.get("/all-feedbacks", (req, res) => {
 
 router.get("/feedbacks/partner/:pId", (req, res) => {
   let pId = req.params.pId;
-  let originalUrl = parseParams(req.originalUrl);
+  let originalUrl = req.query;
   try {
     partnerFeedBack
       .find({ pId: pId, isDeleted: originalUrl.isDeleted ?? false })

@@ -3,7 +3,6 @@ const {
   catchFunc,
   processRequest,
 } = require("../../helpers/error_handling/process_request");
-const { parseParams } = require("../../helpers/query/parse_params");
 const router = Router();
 const adminDB = require("../../models/admin/admin_schema");
 
@@ -25,7 +24,7 @@ router.post("/create-admin-master", (req, res) => {
 /* ----------------------------- GET ADMINS LIST ---------------------------- */
 
 router.get("/get-all-admins", (req, res) => {
-  const params = parseParams(req.originalUrl);
+  const params = req.query;
   const isDeleted = params.isDeleted ?? false;
   try {
     adminDB.find({ isDeleted: isDeleted }, (err, data) => {

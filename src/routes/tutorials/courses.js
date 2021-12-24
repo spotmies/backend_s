@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const coursesDB = require("../../models/tutorials/course_schema");
-const { parseParams } = require("../../helpers/query/parse_params");
 const {
   processRequest,
   catchFunc,
@@ -38,7 +37,7 @@ router.put("/courses/:id", (req, res) => {
 
 router.get("courses/:id", (req, res) => {
   const id = req.params.id;
-  const originalUrl = parseParams(req.originalUrl);
+  const originalUrl = req.query;
   const isDeleted = originalUrl.isDeleted ?? false;
   try {
     coursesDB.findOne({ _id: id, isDeleted: isDeleted }, (err, data) => {
@@ -52,7 +51,7 @@ router.get("courses/:id", (req, res) => {
 /* --------------------------- GET ALL COURSES ----------------------------- */
 
 router.get("/all-courses", (req, res) => {
-  const originalUrl = parseParams(req.originalUrl);
+  const originalUrl = req.query;
   const isDeleted = originalUrl.isDeleted ?? false;
   try {
     coursesDB
@@ -71,7 +70,7 @@ router.get("/all-courses", (req, res) => {
 router.put("/units-to-course/:id", (req, res) => {
   const id = req.params.id;
   const body = req.body;
-  const originalUrl = parseParams(req.originalUrl);
+  const originalUrl = req.query;
   const remove = originalUrl.remove ?? false;
   try {
     coursesDB.findByIdAndUpdate(

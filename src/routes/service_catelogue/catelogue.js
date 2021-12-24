@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const catelogDB = require("../../models/service_catelogue/service_catelogue");
 const partnerDB = require("../../models/partner/partner_registration_sch");
-const { parseParams } = require("../../helpers/query/parse_params");
 
 /* -------------------------------------------------------------------------- */
 /*                   NEW CATELOG CREATE BY PARTNER WITH PID                   */
@@ -84,7 +83,7 @@ router.get("/catelogs/:docId", (req, res) => {
 
 router.get("/partner/:pId", (req, res) => {
   const pId = req.params.pId;
-  let originalUrl = parseParams(req.originalUrl);
+  let originalUrl = req.query;
   try {
     catelogDB.find(
       { pId: pId, isDeleted: originalUrl.isDeleted ?? false },
@@ -104,7 +103,7 @@ router.get("/partner/:pId", (req, res) => {
 
 router.delete("/catelogs/:docId", (req, res) => {
   const docId = req.params.docId;
-  let originalUrl = parseParams(req.originalUrl);
+  let originalUrl = req.query;
   try {
     catelogDB.findByIdAndUpdate(
       docId,

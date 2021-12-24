@@ -1,6 +1,4 @@
 const express = require("express");
-const mongoose = require("mongoose");
-const { parseParams } = require("../../helpers/query/parse_params");
 const router = express.Router();
 const geocodeSch = require("../../models/geocode/geocode_schema");
 
@@ -25,7 +23,7 @@ router.get("/all", (req, res) => {
 
 router.get("/addressLine/:line", (req, res) => {
   const addressLine = req.params.line;
-  let params = parseParams(req.originalUrl);
+  let params = req.query;
   let limit = params.limit != undefined ? Number(params.limit) : 5;
   let regex = new RegExp(addressLine, "i");
   geocodeSch.find(
