@@ -9,6 +9,9 @@ const {
   ordIdSch,
   orderSchedule,
   nonReqTimeStamp,
+  createdAt,
+  modifiedAt,
+  nonReqBool,
 } = require("../../helpers/schema/schemaHelp");
 
 const newOrderSchema = new mongoose.Schema(
@@ -26,7 +29,10 @@ const newOrderSchema = new mongoose.Schema(
     orderState: {
       type: Number,
       required: false,
-      enum: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      enum: [
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+        20,
+      ],
       default: 0,
     },
     join: timeStamp,
@@ -41,7 +47,6 @@ const newOrderSchema = new mongoose.Schema(
     address: nonReqStr,
 
     media: [String],
-    fBack: nonReqNum,
     pId: nonReqStr,
     orderSendTo: [nonReqStr],
     messages: [{ type: mongoose.Schema.Types.ObjectId, ref: "messaging" }],
@@ -58,16 +63,8 @@ const newOrderSchema = new mongoose.Schema(
       ref: "partners",
     },
     //below field is used to check whether doc deleted or not
-    isDeletedForUser: {
-      required: false,
-      type: Boolean,
-      default: false,
-    },
-    isDeletedForPartner: {
-      required: false,
-      type: Boolean,
-      default: false,
-    },
+    isDeletedForUser: nonReqBool,
+    isDeletedForPartner: nonReqBool,
     //this below field used for accept or cancel order
     acceptBy: nonReqStr,
     cancelBy: nonReqStr,
@@ -85,6 +82,14 @@ const newOrderSchema = new mongoose.Schema(
       required: false,
       ref: "partnerfeedbacks",
     },
+    moneyGivenByUser: nonReqNum,
+    moneyTakenByPartner: nonReqNum,
+    isOrderCompletedByUser: nonReqBool,
+    isOrderCompletedByPartner: nonReqBool,
+    orderCompletedAtUser: nonReqTimeStamp,
+    orderCompletedAtPartner: nonReqTimeStamp,
+    createdAt: createdAt,
+    lastModified: modifiedAt,
   },
   { timestamps: true }
 );

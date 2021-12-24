@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 const {
-  reqNum,
   unChangeUniqueStr,
   timeStamp,
   unChangeStr,
   upStatesAndCounts,
+  nonReqBool,
 } = require("../../helpers/schema/schemaHelp");
 
 const messaging = new mongoose.Schema(
@@ -40,16 +40,8 @@ const messaging = new mongoose.Schema(
       ref: "users",
     },
     //below field is used to check whether doc deleted or not
-    isDeletedForUser: {
-      required: false,
-      type: Boolean,
-      default: false,
-    },
-    isDeletedForPartner: {
-      required: false,
-      type: Boolean,
-      default: false,
-    },
+    isDeletedForUser: nonReqBool,
+    isDeletedForPartner: nonReqBool,
   },
   { timestamps: true }
 );
