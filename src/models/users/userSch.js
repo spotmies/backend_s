@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema(
     userState: {
       type: String,
       required: true,
-      enum: ["active", "inActive", "blocked"],
+      enum:["active","inActive","blocked","banned","suspended",],
     },
     orders: [{ type: mongoose.Schema.Types.ObjectId, ref: "orders" }],
     lastLogin: nonReqNum,
