@@ -32,6 +32,7 @@ const partnerRegistration = new mongoose.Schema({
   accountType: reqStr,
   lang: [String],
   businessName: nonReqStr,
+  collegeName: nonReqStr,
   experience: nonReqNum,
   ref: [String],
   inComingOrders: [
@@ -94,6 +95,12 @@ const partnerRegistration = new mongoose.Schema({
   enableModifications: nonReqBool,
   appConfig:nonReqBool,
   isActive:nonReqBool,
+  partnerState:{
+    type:String,
+    required:false,
+    enum:["active","inActive","blocked","banned","suspended",],
+    default:"active",
+  },
 
   //common fields
   createdAt: createdAt,
