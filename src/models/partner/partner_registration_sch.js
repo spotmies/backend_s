@@ -16,95 +16,98 @@ const {
   nonReqBool,
 } = require("../../helpers/schema/schemaHelp");
 
-const partnerRegistration = new mongoose.Schema({
-  name: reqStr,
-  dob: dobSch,
-  perAdd: nonReqStr,
-  tempAdd: nonReqStr,
-  eMail: nonReqStr,
-  isEmailVerified: isVerifedSch,
-  isAltNumVerifed: isVerifedSch,
-  phNum: uniqueNum,
-  altNum: nonReqNum,
-  job: reqNum,
-  pId: uIdSch,
-  join: timeStamp,
-  accountType: reqStr,
-  lang: [String],
-  businessName: nonReqStr,
-  collegeName: nonReqStr,
-  experience: nonReqNum,
-  ref: [String],
-  inComingOrders: [
-    { type: mongoose.Schema.Types.ObjectId, ref: "orders", required: false },
-  ],
-  orders: [
-    { type: mongoose.Schema.Types.ObjectId, ref: "orders", required: false },
-  ],
-  rate: [nonReqNum],
-  acceptance: [nonReqNum],
-  availability: bool,
-  partnerPic: nonReqStr,
-  docs: {
-    adharF: {
-      type: String,
+const partnerRegistration = new mongoose.Schema(
+  {
+    name: reqStr,
+    dob: dobSch,
+    perAdd: nonReqStr,
+    tempAdd: nonReqStr,
+    eMail: nonReqStr,
+    isEmailVerified: isVerifedSch,
+    isAltNumVerifed: isVerifedSch,
+    phNum: uniqueNum,
+    altNum: nonReqNum,
+    job: reqNum,
+    pId: uIdSch,
+    join: timeStamp,
+    accountType: reqStr,
+    lang: [String],
+    businessName: nonReqStr,
+    collegeName: nonReqStr,
+    experience: nonReqNum,
+    ref: [String],
+    inComingOrders: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "orders", required: false },
+    ],
+    orders: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "orders", required: false },
+    ],
+    rate: [nonReqNum],
+    acceptance: [nonReqNum],
+    availability: bool,
+    partnerPic: nonReqStr,
+    docs: {
+      adharF: {
+        type: String,
+      },
+      adharB: {
+        type: String,
+      },
+      otherDocs: [String],
     },
-    adharB: {
-      type: String,
-    },
-    otherDocs: [String],
-  },
 
-  lastLogin: nonReqTimeStamp,
-  logs: [String],
-  permission: reqNum,
-  feedBack: [],
-  reports: [
-    {
-      reportedBy: {
+    lastLogin: nonReqTimeStamp,
+    logs: [String],
+    permission: reqNum,
+    feedBack: [],
+    reports: [
+      {
+        reportedBy: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "users",
+          required: false,
+        },
+        reportedAt: reqNum,
+      },
+    ],
+    complaints: [
+      {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "users",
+        ref: "partnerComplaints",
         required: false,
       },
-      reportedAt: reqNum,
+    ],
+    catelogs: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "catelogs",
+        required: false,
+      },
+    ],
+    isTermsAccepted: { type: Boolean, required: true },
+    partnerDeviceToken: nonReqStr,
+    workLocation: {
+      required: true,
+      type: [Number],
     },
-  ],
-  complaints: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "partnerComplaints",
+    homeLocation: [Number],
+    currentLocation: [Number],
+    isDocumentsVerified: nonReqBool,
+    enableModifications: nonReqBool,
+    appConfig: nonReqBool,
+    isActive: nonReqBool,
+    partnerState: {
+      type: String,
       required: false,
+      enum: ["active", "inActive", "blocked", "banned", "suspended"],
+      default: "active",
     },
-  ],
-  catelogs: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "catelogs",
-      required: false,
-    },
-  ],
-  isTermsAccepted: { type: Boolean, required: true },
-  partnerDeviceToken: nonReqStr,
-  workLocation: {
-    required: true,
-    type: [Number],
-  },
-  homeLocation: [Number],
-  currentLocation: [Number],
-  isDocumentsVerified: nonReqBool,
-  enableModifications: nonReqBool,
-  appConfig:nonReqBool,
-  isActive:nonReqBool,
-  partnerState:{
-    type:String,
-    required:false,
-    enum:["active","inActive","blocked","banned","suspended",],
-    default:"active",
-  },
 
-  //common fields
-  createdAt: createdAt,
-  lastModified: modifiedAt,
-  isDeleted: nonReqBool,
-},{timestamps:true});
+    //common fields
+    createdAt: createdAt,
+    lastModified: modifiedAt,
+    isDeleted: nonReqBool,
+  },
+  { timestamps: true }
+);
 module.exports = mongoose.model("partners", partnerRegistration);

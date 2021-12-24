@@ -1,8 +1,6 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const connectdb = require("./src/config/db");
 const mainRoute = require("./src/routes/router");
-const { PythonShell } = require("python-shell");
 
 var bodyParser = require("body-parser");
 var cors = require("cors");
@@ -26,7 +24,7 @@ app.use(function (req, res, next) {
   next();
 });
 webSocket.start(io);
-firebaseFcm.start();
+//firebaseFcm.start();
 
 // app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -37,7 +35,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use("/api", mainRoute);
-
 
 server.listen(PORT, () => {
   console.log(`app running on port ${PORT}`);

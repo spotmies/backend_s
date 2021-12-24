@@ -22,7 +22,6 @@
   },
   "homepage": "https://github.com/modernsilpi/backend_s#readme",
   "dependencies": {
-    "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "dotenv": "^9.0.2",
@@ -30,9 +29,7 @@
     "fcm-node": "^1.6.1",
     "firebase-admin": "^9.11.1",
     "mongoose": "^6.0.7",
-    "node-geocoder": "^3.27.0",
     "nodemon": "^2.0.12",
-    "python-shell": "^3.0.0",
     "querystring": "^0.2.1",
     "socket.io": "^2.4.1",
     "url": "^0.11.0"
