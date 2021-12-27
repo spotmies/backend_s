@@ -19,6 +19,7 @@ const constantsR = require("./constants/constants");
 const serviceListRoute = require("../routes/services_list/services_list");
 const adminRouter = require("../routes/admin/admin");
 const suggestionRouter = require("../routes/suggestions/suggestions");
+const faqRouter = require("../routes/support/faq");
 // const loggerR = require("./loggers/loggers");
 //const postR = require("./posts/post");
 
@@ -42,6 +43,7 @@ router.use("/constant", constantsR);
 router.use("/services", serviceListRoute);
 router.use("/admin", adminRouter);
 router.use("/suggestion",suggestionRouter);
+router.use("/support/faq", faqRouter);
 router.get("/stamp", (req, res) => {
   let stamp = new Date().valueOf();
   res.send(stamp.toString());

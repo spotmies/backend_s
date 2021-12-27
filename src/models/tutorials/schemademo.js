@@ -83,3 +83,40 @@ array = [
     ],
   },
 ];
+
+// // create frequently asked questions schema
+// const faqSchema = new mongoose.Schema({
+//   faq: {
+//     type: String,
+//     required: true,
+//   },
+//   answer: {
+//     type: String,
+//     required: true,
+//   },
+//   sort: {
+//     type: Number,
+//     required: true,
+//   },
+// });
+
+// //create new faq model schema
+// const faqModel = mongoose.model("faq", faqSchema);
+
+// //category scehma
+ 
+// {
+//   title:
+//   description:
+//   body:[
+//     {
+//       question:
+//       answer
+//       sort
+//       isactive
+//       media
+
+//     }
+//     is delete
+//   ]
+// }
