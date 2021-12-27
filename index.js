@@ -22,7 +22,7 @@ app.use(function (req, res, next) {
   next();
 });
 webSocket.start(io);
-//firebaseFcm.start();
+firebaseFcm.start();
 
 // parse application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: false }));
