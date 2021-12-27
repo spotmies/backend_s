@@ -61,15 +61,15 @@ module.exports = {
       credential: admin.credential.cert(serviceAccount),
       databaseURL: "https://spotmiess.firebaseio.com",
     });
-    admin
-      .messaging()
-      .send(message)
-      .then((response) => {
-        console.log("Successfully sent message: ", response);
-      })
-      .catch((error) => {
-        console.log("Error sending message: ", error);
-      });
+    // admin
+    //   .messaging()
+    //   .send(message)
+    //   .then((response) => {
+    //     console.log("Successfully sent message: ", response);
+    //   })
+    //   .catch((error) => {
+    //     console.log("Error sending message: ", error);
+    //   });
   },
   sendNotification: function (message) {
     let payload = {
