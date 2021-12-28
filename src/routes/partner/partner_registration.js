@@ -238,7 +238,7 @@ router.delete(`/${constants.getPartner}/:pId`, (req, res) => {
 /*                                GET ALL PARTNER DETAILS                     */
 /* -------------------------------------------------------------------------- */
 
-router.get(`/${constants.getPartner}`, (req, res) => {
+router.get(`/all-partners`, (req, res) => {
   const isDeleted = req.query.isDeleted ?? false;
   try {
     partnerDB
