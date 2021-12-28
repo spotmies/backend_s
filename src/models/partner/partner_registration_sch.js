@@ -55,7 +55,7 @@ const partnerRegistration = new mongoose.Schema(
     rate: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "partner_feedback",
+        ref: "partner_feedbacks",
         required: false,
       },
     ],
@@ -78,7 +78,7 @@ const partnerRegistration = new mongoose.Schema(
     feedBack: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "partner_feedback",
+        ref: "partner_feedbacks",
         required: false,
       },
     ],

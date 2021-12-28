@@ -50,4 +50,4 @@ const partnerFeedback = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("partner_feedback", partnerFeedback);
+module.exports = mongoose.model("partner_feedbacks", partnerFeedback);

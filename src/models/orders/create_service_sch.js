@@ -80,7 +80,7 @@ const newOrderSchema = new mongoose.Schema(
     feedBackDetails: {
       type: mongoose.Schema.Types.ObjectId,
       required: false,
-      ref: "partner_feedback",
+      ref: "partner_feedbacks",
     },
     moneyGivenByUser: nonReqNum,
     moneyTakenByPartner: nonReqNum,
