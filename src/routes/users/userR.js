@@ -2,6 +2,10 @@ const express = require("express");
 const userDb = require("../../models/users/userSch");
 const router = express.Router();
 const constants = require("../../helpers/constants");
+const {
+  processRequest,
+  catchFunc,
+} = require("../../helpers/error_handling/process_request");
 //post method for registering user
 /* -------------------------------------------------------------------------- */
 /*                                   new user registration                                  */
@@ -50,6 +54,47 @@ router.get(`/${constants.userDetails}/:id`, (req, res) => {
     return res.status(500).send(error.message);
   }
 });
+
+/* -------------------------------- Login api ------------------------------- */
+
+router.post("/login", (req, res) => {
+  const body = req.body;
+  try {
+    userDb.findOneAndUpdate(
+      { uId: body.uId },
+      {
+        $push: { logs: body.lastLogin },
+        userDeviceToken: body.userDeviceToken,
+        isActive: body.isActive ?? true,
+      },
+      { new: true },
+      (err, data) => {
+        return processRequest(err, data, res, { noContent: true });
+      }
+    );
+  } catch (error) {
+    return catchFunc(error, res);
+  }
+});
+
+/* ------------------------------- Logout api ------------------------------- */
+
+router.post("/logout", (req, res) => {
+  const uId = req.body.uId;
+  try {
+    userDb.findOneAndUpdate(
+      { uId: uId },
+      { $set: { isActive: false } },
+      (err, doc) => {
+        return processRequest(err, doc, res, { noContent: true });
+      }
+    );
+  } catch (error) {
+    return catchFunc(error, res);
+  }
+});
+
+
 
 /* -------------------------------------------------------------------------- */
 /*                             update user details                            */

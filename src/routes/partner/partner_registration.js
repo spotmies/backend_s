@@ -5,8 +5,7 @@ const constants = require("../../helpers/constants");
 const complaintR = require("./complaints");
 const {
   processRequest,
-  deleteRequest,
-  catchFunc
+  catchFunc,
 } = require("../../helpers/error_handling/process_request");
 
 /* -------------------------------------------------------------------------- */
@@ -124,9 +123,10 @@ router.get(`/${constants.getPartner}/:pId`, (req, res) => {
 /* -------------------------------------------------------------------------- */
 /*                              PARTNER LOGIN API                             */
 /* -------------------------------------------------------------------------- */
-router.post("/login/:id", function (req, res) {
-  const pId = req.params.id;
+
+router.post("/login", function (req, res) {
   const body = req.body;
+  const pId = body.pId;
 
   try {
     partnerDB.findOneAndUpdate(
@@ -134,16 +134,31 @@ router.post("/login/:id", function (req, res) {
       {
         $push: { logs: body.lastLogin },
         partnerDeviceToken: body.partnerDeviceToken,
+        isActive: body.isActive ?? true,
       },
-      { new: true },
       (err, doc) => {
-        if (err) return res.status(400).json(err);
-        if (!doc) return res.status(404).json(doc);
-        return res.status(200).json(doc);
+        return processRequest(err, doc, res, { noContent: true });
       }
     );
   } catch (error) {
     return res.status(500).send(error.message);
+  }
+});
+
+/* ------------------------------- Logout api ------------------------------- */
+
+router.post("/logout", function (req, res) {
+  const pId = req.body.pId;
+  try {
+    partnerDB.findOneAndUpdate(
+      { pId: pId },
+      { $set: { isActive: false } },
+      (err, doc) => {
+        return processRequest(err, doc, res, { noContent: true });
+      }
+    );
+  } catch (error) {
+    return catchFunc(error, res);
   }
 });
 
