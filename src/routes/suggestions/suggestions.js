@@ -36,6 +36,17 @@ router.get("/all-suggestions/:id", (req, res) => {
   }
 });
 
+router.get("/get-all-suggestions", (req, res) => {
+  const isDeleted = req.query.isDeleted ?? false;
+  try {
+    schema.find({ isDeleted: isDeleted }, (err, data) => {
+      return processRequest(err, data, res);
+    });
+  } catch (error) {
+    return catchFunc(error, res);
+  }
+});
+
 /* -------------------------- Get suggestions by id ------------------------- */
 
 router.get("/suggestions/:id", (req, res) => {
