@@ -3,6 +3,11 @@ const router = express.Router();
 const partnerDB = require("../../models/partner/partner_registration_sch");
 const constants = require("../../helpers/constants");
 const complaintR = require("./complaints");
+const {
+  processRequest,
+  deleteRequest,
+  catchFunc
+} = require("../../helpers/error_handling/process_request");
 
 /* -------------------------------------------------------------------------- */
 /*                                 NEW PARTNER                                */
@@ -75,6 +80,7 @@ router.get(`/${constants.getPartner}/:pId`, (req, res) => {
             "name phNum uId userState altNum eMail pic lastLogin userDeviceToken",
         },
       })
+
       .populate({
         path: originalUrl.extractData == "true" ? "orders" : "null",
       })
@@ -218,16 +224,16 @@ router.delete(`/${constants.getPartner}/:pId`, (req, res) => {
 /* -------------------------------------------------------------------------- */
 
 router.get(`/${constants.getPartner}`, (req, res) => {
+  const isDeleted = req.query.isDeleted ?? false;
   try {
-    partnerDB.find({}, (err, data) => {
-      if (err) {
-        console.error(err);
-        return res.status(400).send(err.message);
-      }
-      res.status(200).json(data);
-    });
+    partnerDB
+      .find({ isDeleted: isDeleted })
+      .populate("rate", "rating")
+      .exec((err, data) => {
+        return processRequest(err, data, res);
+      });
   } catch (error) {
-    return res.status(500).send(error.message);
+    return catchFunc(error, res);
   }
 });
 

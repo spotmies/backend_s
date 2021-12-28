@@ -4,26 +4,23 @@ const {
   reqStr,
   timeStamp,
   modifiedAt,
+  nonReqBool,
 } = require("../../helpers/schema/schemaHelp");
 const mongoose = require("mongoose");
 const partnerFeedback = new mongoose.Schema(
   {
-    // feedbackId: {
-    //   type: String,
-    //   unique: true,
-    //   required: true,
-    //   immutable: true,
-    // },
     rating: {
       type: Number,
       required: true,
       min: 0,
       max: 100,
     },
-    images: {
-      type: [String],
-      required: false,
-    },
+    media: [
+      {
+        mediaType: reqStr,
+        mediaUrl: reqStr,
+      },
+    ],
     description: nonReqStr,
     pId: reqStr,
     uId: reqStr,
@@ -46,14 +43,11 @@ const partnerFeedback = new mongoose.Schema(
     createdAt: timeStamp,
     lastModified: modifiedAt,
     otherInformation: nonReqStr,
-    questionAndAnswers: nonReqStr,
-    isDeleted: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
+    questions: [nonReqStr],
+    answers: [nonReqStr],
+    isDeleted: nonReqBool,
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("partnerFeedBack", partnerFeedback);
+module.exports = mongoose.model("partner_feedback", partnerFeedback);

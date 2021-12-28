@@ -14,6 +14,7 @@ const {
   createdAt,
   modifiedAt,
   nonReqBool,
+  reqBool,
 } = require("../../helpers/schema/schemaHelp");
 
 const partnerRegistration = new mongoose.Schema(
@@ -25,6 +26,7 @@ const partnerRegistration = new mongoose.Schema(
     eMail: nonReqStr,
     isEmailVerified: isVerifedSch,
     isAltNumVerifed: isVerifedSch,
+    isLocationVerified: isVerifedSch,
     phNum: uniqueNum,
     altNum: nonReqNum,
     job: reqNum,
@@ -35,6 +37,14 @@ const partnerRegistration = new mongoose.Schema(
     businessName: nonReqStr,
     collegeName: nonReqStr,
     experience: nonReqNum,
+    minServicePrice: nonReqNum,
+    maxServicePrice: nonReqNum,
+    media: [
+      {
+        mediaType: reqStr,
+        mediaUrl: reqStr,
+      },
+    ],
     ref: [String],
     inComingOrders: [
       { type: mongoose.Schema.Types.ObjectId, ref: "orders", required: false },
@@ -42,7 +52,13 @@ const partnerRegistration = new mongoose.Schema(
     orders: [
       { type: mongoose.Schema.Types.ObjectId, ref: "orders", required: false },
     ],
-    rate: [nonReqNum],
+    rate: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "partner_feedback",
+        required: false,
+      },
+    ],
     acceptance: [nonReqNum],
     availability: bool,
     partnerPic: nonReqStr,
@@ -59,7 +75,13 @@ const partnerRegistration = new mongoose.Schema(
     lastLogin: nonReqTimeStamp,
     logs: [String],
     permission: reqNum,
-    feedBack: [],
+    feedBack: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "partner_feedback",
+        required: false,
+      },
+    ],
     reports: [
       {
         reportedBy: {
@@ -84,7 +106,7 @@ const partnerRegistration = new mongoose.Schema(
         required: false,
       },
     ],
-    isTermsAccepted: { type: Boolean, required: true },
+    isTermsAccepted: reqBool,
     partnerDeviceToken: nonReqStr,
     workLocation: {
       required: true,
@@ -92,6 +114,9 @@ const partnerRegistration = new mongoose.Schema(
     },
     homeLocation: [Number],
     currentLocation: [Number],
+    workAddress: nonReqStr,
+    homeAddress: nonReqStr,
+    currentAddress: nonReqStr,
     isDocumentsVerified: nonReqBool,
     enableModifications: nonReqBool,
     appConfig: nonReqBool,

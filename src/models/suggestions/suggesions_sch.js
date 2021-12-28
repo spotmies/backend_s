@@ -34,6 +34,12 @@ const suggestionSchema = new mongoose.Schema(
         "others",
       ],
     },
+    media: [
+      {
+        mediaType: reqStr,
+        mediaUrl: reqStr,
+      },
+    ],
     uId: nonReqStr,
     pId: nonReqStr,
     uDetails: {

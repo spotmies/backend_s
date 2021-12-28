@@ -255,7 +255,12 @@ const nonReqBool = {
   default: false,
   type: Boolean,
 };
+const reqBool = {
+  required: true,
+  type: Boolean,
+};
 module.exports = {
+  reqBool,
   reqNum,
   nonReqStr,
   reqStr,
