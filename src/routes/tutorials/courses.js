@@ -15,7 +15,7 @@ router.post("/new-course", (req, res) => {
       return processRequest(err, data, res, req);
     });
   } catch (error) {
-    return catchFunc(error, res);
+    return catchFunc(error, res, req);
   }
 });
 
@@ -29,7 +29,7 @@ router.put("/courses/:id", (req, res) => {
       return processRequest(err, data, res, req);
     });
   } catch (error) {
-    return catchFunc(error, res);
+    return catchFunc(error, res, req);
   }
 });
 
@@ -44,7 +44,7 @@ router.get("courses/:id", (req, res) => {
       return processRequest(err, data, res, req);
     });
   } catch (error) {
-    return catchFunc(error, res);
+    return catchFunc(error, res, req);
   }
 });
 
@@ -61,7 +61,7 @@ router.get("/all-courses", (req, res) => {
         return processRequest(err, data, res, req);
       });
   } catch (error) {
-    return catchFunc(error, res);
+    return catchFunc(error, res, req);
   }
 });
 
@@ -93,7 +93,7 @@ router.put("/units-to-course/:id", (req, res) => {
       }
     );
   } catch (error) {
-    return catchFunc(error, res);
+    return catchFunc(error, res, req);
   }
 });
 

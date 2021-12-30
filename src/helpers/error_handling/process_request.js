@@ -13,7 +13,7 @@ function deleteRequest(err, data, res) {
   if (data?.isDeleted) return res.sendStatus(204);
   else return res.sendStatus(500);
 }
-function catchFunc(error, res) {
+function catchFunc(error, res, req) {
   return res.status(500).json({
     message: "Internal Server Error",
     error: error.message,

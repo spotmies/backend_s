@@ -15,7 +15,7 @@ router.post("/new-service-list", (req, res) => {
       return processRequest(err, data, res, req);
     });
   } catch (error) {
-    return catchFunc(error, res);
+    return catchFunc(error, res, req);
   }
 });
 
@@ -30,7 +30,7 @@ router.get("/all-service-list", (req, res) => {
       return processRequest(err, data, res, req);
     });
   } catch (error) {
-    return catchFunc(error, res);
+    return catchFunc(error, res, req);
   }
 });
 
@@ -49,7 +49,7 @@ router.put("/services-list/:docId", (req, res) => {
       }
     );
   } catch (error) {
-    return catchFunc(error, res);
+    return catchFunc(error, res, req);
   }
 });
 
@@ -67,7 +67,7 @@ router.delete("/services-list/:docId", (req, res) => {
       }
     );
   } catch (error) {
-    return catchFunc(error, res);
+    return catchFunc(error, res, req);
   }
 });
 

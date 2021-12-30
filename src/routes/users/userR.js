@@ -73,7 +73,7 @@ router.post("/login", (req, res) => {
       }
     );
   } catch (error) {
-    return catchFunc(error, res);
+    return catchFunc(error, res, req);
   }
 });
 
@@ -90,7 +90,7 @@ router.post("/logout", (req, res) => {
       }
     );
   } catch (error) {
-    return catchFunc(error, res);
+    return catchFunc(error, res, req);
   }
 });
 

@@ -15,7 +15,7 @@ router.post("/new-suggestion", (req, res) => {
       return processRequest(err, data, res, req);
     });
   } catch (error) {
-    return catchFunc(error, res);
+    return catchFunc(error, res, req);
   }
 });
 
@@ -32,7 +32,7 @@ router.get("/all-suggestions/:id", (req, res) => {
       }
     );
   } catch (error) {
-    return catchFunc(error, res);
+    return catchFunc(error, res, req);
   }
 });
 
@@ -43,7 +43,7 @@ router.get("/get-all-suggestions", (req, res) => {
       return processRequest(err, data, res, req);
     });
   } catch (error) {
-    return catchFunc(error, res);
+    return catchFunc(error, res, req);
   }
 });
 
@@ -56,7 +56,7 @@ router.get("/suggestions/:id", (req, res) => {
       return processRequest(err, data, res, req);
     });
   } catch (error) {
-    return catchFunc(error, res);
+    return catchFunc(error, res, req);
   }
 });
 
@@ -78,7 +78,7 @@ router.put("/suggestions/:id", (req, res) => {
       }
     );
   } catch (error) {
-    return catchFunc(error, res);
+    return catchFunc(error, res, req);
   }
 });
 

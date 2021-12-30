@@ -16,7 +16,7 @@ router.post(constants.newUnit, (req, res) => {
       return processRequest(err, data, res, req);
     });
   } catch (error) {
-    return catchFunc(error);
+    return catchFunc(error, res, req);
   }
 });
 
@@ -31,7 +31,7 @@ router.get(`${constants.units}/:unitId`, (req, res) => {
       return processRequest(err, data, res, req);
     });
   } catch (error) {
-    return catchFunc(error, res);
+    return catchFunc(error, res, req);
   }
 });
 
@@ -51,7 +51,7 @@ router.put(`${constants.units}/:unitId`, (req, res) => {
       }
     );
   } catch (error) {
-    return catchFunc(error, res);
+    return catchFunc(error, res, req);
   }
 });
 
@@ -72,7 +72,7 @@ router.post(`${constants.newTopic}/:unitId`, (req, res) => {
       }
     );
   } catch (error) {
-    return catchFunc(error, res);
+    return catchFunc(error, res, req);
   }
 });
 
@@ -93,7 +93,7 @@ router.delete(`${constants.removeTopic}/:unitId`, (req, res) => {
       }
     );
   } catch (error) {
-    return catchFunc(error, res);
+    return catchFunc(error, res, req);
   }
 });
 
@@ -111,7 +111,7 @@ router.delete(`${constants.units}/:unitId`, (req, res) => {
       }
     );
   } catch (error) {
-    return catchFunc(error, res);
+    return catchFunc(error, res, req);
   }
 });
 

@@ -158,7 +158,7 @@ router.post("/logout", function (req, res) {
       }
     );
   } catch (error) {
-    return catchFunc(error, res);
+    return catchFunc(error, res, req);
   }
 });
 
@@ -248,7 +248,7 @@ router.get(`/all-partners`, (req, res) => {
         return processRequest(err, data, res, req);
       });
   } catch (error) {
-    return catchFunc(error, res);
+    return catchFunc(error, res, req);
   }
 });
 

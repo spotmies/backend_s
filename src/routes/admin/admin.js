@@ -17,7 +17,7 @@ router.post("/create-admin-master", (req, res) => {
       return processRequest(err, data, res, req);
     });
   } catch (error) {
-    return catchFunc(error, res);
+    return catchFunc(error, res, req);
   }
 });
 
@@ -31,7 +31,7 @@ router.get("/get-all-admins", (req, res) => {
       return processRequest(err, data, res, req);
     });
   } catch (error) {
-    return catchFunc(error, res);
+    return catchFunc(error, res, req);
   }
 });
 
@@ -60,7 +60,7 @@ router.put("/admin-login/:Id", (req, res) => {
       }
     );
   } catch (error) {
-    return catchFunc(error, res);
+    return catchFunc(error, res, req);
   }
 });
 
@@ -79,7 +79,7 @@ router.put("/admins/:id", (req, res) => {
       }
     );
   } catch (error) {
-    return catchFunc(error, res);
+    return catchFunc(error, res, req);
   }
 });
 
@@ -92,7 +92,7 @@ router.post("/admin/set-password/:id", (req, res) => {
     //need to create hash function here
     //and check with the hash function
   } catch (error) {
-    return catchFunc(error, res);
+    return catchFunc(error, res, req);
   }
 });
 
