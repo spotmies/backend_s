@@ -1,3 +1,5 @@
+const mongoose = require("mongoose");
+
 //required timestamps
 const timstampValidate = (value) => {
   var n = value.toString();
@@ -259,6 +261,24 @@ const reqBool = {
   required: true,
   type: Boolean,
 };
+
+const viewsSchema = new mongoose.Schema(
+  {
+    uId: reqStr,
+    createdAt: createdAt,
+    uDetails: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      immutable: true,
+      ref: "users",
+    },
+    required: false,
+  },
+  { timestamps: true }
+);
+
+
+
 module.exports = {
   reqBool,
   reqNum,
@@ -296,5 +316,6 @@ module.exports = {
   reqEmail,
   reqArrOfNum,
   arrOfNum,
-  defaultNum
+  defaultNum,
+  viewsSchema
 };

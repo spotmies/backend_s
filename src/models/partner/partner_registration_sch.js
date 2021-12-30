@@ -15,7 +15,10 @@ const {
   modifiedAt,
   nonReqBool,
   reqBool,
+  viewsSchema,
 } = require("../../helpers/schema/schemaHelp");
+
+
 
 const partnerRegistration = new mongoose.Schema(
   {
@@ -127,6 +130,15 @@ const partnerRegistration = new mongoose.Schema(
       enum: ["active", "inActive", "blocked", "banned", "suspended"],
       default: "active",
     },
+    businessLogo: nonReqStr,
+    businessBanner: nonReqStr,
+    businessDescription: nonReqStr,
+    businessType: nonReqStr,
+    isDoorStepDeliveryAvailable: nonReqBool,
+    isAcceptOnlinePayment: nonReqBool,
+    landMark: nonReqStr,
+    websites: [nonReqStr],
+    views: [viewsSchema],
 
     //common fields
     createdAt: createdAt,
