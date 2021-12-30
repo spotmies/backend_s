@@ -13,7 +13,7 @@ const {
 router.post("/new-constants", (req, res) => {
   try {
     constantsSchema.create(req.body, (err, data) => {
-      return processRequest(err, data, res);
+      return processRequest(err, data, res, req);
     });
   } catch (error) {
     return catchFunc(error, res);
@@ -30,7 +30,7 @@ router.get("/constants/:id", (req, res) => {
 
   try {
     constantsSchema.findOne({ _id: id, isDeleted: isDeleted }, (err, data) => {
-      return processRequest(err, data, res);
+      return processRequest(err, data, res, req);
     });
   } catch (error) {
     return catchFunc(error, res);
@@ -48,7 +48,7 @@ router.get("/doc-id/:docId", (req, res) => {
     constantsSchema.findOne(
       { constantsId: docId, isDeleted: isDeleted },
       (err, data) => {
-        return processRequest(err, data, res);
+        return processRequest(err, data, res, req);
       }
     );
   } catch (error) {
@@ -64,7 +64,7 @@ router.get("/all-constants", (req, res) => {
   let isDeleted = originalUrl.isDeleted ?? false;
   try {
     constantsSchema.find({ isDeleted: isDeleted }, (err, data) => {
-      return processRequest(err, data, res);
+      return processRequest(err, data, res, req);
     });
   } catch (error) {
     return catchFunc(error, res);
@@ -86,7 +86,7 @@ router.post("/constants-to-screen/:id", (req, res) => {
       { $addToSet: { [screenName]: { $each: [updateBody] } } },
       { new: true },
       (err, data) => {
-        return processRequest(err, data, res);
+        return processRequest(err, data, res, req);
       }
     );
   } catch (error) {
@@ -121,7 +121,7 @@ router.put("/constants-to-screen/:id", (req, res) => {
           },
           { new: true },
           (err, data) => {
-            return processRequest(err, data, res);
+            return processRequest(err, data, res, req);
           }
         );
       }
@@ -149,7 +149,7 @@ router.delete("/constants-to-screen/:id", (req, res) => {
       },
       { new: true },
       (err, data) => {
-        return processRequest(err, data, res);
+        return processRequest(err, data, res, req);
       }
     );
   } catch (error) {
@@ -170,7 +170,7 @@ router.put("/constants/:id", (req, res) => {
       { $set: req.body },
       { new: true },
       (err, data) => {
-        return processRequest(err, data, res);
+        return processRequest(err, data, res, req);
       }
     );
   } catch (error) {
@@ -188,7 +188,7 @@ router.delete("/constants/:id", (req, res) => {
       { $set: { isDeleted: true } },
       { new: true },
       (err, data) => {
-        return processRequest(err, data, res);
+        return processRequest(err, data, res, req);
       }
     );
   } catch (error) {

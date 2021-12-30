@@ -14,7 +14,7 @@ router.post("/create-admin-master", (req, res) => {
 
   try {
     adminDB.create(body, (err, data) => {
-      return processRequest(err, data, res);
+      return processRequest(err, data, res, req);
     });
   } catch (error) {
     return catchFunc(error, res);
@@ -28,7 +28,7 @@ router.get("/get-all-admins", (req, res) => {
   const isDeleted = params.isDeleted ?? false;
   try {
     adminDB.find({ isDeleted: isDeleted }, (err, data) => {
-      return processRequest(err, data, res);
+      return processRequest(err, data, res, req);
     });
   } catch (error) {
     return catchFunc(error, res);
@@ -75,7 +75,7 @@ router.put("/admins/:id", (req, res) => {
       { $set: body },
       { new: true },
       (err, data) => {
-        return processRequest(err, data, res);
+        return processRequest(err, data, res, req);
       }
     );
   } catch (error) {

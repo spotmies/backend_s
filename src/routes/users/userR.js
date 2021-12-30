@@ -69,7 +69,7 @@ router.post("/login", (req, res) => {
       },
       { new: true },
       (err, data) => {
-        return processRequest(err, data, res, { noContent: true });
+        return processRequest(err, data, res, req, { noContent: true });
       }
     );
   } catch (error) {
@@ -86,15 +86,13 @@ router.post("/logout", (req, res) => {
       { uId: uId },
       { $set: { isActive: false } },
       (err, doc) => {
-        return processRequest(err, doc, res, { noContent: true });
+        return processRequest(err, doc, res, req, { noContent: true });
       }
     );
   } catch (error) {
     return catchFunc(error, res);
   }
 });
-
-
 
 /* -------------------------------------------------------------------------- */
 /*                             update user details                            */
@@ -173,6 +171,18 @@ router.get("/users", (req, res) => {
         return res.status(400).send(err.message);
       }
       res.status(200).json(data);
+    });
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+});
+
+router.get("/testing", (req, res) => {
+  console.log(req);
+  try {
+    return res.status(200).json({
+      message: "testing",
+      api: req.originalUrl,
     });
   } catch (error) {
     return res.status(500).send(error.message);

@@ -12,7 +12,7 @@ router.post("/new-suggestion", (req, res) => {
   const body = req.body;
   try {
     schema.create(body, (err, data) => {
-      return processRequest(err, data, res);
+      return processRequest(err, data, res, req);
     });
   } catch (error) {
     return catchFunc(error, res);
@@ -28,7 +28,7 @@ router.get("/all-suggestions/:id", (req, res) => {
     schema.find(
       { suggestionFor: typeId, isDeleted: isDeleted },
       (err, data) => {
-        return processRequest(err, data, res);
+        return processRequest(err, data, res, req);
       }
     );
   } catch (error) {
@@ -40,7 +40,7 @@ router.get("/get-all-suggestions", (req, res) => {
   const isDeleted = req.query.isDeleted ?? false;
   try {
     schema.find({ isDeleted: isDeleted }, (err, data) => {
-      return processRequest(err, data, res);
+      return processRequest(err, data, res, req);
     });
   } catch (error) {
     return catchFunc(error, res);
@@ -53,7 +53,7 @@ router.get("/suggestions/:id", (req, res) => {
   const id = req.params.id;
   try {
     schema.findById(id, (err, data) => {
-      return processRequest(err, data, res);
+      return processRequest(err, data, res, req);
     });
   } catch (error) {
     return catchFunc(error, res);
@@ -74,7 +74,7 @@ router.put("/suggestions/:id", (req, res) => {
       { new: true },
 
       (err, data) => {
-        return processRequest(err, data, res);
+        return processRequest(err, data, res, req);
       }
     );
   } catch (error) {

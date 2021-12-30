@@ -137,7 +137,7 @@ router.post("/login", function (req, res) {
         isActive: body.isActive ?? true,
       },
       (err, doc) => {
-        return processRequest(err, doc, res, { noContent: true });
+        return processRequest(err, doc, res, req, { noContent: true });
       }
     );
   } catch (error) {
@@ -154,7 +154,7 @@ router.post("/logout", function (req, res) {
       { pId: pId },
       { $set: { isActive: false } },
       (err, doc) => {
-        return processRequest(err, doc, res, { noContent: true });
+        return processRequest(err, doc, res, req, { noContent: true });
       }
     );
   } catch (error) {
@@ -245,7 +245,7 @@ router.get(`/all-partners`, (req, res) => {
       .find({ isDeleted: isDeleted })
       .populate("rate", "rating")
       .exec((err, data) => {
-        return processRequest(err, data, res);
+        return processRequest(err, data, res, req);
       });
   } catch (error) {
     return catchFunc(error, res);

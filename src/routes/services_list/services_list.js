@@ -12,7 +12,7 @@ router.post("/new-service-list", (req, res) => {
   const body = req.body;
   try {
     listDB.create(body, (err, data) => {
-      return processRequest(err, data, res);
+      return processRequest(err, data, res, req);
     });
   } catch (error) {
     return catchFunc(error, res);
@@ -27,7 +27,7 @@ router.get("/all-service-list", (req, res) => {
   const isActive = parmas.isActive ?? true;
   try {
     listDB.find({ isDeleted: isDeleted, isActive: isActive }, (err, data) => {
-      return processRequest(err, data, res);
+      return processRequest(err, data, res, req);
     });
   } catch (error) {
     return catchFunc(error, res);
@@ -45,7 +45,7 @@ router.put("/services-list/:docId", (req, res) => {
       { $set: body },
       { new: true },
       (err, data) => {
-        return processRequest(err, data, res);
+        return processRequest(err, data, res, req);
       }
     );
   } catch (error) {
@@ -63,7 +63,7 @@ router.delete("/services-list/:docId", (req, res) => {
       { $set: { isDeleted: true } },
       { new: true },
       (err, data) => {
-        return processRequest(err, data, res);
+        return processRequest(err, data, res, req);
       }
     );
   } catch (error) {

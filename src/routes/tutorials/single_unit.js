@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const constants = require("../../helpers/constants");
+const {
+  processRequest,
+  catchFunc,
+} = require("../../helpers/error_handling/process_request");
 const unitDB = require("../../models/tutorials/single_unit_schema");
 
 /* ---------------------- CREATE NEW UNIT FOR TUTORIAL ---------------------- */
@@ -9,7 +13,7 @@ router.post(constants.newUnit, (req, res) => {
   const body = req.body;
   try {
     unitDB.create(body, (err, data) => {
-      return processRequest(err, data, res);
+      return processRequest(err, data, res, req);
     });
   } catch (error) {
     return catchFunc(error);
@@ -24,7 +28,7 @@ router.get(`${constants.units}/:unitId`, (req, res) => {
   let isDeleted = originalUrl.isDeleted ?? false;
   try {
     unitDB.findOne({ unitId: unitId, isDeleted: isDeleted }, (err, data) => {
-      return processRequest(err, data, res);
+      return processRequest(err, data, res, req);
     });
   } catch (error) {
     return catchFunc(error, res);
@@ -43,7 +47,7 @@ router.put(`${constants.units}/:unitId`, (req, res) => {
       { unitId: unitId, isDeleted: isDeleted },
       { $set: body },
       (err, data) => {
-        return processRequest(err, data, res);
+        return processRequest(err, data, res, req);
       }
     );
   } catch (error) {
@@ -64,7 +68,7 @@ router.post(`${constants.newTopic}/:unitId`, (req, res) => {
       { $push: { topics: body } },
       { new: true },
       (err, data) => {
-        return processRequest(err, data, res);
+        return processRequest(err, data, res, req);
       }
     );
   } catch (error) {
@@ -85,7 +89,7 @@ router.delete(`${constants.removeTopic}/:unitId`, (req, res) => {
       { $pull: { topics: { topicName: topicName } } },
       { new: true },
       (err, data) => {
-        return processRequest(err, data, res);
+        return processRequest(err, data, res, req);
       }
     );
   } catch (error) {
@@ -103,7 +107,7 @@ router.delete(`${constants.units}/:unitId`, (req, res) => {
       { $set: { isDeleted: true } },
       { new: true },
       (err, data) => {
-        return processRequest(err, data, res);
+        return processRequest(err, data, res, req);
       }
     );
   } catch (error) {
@@ -111,18 +115,4 @@ router.delete(`${constants.units}/:unitId`, (req, res) => {
   }
 });
 
-function processRequest(err, data, res) {
-  if (err) {
-    return res.status(400).json(err.message);
-  }
-  if (!data) return res.status(404).json({ message: "No data found" });
-  return res.status(200).json(data);
-}
-
-function catchFunc(error, res) {
-  return res.status(500).json({
-    message: "Internal Server Error",
-    error: error.message,
-  });
-}
 module.exports = router;

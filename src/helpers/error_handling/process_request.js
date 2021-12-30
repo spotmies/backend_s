@@ -1,4 +1,4 @@
-function processRequest(err, data, res,{noContent=false} = {}) {
+function processRequest(err, data, res, req, { noContent = false } = {}) {
   if (err) return res.status(400).json(err.message);
 
   if (!data || data?.isDeleted == true)

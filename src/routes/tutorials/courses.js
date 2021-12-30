@@ -12,7 +12,7 @@ router.post("/new-course", (req, res) => {
   const body = req.body;
   try {
     coursesDB.create(body, (err, data) => {
-      return processRequest(err, data, res);
+      return processRequest(err, data, res, req);
     });
   } catch (error) {
     return catchFunc(error, res);
@@ -26,7 +26,7 @@ router.put("/courses/:id", (req, res) => {
   const body = req.body;
   try {
     coursesDB.findByIdAndUpdate(id, body, { new: true }, (err, data) => {
-      return processRequest(err, data, res);
+      return processRequest(err, data, res, req);
     });
   } catch (error) {
     return catchFunc(error, res);
@@ -41,7 +41,7 @@ router.get("courses/:id", (req, res) => {
   const isDeleted = originalUrl.isDeleted ?? false;
   try {
     coursesDB.findOne({ _id: id, isDeleted: isDeleted }, (err, data) => {
-      return processRequest(err, data, res);
+      return processRequest(err, data, res, req);
     });
   } catch (error) {
     return catchFunc(error, res);
@@ -58,7 +58,7 @@ router.get("/all-courses", (req, res) => {
       .find({ isDeleted: isDeleted })
       .populate("listUnits")
       .exec((err, data) => {
-        return processRequest(err, data, res);
+        return processRequest(err, data, res, req);
       });
   } catch (error) {
     return catchFunc(error, res);
@@ -81,13 +81,13 @@ router.put("/units-to-course/:id", (req, res) => {
       },
       { new: true },
       (err, data) => {
-        if (remove) return processRequest(err, data, res);
+        if (remove) return processRequest(err, data, res, req);
         coursesDB.findByIdAndUpdate(
           id,
           { $addToSet: { listUnits: body.objectIds } },
           { new: true },
           (err, data) => {
-            return processRequest(err, data, res);
+            return processRequest(err, data, res, req);
           }
         );
       }
