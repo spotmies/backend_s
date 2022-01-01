@@ -14,7 +14,7 @@ const suggestionSchema = new mongoose.Schema(
     body: nonReqStr,
     suggestionFor: {
       type: String,
-      enum: ["feedback", "contactUs","faq","other"],
+      enum: ["feedback", "contactUs", "faq", "other"],
       required: true,
     },
     /* ------------------------- contact us form fields ------------------------- */
@@ -55,18 +55,10 @@ const suggestionSchema = new mongoose.Schema(
     isRead: nonReqBool,
     isStarred: nonReqBool,
     isIssueSolved: nonReqBool,
-    questions: [
-      {
-        type: String,
-        require: false,
-      },
-    ],
-    answers: [
-      {
-        type: String,
-        require: false,
-      },
-    ],
+    feedbackQuestionsId: nonReqStr,
+    isFeedbackQuestionsAttempted: nonReqBool,
+    attemptedQuestions: [nonReqStr],
+    answers: [nonReqStr],
     others: nonReqStr,
     isDeleted: nonReqBool,
     createdAt: createdAt,

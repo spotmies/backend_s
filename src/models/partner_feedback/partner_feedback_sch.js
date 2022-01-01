@@ -1,10 +1,9 @@
 const {
   nonReqStr,
-  reqNum,
   reqStr,
-  timeStamp,
   modifiedAt,
   nonReqBool,
+  createdAt,
 } = require("../../helpers/schema/schemaHelp");
 const mongoose = require("mongoose");
 const partnerFeedback = new mongoose.Schema(
@@ -40,10 +39,12 @@ const partnerFeedback = new mongoose.Schema(
       required: true,
       ref: "orders",
     },
-    createdAt: timeStamp,
+    feedbackQuestionsId:nonReqStr,
+    isFeedbackQuestionsAttempted:nonReqBool,
+    createdAt: createdAt,
     lastModified: modifiedAt,
     otherInformation: nonReqStr,
-    questions: [nonReqStr],
+    attemptedQuestions: [nonReqStr],
     answers: [nonReqStr],
     isDeleted: nonReqBool,
   },
