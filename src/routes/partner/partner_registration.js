@@ -63,7 +63,8 @@ router.get(`/${constants.getPartner}/:pId`, (req, res) => {
     partnerDB
       .findOne({ pId: pId })
       .populate({
-        path: originalUrl.extractData == "true" ? "reports.reportedBy" : "catelogs",
+        path:
+          originalUrl.extractData == "true" ? "reports.reportedBy" : "catelogs",
       })
       .populate({
         path: originalUrl.extractData == "true" ? "complaints" : "catelogs",
@@ -87,7 +88,7 @@ router.get(`/${constants.getPartner}/:pId`, (req, res) => {
         path: originalUrl.extractData == "true" ? "catelogs" : "catelogs",
         match: { isDeleted: false },
       })
-      .populate("rate", "rating")
+      .populate("rate", "rating description")
 
       // .populate({
       //   path:
