@@ -34,6 +34,11 @@ const faqSchema = new mongoose.Schema(
     sort: defaultNum,
     isActive: nonReqBool,
     body: [faqBody],
+    platform: {
+      type: String,
+      enum: ["userApp", "partnerApp", "UserWeb", "adminPanel", "controlPanel"],
+      default: "partnerApp",
+    },
 
     createdAt: createdAt,
     lastModified: modifiedAt,
