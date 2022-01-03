@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const partnerFeedBack = require("../../models/partner_feedback/partner_feedback_sch");
+const { addFeedbackIdToOrder } = require("../../services/orders");
 const router = express.Router();
 
 /* -------------------------------------------------------------------------- */
@@ -8,6 +9,7 @@ const router = express.Router();
 /* -------------------------------------------------------------------------- */
 router.post("/new-feedback", (req, res) => {
   const body = req.body;
+
   try {
     partnerFeedBack
       .create(body)
@@ -15,6 +17,11 @@ router.post("/new-feedback", (req, res) => {
         if (err) {
           return res.status(400).send(err.message);
         }
+        const orderBody = {
+          feedBackDetails: doc._id,
+          orderState: "10",
+        };
+        addFeedbackIdToOrder(body.orderDetails, orderBody);
         return res.status(200).json(doc);
       })
       .catch((err) => {

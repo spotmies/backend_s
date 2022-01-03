@@ -197,6 +197,7 @@ router.get(`/:userType/:uId`, (req, res) => {
         "name eMail phNum partnerPic rate lang experience job loc businessName accountType availability pId partnerDeviceToken"
       )
       .populate("acceptResponse")
+      .populate("feedBackDetails")
       .exec(function (err, data) {
         if (err) {
           console.error(err);
