@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const partnerDB = require("../../models/partner/partner_registration_sch");
+const locationDB = require("../../models/support/location");
 const constants = require("../../helpers/constants");
 const complaintR = require("./complaints");
 const {
@@ -279,6 +280,39 @@ router.put("/report", (req, res) => {
     );
   } catch (error) {
     if (error) return res.status(500).send(error.message);
+  }
+});
+
+/* ----------------- Get nearest partner using geo location ----------------- */
+
+router.get("/nearest-partner", (req, res) => {
+  const lat = req.query.lat;
+  const log = req.query.log;
+  const maxDistance = req.query.maxDistance ?? 10000;
+  const minDistance = req.query.minDistance ?? 10;
+  const job = req.query.job;
+  const availability = req.query.availability ?? true;
+  try {
+    partnerDB
+      .find(
+        {
+          workLocation: {
+            $near: {
+              $geometry: { type: "Point", coordinates: [lat, log] },
+              $minDistance: minDistance,
+              $maxDistance: maxDistance,
+            },
+          },
+          job: job,
+          availability: availability,
+        }
+      )
+      .select("pId name workLocation job partnerPic")
+      .exec((err, data) => {
+        return processRequest(err, data, res, req);
+      });
+  } catch (error) {
+    return catchFunc(error, res, req);
   }
 });
 
