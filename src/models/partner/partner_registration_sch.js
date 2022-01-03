@@ -18,8 +18,6 @@ const {
   viewsSchema,
 } = require("../../helpers/schema/schemaHelp");
 
-
-
 const partnerRegistration = new mongoose.Schema(
   {
     name: reqStr,
@@ -112,11 +110,17 @@ const partnerRegistration = new mongoose.Schema(
     isTermsAccepted: reqBool,
     partnerDeviceToken: nonReqStr,
     workLocation: {
-      required: true,
-      type: [Number],
+      type: { type: String, enum: ["Point"], default: "Point" },
+      coordinates: [Number],
     },
-    homeLocation: [Number],
-    currentLocation: [Number],
+    homeLocation: {
+      type: { type: String, enum: ["Point"], default: "Point" },
+      coordinates: [Number],
+    },
+    currentLocation: {
+      type: { type: String, enum: ["Point"], default: "Point" },
+      coordinates: [Number],
+    },
     workAddress: nonReqStr,
     homeAddress: nonReqStr,
     currentAddress: nonReqStr,
@@ -147,4 +151,14 @@ const partnerRegistration = new mongoose.Schema(
   },
   { timestamps: true }
 );
+partnerRegistration.index({
+  workLocation: "2dsphere",
+});
+partnerRegistration.index({
+  homeLocation: "2dsphere",
+});
+partnerRegistration.index({
+  currentLocation: "2dsphere",
+});
+
 module.exports = mongoose.model("partners", partnerRegistration);
