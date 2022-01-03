@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const partnerDB = require("../../models/partner/partner_registration_sch");
-const locationDB = require("../../models/support/location");
 const constants = require("../../helpers/constants");
 const complaintR = require("./complaints");
 const {
