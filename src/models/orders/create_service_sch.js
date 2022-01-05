@@ -23,8 +23,9 @@ const newOrderSchema = new mongoose.Schema(
     ordId: ordIdSch,
     ordState: {
       type: String,
-      required: true,
+      required: false,
       enum: ["req", "noPartner", "updated", "onGoing", "completed", "cancel"],
+      default: "req",
     },
     orderState: {
       type: Number,
@@ -40,9 +41,8 @@ const newOrderSchema = new mongoose.Schema(
     uId: unChangeStr,
     views: nonReqNum,
     loc: {
-      type: [Number],
-      required: true,
-      validate: (v) => Array.isArray(v) && v.length > 1,
+      type: { type: String, enum: ["Point"], default: "Point" },
+      coordinates: [Number],
     },
     address: nonReqStr,
 
@@ -93,5 +93,9 @@ const newOrderSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+newOrderSchema.index({
+  loc: "2dsphere",
+});
 
 module.exports = mongoose.model("orders", newOrderSchema);
