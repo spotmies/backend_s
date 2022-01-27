@@ -14,7 +14,14 @@ const suggestionSchema = new mongoose.Schema(
     body: nonReqStr,
     suggestionFor: {
       type: String,
-      enum: ["feedback", "contactUs", "faq", "partnerRegistration", "other"],
+      enum: [
+        "feedback",
+        "contactUs",
+        "faq",
+        "partnerRegistration",
+        "newsLetter",
+        "other",
+      ],
       required: true,
     },
     /* ------------------------- contact us form fields ------------------------- */
