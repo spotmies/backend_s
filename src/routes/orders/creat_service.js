@@ -18,7 +18,7 @@ router.post(`/${constants.createOrder}/:uId`, (req, res, next) => {
       .create(data)
       .then((doc, err) => {
         if (err) {
-          return res.status(400).send(err.message);
+          return res.status(400).json(err.message);
         }
         if (!doc) return res.status(404).json(doc);
         try {
