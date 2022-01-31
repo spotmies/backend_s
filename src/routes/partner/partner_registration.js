@@ -14,6 +14,7 @@ const {
 
 router.post(`/${constants.newPartner}`, (req, res, next) => {
   var data = req.body;
+  data.permission = 10;
   console.log("newPart", data);
   console.log(data.docs);
   if (
@@ -293,19 +294,17 @@ router.get("/nearest-partner", (req, res) => {
   const availability = req.query.availability ?? true;
   try {
     partnerDB
-      .find(
-        {
-          workLocation: {
-            $near: {
-              $geometry: { type: "Point", coordinates: [lat, log] },
-              $minDistance: minDistance,
-              $maxDistance: maxDistance,
-            },
+      .find({
+        workLocation: {
+          $near: {
+            $geometry: { type: "Point", coordinates: [lat, log] },
+            $minDistance: minDistance,
+            $maxDistance: maxDistance,
           },
-          job: job,
-          availability: availability,
-        }
-      )
+        },
+        job: job,
+        availability: availability,
+      })
       .select("pId name workLocation job partnerPic")
       .exec((err, data) => {
         return processRequest(err, data, res, req);
