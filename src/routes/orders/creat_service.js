@@ -18,6 +18,7 @@ router.post(`/${constants.createOrder}/:uId`, (req, res, next) => {
       .create(data)
       .then((doc, err) => {
         if (err) {
+          console.log(err.message);
           return res.status(400).json(err.message);
         }
         if (!doc) return res.status(404).json(doc);
@@ -28,6 +29,7 @@ router.post(`/${constants.createOrder}/:uId`, (req, res, next) => {
             { new: true },
             (err, result) => {
               if (err) {
+                console.log(err.message);
                 return res.status(400).json(err.message);
               }
               return res.status(200).json(doc);
@@ -39,6 +41,7 @@ router.post(`/${constants.createOrder}/:uId`, (req, res, next) => {
       })
       .catch((err) => {
         if (err) {
+          console.log(err.message);
           return res.status(400).json(err.message);
         }
       });
