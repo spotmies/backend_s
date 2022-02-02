@@ -14,7 +14,7 @@ const {
 
 router.post(`/${constants.newPartner}`, (req, res, next) => {
   var data = req.body;
-  data.permission = 10;
+  // data.permission = 10;
   console.log("newPart", data);
   console.log(data.docs);
   if (
