@@ -21,7 +21,7 @@ router.post(`/${constants.newResponse}`, (req, res) => {
       { new: true },
       (err, result) => {
         if (err) {
-          console.log(err.message);
+          console.log("24", err.message);
           return res.status(400).send(err.message);
         }
         if (data.responseType === "reject") return res.status(200).json(result);
@@ -29,7 +29,7 @@ router.post(`/${constants.newResponse}`, (req, res) => {
           try {
             orderDB.findOne({ ordId: data.ordId }, (err, ordData) => {
               if (err) {
-                console.log(err.message);
+                console.log("32", err.message);
                 return res.status(400).send(err.message);
               }
               if (!ordData) return res.status(400).json("invalid ordId");
@@ -50,7 +50,7 @@ router.post(`/${constants.newResponse}`, (req, res) => {
                     .status(400)
                     .send(`this order in status of ${ordData.orderState}`);
                 }
-                updateBlock = ordData;
+                // updateBlock = ordData;
                 if (data.responseType === "accept") {
                   updateBlock["acceptBy"] = "partner";
                   updateBlock.acceptAt = new Date().valueOf();
@@ -68,7 +68,7 @@ router.post(`/${constants.newResponse}`, (req, res) => {
                   .create(data)
                   .then((doc, err) => {
                     if (err) {
-                      console.log(err.message);
+                      console.log("71", err.message);
                       return res.status(400).send(err.message);
                     }
                     if (!doc) return res.status(404).json(doc);
@@ -79,11 +79,12 @@ router.post(`/${constants.newResponse}`, (req, res) => {
                     try {
                       orderDB.findOneAndUpdate(
                         { ordId: doc.ordId },
-                        updateBlock,
+                        { $set: updateBlock },
+
                         { new: true },
                         (err, result) => {
                           if (err) {
-                            console.log(err.message);
+                            console.log("86", err.message);
                             return res.status(400).send(err.message);
                           }
                           return res.status(200).json(doc);
@@ -91,14 +92,14 @@ router.post(`/${constants.newResponse}`, (req, res) => {
                       );
                     } catch (err) {
                       if (err) {
-                        console.log(err.message);
+                        console.log("94", err.message);
                         return res.status(400).send(err.message);
                       }
                     }
                   })
                   .catch((err) => {
                     if (err) {
-                      console.log(err.message);
+                      console.log("101", err.message);
                       return res.status(400).send(err.message);
                     }
                   });
@@ -121,7 +122,7 @@ router.post(`/${constants.newResponse}`, (req, res) => {
     );
   } catch (err) {
     if (err) {
-      console.log(err.message);
+      console.log("124", err.message);
       return res.status(400).send(err.message);
     }
   }
