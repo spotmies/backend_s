@@ -72,7 +72,7 @@ router.post(`/${constants.newResponse}`, (req, res) => {
                       return res.status(400).send(err.message);
                     }
                     if (!doc) return res.status(404).json(doc);
-                    updateBlock.responses.push(doc.id);
+                    updateBlock?.responses?.push(doc.id);
                     if (data.responseType === "accept")
                       updateBlock["acceptResponse"] = doc.id;
 
