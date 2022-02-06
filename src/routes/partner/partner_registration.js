@@ -286,12 +286,20 @@ router.put("/report", (req, res) => {
 /* ----------------- Get nearest partner using geo location ----------------- */
 
 router.get("/nearest-partner", (req, res) => {
-  const lat = req.query.lat;
-  const log = req.query.log;
-  const maxDistance = req.query.maxDistance ?? 10000;
-  const minDistance = req.query.minDistance ?? 10;
-  const job = req.query.job;
-  const availability = req.query.availability ?? true;
+  const lat = req.query?.lat;
+  const log = req.query?.log;
+  const maxDistance = req.query?.maxDistance ?? 100000;
+  const minDistance = req.query?.minDistance ?? 10;
+  const job = req.query?.job;
+  const skip = parseInt(req?.query?.skip ?? 0);
+  const limit = parseInt(req?.query?.limit ?? 10);
+  // const availability = req.query.availability ?? true;
+  let block = {
+    isDeleted: false,
+    partnerState: "active",
+    permission: { $gt: 9 },
+  };
+  if (job != undefined || job != null) block.job = job;
   try {
     partnerDB
       .find({
@@ -302,10 +310,33 @@ router.get("/nearest-partner", (req, res) => {
             $maxDistance: maxDistance,
           },
         },
-        job: job,
-        availability: availability,
+        ...block,
       })
-      .select("pId name workLocation job partnerPic")
+      .select(
+        "pId name workLocation job partnerPic perAdd phNum accountType businessName collegeName isActive"
+      )
+      .skip(skip)
+      .limit(limit)
+      .exec((err, data) => {
+        return processRequest(err, data, res, req);
+      });
+  } catch (error) {
+    return catchFunc(error, res, req);
+  }
+});
+
+/* ---------------------------- get partner list ---------------------------- */
+router.get("/partner-list", (req, res) => {
+  const skip = parseInt(req.query.skip ?? 0);
+  const limit = parseInt(req?.query?.limit ?? 2);
+
+  try {
+    partnerDB
+      .find()
+
+      .select("name")
+      .skip(skip)
+      .limit(limit)
       .exec((err, data) => {
         return processRequest(err, data, res, req);
       });
