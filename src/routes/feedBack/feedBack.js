@@ -4,7 +4,7 @@ const feedback = require("../../models/feedBack/feedback");
 const router = express.Router();
 const admin = require("firebase-admin");
 var firebaseFcm = require("../firebase_admin/firebase_admin");
-var FCM = require("fcm-node");
+// var FCM = require("fcm-node");
 const fetch = require("node-fetch");
 var serverKey =
   "AAAAQICO0kA:APA91bFHSnH18KNDFn9_l5Antv3uJRMoa3kBZZf-MXncYMrGEUlW8ehKAsUEH2mPyeV9r_28_gLkYk3wIx4fqYzza10DdF87PkAhfpG0LHh-oYUqZcK9_mHkfaxF5NPpmnjCGI1Q0rlD"; //put your server key here
@@ -13,8 +13,6 @@ const deviceId =
 const deviceId2 =
   "eWkjKtSFSyiLoGdVYmvn9v:APA91bEgIqMokCxtHksO1_sgmqD34TLl6RuxoxOIA5SI4MKQUWOt2TL-6bjDtw1yCUKWiRcMKtqRss41H6AguT85O6xQnJYS_R4sLFitK57ZxB15PEBq57JwohMI1o5HPv2S83_dAy5R";
 
-
-  
 router.post("/notification4", function (req, res) {
   console.log("nofication 4");
   var notification = {

@@ -2,7 +2,7 @@ const express = require("express");
 const constants = require("../helpers/constants");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
-const feedB = require("./feedBack/feedBack");
+// const feedB = require("./feedBack/feedBack");
 const userR = require("./users/userR");
 const orderR = require("./orders/creat_service");
 const partnerR = require("./partner/partner_registration");
@@ -27,7 +27,7 @@ const public = require("./public/public");
 /*                                MAIN ROUTERS                                */
 /* -------------------------------------------------------------------------- */
 
-router.use("/feed", feedB);
+// router.use("/feed", feedB);
 router.use("/partner-feedback", verifyToken, partnerFeedbackRoute);
 router.use("/user", verifyToken, userR);
 router.use("/order", verifyToken, orderR);
