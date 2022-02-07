@@ -1,8 +1,8 @@
 const express = require("express");
 const constants = require("../helpers/constants");
-
+const jwt = require("jsonwebtoken");
 const router = express.Router();
-const feedB = require("./feedBack/feedBack");
+// const feedB = require("./feedBack/feedBack");
 const userR = require("./users/userR");
 const orderR = require("./orders/creat_service");
 const partnerR = require("./partner/partner_registration");
@@ -21,38 +21,61 @@ const adminRouter = require("../routes/admin/admin");
 const suggestionRouter = require("../routes/suggestions/suggestions");
 const faqRouter = require("../routes/support/faq");
 const feedbackQuestionsRouter = require("../routes/suggestions/feedback_questions");
-// const loggerR = require("./loggers/loggers");
-//const postR = require("./posts/post");
+const public = require("./public/public");
 
 /* -------------------------------------------------------------------------- */
 /*                                MAIN ROUTERS                                */
 /* -------------------------------------------------------------------------- */
 
-router.use("/feed", feedB);
-router.use("/partner-feedback", partnerFeedbackRoute);
-router.use("/user", userR);
-router.use("/order", orderR);
-router.use("/partner", partnerR);
-router.use(`/${constants.mainChatRoute}`, chatR);
-router.use(`/${constants.mainRouteResponse}`, responsesR);
+// router.use("/feed", feedB);
+router.use("/partner-feedback", verifyToken, partnerFeedbackRoute);
+router.use("/user", verifyToken, userR);
+router.use("/order", verifyToken, orderR);
+router.use("/partner", verifyToken, partnerR);
+router.use(`/${constants.mainChatRoute}`, verifyToken, chatR);
+router.use(`/${constants.mainRouteResponse}`, verifyToken, responsesR);
 router.use("/notification", notificationR);
-router.use("/catelog", catelogR);
+router.use("/catelog", verifyToken, catelogR);
 router.use("/career/intern", internsRoute);
-router.use("/tutorial/unit", tutorialUnitRouter);
-router.use("/tutorial/course", tutorialCoursesRouter);
+router.use("/tutorial/unit", verifyToken, tutorialUnitRouter);
+router.use("/tutorial/course", verifyToken, tutorialCoursesRouter);
 router.use("/constant", constantsR);
 router.use("/services", serviceListRoute);
 router.use("/admin", adminRouter);
-router.use("/suggestion",suggestionRouter);
+router.use("/suggestion", suggestionRouter);
 router.use("/support/faq", faqRouter);
 router.use("/suggestion/feedback-question", feedbackQuestionsRouter);
+router.use("/public", public);
 router.get("/stamp", (req, res) => {
   let stamp = new Date().valueOf();
   res.send(stamp.toString());
 });
-router.use("/geocode", geocodeLocator);
+router.use("/geocode", verifyToken, geocodeLocator);
 
-// router.use("/logger", loggerR);
-// router.use("/post", postR);
+// Verify Token
+function verifyToken(req, res, next) {
+  // Get auth header value
+  const bearerHeader = req.headers["authorization"];
+  // Check if bearer is undefined
+  if (typeof bearerHeader !== "undefined") {
+    // Split at the space
+    const bearer = bearerHeader.split(" ");
+    // Get token from array
+    const bearerToken = bearer[1];
+    // Set the token
+    req.token = bearerToken;
+    // Next middleware
+    jwt.verify(req.token, "secretkey", (err, authData) => {
+      if (err) {
+        return res.sendStatus(403);
+      } else {
+        next();
+      }
+    });
+  } else {
+    // Forbidden
+    return res.sendStatus(403);
+  }
+}
 
 module.exports = router;
