@@ -7,6 +7,7 @@ const {
   catchFunc,
   processRequestNext,
 } = require("../../helpers/error_handling/process_request");
+const constants = require("../../helpers/constants");
 
 /* -------------------------------- Login api ------------------------------- */
 
@@ -31,14 +32,19 @@ router.post("/user/login", (req, res) => {
         processRequestNext(err, data, res, req, () => {
           jwt.sign(
             { user },
-            "secretkey",
+            constants.seceretKey,
             { expiresIn: "30s" },
             (err, token) => {
               if (err) {
                 return res.status(400).send(err.message);
               }
-              return res.json({
-                token,
+              jwt.verify(token, constants.seceretKey, (err, authData) => {
+                if (err) {
+                  return res.sendStatus(403);
+                } else {
+                  // next();
+                  return res.json({ authData, token });
+                }
               });
             }
           );
@@ -60,14 +66,27 @@ router.post("/access-token", (req, res) => {
   try {
     userDb.findOne({ uId: body.uId }, (err, data) => {
       processRequestNext(err, data, res, req, () => {
-        jwt.sign({ user }, "secretkey", { expiresIn: "30s" }, (err, token) => {
-          if (err) {
-            return res.status(400).send(err.message);
+        jwt.sign(
+          { user },
+          constants.seceretKey,
+          { expiresIn: "30s" },
+          (err, token) => {
+            if (err) {
+              return res.status(400).send(err.message);
+            }
+            jwt.verify(token, constants.seceretKey, (err, authData) => {
+              if (err) {
+                return res.sendStatus(403);
+              } else {
+                // next();
+                return res.json({ authData, token });
+              }
+            });
+            // return res.json({
+            //   token,
+            // });
           }
-          return res.json({
-            token,
-          });
-        });
+        );
       });
     });
   } catch (error) {

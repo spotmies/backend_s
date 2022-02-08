@@ -13,6 +13,7 @@ module.exports = {
   mainRouteResponse: "response",
   responses: "responses",
   newResponse: "newResponse",
+  seceretKey: "secretKey",
 
   /* ----------------------------- TUTORIAL UNITS ----------------------------- */
   newUnit: "/new-unit",

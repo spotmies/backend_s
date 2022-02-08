@@ -65,7 +65,7 @@ function verifyToken(req, res, next) {
     // Set the token
     req.token = bearerToken;
     // Next middleware
-    jwt.verify(req.token, "secretkey", (err, authData) => {
+    jwt.verify(req.token, constants.seceretKey, (err, authData) => {
       if (err) {
         return res.sendStatus(403);
       } else {
