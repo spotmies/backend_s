@@ -1,4 +1,3 @@
-
 const express = require("express");
 const router = express.Router();
 const chatDB = require("../../models/messaging/messaging_sch");
@@ -120,11 +119,23 @@ router.get(`/:userType/:uId`, (req, res) => {
       .find({ [userType]: uOrPId, [deleteQuery]: deleteField })
       .sort({ lastModified: -1 })
       .populate("orderDetails")
-      .populate("uDetails")
       .populate(
-        "pDetails",
-        "name eMail phNum partnerPic rate lang experience job loc businessName accountType availability partnerDeviceToken"
+        "uDetails",
+        "name phNum join pic eMail altNum uId userState lastLogin userDeviceToken"
       )
+      .populate({
+        path: "pDetails",
+        select:
+          "name eMail phNum partnerPic rate lang experience job loc businessName accountType availability pId partnerDeviceToken",
+        populate: {
+          path: "rate",
+          select: "rating",
+        },
+      })
+      // .populate(
+      //   "pDetails",
+      //   "name eMail phNum partnerPic rate lang experience job loc businessName accountType availability partnerDeviceToken"
+      // )
       .exec(function (err, data) {
         if (err) {
           console.error(err);
