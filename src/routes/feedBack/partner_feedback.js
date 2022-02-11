@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const partnerFeedBack = require("../../models/partner_feedback/partner_feedback_sch");
 const { addFeedbackIdToOrder } = require("../../services/orders");
+const { pushRatingsToPartner } = require("../../services/partners");
 const router = express.Router();
 
 /* -------------------------------------------------------------------------- */
@@ -22,6 +23,7 @@ router.post("/new-feedback", (req, res) => {
           orderState: "10",
         };
         addFeedbackIdToOrder(body.orderDetails, orderBody);
+        pushRatingsToPartner(body.pId, doc._id);
         return res.status(200).json(doc);
       })
       .catch((err) => {
