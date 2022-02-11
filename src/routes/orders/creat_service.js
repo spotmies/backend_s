@@ -195,12 +195,24 @@ router.get(`/:userType/:uId`, (req, res) => {
         "uDetails",
         "name phNum join pic eMail altNum uId userState lastLogin userDeviceToken"
       )
-      .populate(
-        "pDetails",
-        "name eMail phNum partnerPic rate lang experience job loc businessName accountType availability pId partnerDeviceToken"
-      )
+      // .populate(
+      //   "pDetails",
+      //   "name eMail phNum partnerPic rate lang experience job loc businessName accountType availability pId partnerDeviceToken"
+      // )
+      .populate({
+        path: "pDetails",
+        select:
+          "name eMail phNum partnerPic rate lang experience job loc businessName accountType availability pId partnerDeviceToken",
+        populate: {
+          path: "rate",
+          select: "rating",
+        },
+      })
       .populate("acceptResponse")
-      .populate("feedBackDetails")
+      .populate(
+        "feedBackDetails",
+        "rating description media createdAt pDetails"
+      )
       .exec(function (err, data) {
         if (err) {
           console.error(err);
