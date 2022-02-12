@@ -22,6 +22,7 @@ const suggestionRouter = require("../routes/suggestions/suggestions");
 const faqRouter = require("../routes/support/faq");
 const feedbackQuestionsRouter = require("../routes/suggestions/feedback_questions");
 const public = require("./public/public");
+const store = require("../routes/store/store");
 
 /* -------------------------------------------------------------------------- */
 /*                                MAIN ROUTERS                                */
@@ -46,6 +47,7 @@ router.use("/suggestion", suggestionRouter);
 router.use("/support/faq", faqRouter);
 router.use("/suggestion/feedback-question", feedbackQuestionsRouter);
 router.use("/public", public);
+router.use("/store", store);
 router.get("/stamp", (req, res) => {
   let stamp = new Date().valueOf();
   res.send(stamp.toString());
@@ -54,6 +56,7 @@ router.use("/geocode", verifyToken, geocodeLocator);
 
 // Verify Token
 function verifyToken(req, res, next) {
+  // return next(); //                           -> comment this line while updating to production mode
   // Get auth header value
   const bearerHeader = req.headers["authorization"];
   // Check if bearer is undefined
