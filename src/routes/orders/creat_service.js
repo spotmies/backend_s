@@ -5,6 +5,7 @@ const userDb = require("../../models/users/userSch");
 const responsesDB = require("../../models/responses/responses_sch");
 const constants = require("../../helpers/constants");
 const { notificationByToken } = require("../firebase_admin/firebase_admin");
+const { pushOrdIdToPartner } = require("../../services/partners");
 
 /* -------------------------------------------------------------------------- */
 /*                              create new order                              */
@@ -310,6 +311,7 @@ router.post("/stateChange", function (req, res) {
                 //console.error(err);
                 return res.status(400).send(err.message);
               }
+              pushOrdIdToPartner(body?.pId, data?._id);
               try {
                 responsesDB.findByIdAndUpdate(
                   body.acceptResponse,

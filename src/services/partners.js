@@ -7,6 +7,15 @@ function pushRatingsToPartner(pId, reviewDoc) {
     console.log(error);
   }
 }
+function pushOrdIdToPartner(pId, orderDocId) {
+  try {
+    pDB.findOneAndUpdate({ pId: pId }, { $push: { orders: orderDocId } });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 module.exports = {
   pushRatingsToPartner,
+  pushOrdIdToPartner,
 };

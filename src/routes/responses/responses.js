@@ -5,6 +5,7 @@ const orderDB = require("../../models/orders/create_service_sch");
 const partnerDB = require("../../models/partner/partner_registration_sch");
 const constants = require("../../helpers/constants");
 const { notificationByToken } = require("../firebase_admin/firebase_admin");
+const { pushOrdIdToPartner } = require("../../services/partners");
 
 /* -------------------------------------------------------------------------- */
 /*                          CREATE RESPONSE FOR USER                          */
@@ -62,6 +63,7 @@ router.post(`/${constants.newResponse}`, (req, res) => {
 
                   data.money = ordData.money;
                   data.isAccepted = true;
+                  pushOrdIdToPartner(data?.pId, ordData?._id);
                 }
 
                 responsesDB
