@@ -12,7 +12,7 @@ router.get("/:pId", (req, res) => {
     partnerDB
       .findOne({ pId: pId })
       .select(
-        "-docs -isDeleted -__v -currentLocation -ref -inComingOrders -orders -acceptance -logs -lastLogin -permission -feedBack -complaints -isTermsAccepted -isDocumentsVerified -enableModifications -appConfig -reports -views"
+        "-docs -isDeleted -__v -currentLocation -ref -inComingOrders -acceptance -logs -lastLogin -permission -feedBack -complaints -isTermsAccepted -isDocumentsVerified -enableModifications -appConfig -reports -views"
       )
       .populate({
         path: "catelogs",
