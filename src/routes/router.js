@@ -56,7 +56,9 @@ router.use("/geocode", verifyToken, geocodeLocator);
 
 // Verify Token
 function verifyToken(req, res, next) {
-  return next(); //                           -> comment this line while updating to production mode
+  const allowedRoutes = ["/api/user/newUser"];
+  if (allowedRoutes.includes(req.originalUrl)) return next();
+  // return next(); //                           -> comment this line while updating to production mode
   // Get auth header value
   const bearerHeader = req.headers["authorization"];
   // Check if bearer is undefined
