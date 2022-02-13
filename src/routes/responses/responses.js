@@ -231,7 +231,7 @@ router.get(`/:userType/:uId`, (req, res) => {
       .populate("orderDetails")
       .populate(
         "pDetails",
-        "name eMail phNum partnerPic rate lang experience job loc businessName accountType availability partnerDeviceToken"
+        "name eMail phNum partnerPic rate lang experience job workLocation businessName accountType availability partnerDeviceToken pId"
       )
       .exec(function (err, data) {
         if (err) {
