@@ -56,7 +56,12 @@ router.use("/geocode", verifyToken, geocodeLocator);
 
 // Verify Token
 function verifyToken(req, res, next) {
-  const allowedRoutes = ["/api/user/newUser", "/api/partner/newPartner"];
+  const allowedRoutes = [
+    "/api/user/login",
+    "/api/user/newUser",
+    "/api/partner/newPartner",
+    "/api/partner/login",
+  ];
   //  ;
   if (allowedRoutes.includes(req.originalUrl)) return next();
   // return next(); //                           -> comment this line while updating to production mode
