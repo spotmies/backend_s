@@ -1,6 +1,7 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const userDb = require("../../models/users/userSch");
+const partnerDb = require("../../models/partner/partner_registration_sch");
 const router = express.Router();
 const {
   processRequest,
@@ -65,29 +66,63 @@ router.post("/access-token", (req, res) => {
   };
   try {
     userDb.findOne({ uId: body.uId }, (err, data) => {
-      processRequestNext(err, data, res, req, () => {
-        jwt.sign(
-          { user },
-          constants.seceretKey,
-          { expiresIn: "30s" },
-          (err, token) => {
-            if (err) {
-              return res.status(400).send(err.message);
-            }
-            jwt.verify(token, constants.seceretKey, (err, authData) => {
+      processRequestNext(
+        err,
+        data,
+        res,
+        req,
+        () => {
+          jwt.sign(
+            { user },
+            constants.seceretKey,
+            { expiresIn: "30s" },
+            (err, token) => {
               if (err) {
-                return res.sendStatus(403);
-              } else {
-                // next();
-                return res.json({ authData, token });
+                return res.status(400).send(err.message);
               }
-            });
-            // return res.json({
-            //   token,
-            // });
-          }
-        );
-      });
+              jwt.verify(token, constants.seceretKey, (err, authData) => {
+                if (err) {
+                  return res.sendStatus(403);
+                } else {
+                  return res.json({ authData, token });
+                }
+              });
+            }
+          );
+        },
+        () => {
+          partnerDb.findOne({ pId: body.uId }, (err, data) => {
+            processRequestNext(
+              err,
+              data,
+              res,
+              req,
+              () => {
+                jwt.sign(
+                  { user },
+                  constants.seceretKey,
+                  { expiresIn: "30s" },
+                  (err, token) => {
+                    if (err) {
+                      return res.status(400).send(err.message);
+                    }
+                    jwt.verify(token, constants.seceretKey, (err, authData) => {
+                      if (err) {
+                        return res.sendStatus(403);
+                      } else {
+                        return res.json({ authData, token });
+                      }
+                    });
+                  }
+                );
+              }
+              // () => {
+              //   return res.status(404).json({ message: "No data found" });
+              // }
+            );
+          });
+        }
+      );
     });
   } catch (error) {
     return catchFunc(error, res, req);

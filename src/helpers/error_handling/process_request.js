@@ -28,13 +28,17 @@ function catchFunc(error, res, req) {
   });
 }
 
-function processRequestNext(err, data, res, req, next) {
+function processRequestNext(err, data, res, req, next, onNoData) {
   if (err) {
     //saveError(err.message, req.originalUrl, req.method);
     return res.status(400).json(err.message);
   }
-  if (!data || data?.isDeleted == true)
+  if (!data || data?.isDeleted == true) {
+    if (onNoData != undefined || onNoData != null) {
+      return onNoData();
+    }
     return res.status(404).json({ message: "No data found" });
+  }
   // return res.status(200).json(data);
   next();
 }
