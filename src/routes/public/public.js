@@ -34,7 +34,7 @@ router.post("/user/login", (req, res) => {
           jwt.sign(
             { user },
             constants.seceretKey,
-            { expiresIn: "30s" },
+            { expiresIn: "10m" },
             (err, token) => {
               if (err) {
                 return res.status(400).send(err.message);
@@ -75,7 +75,7 @@ router.post("/access-token", (req, res) => {
           jwt.sign(
             { user },
             constants.seceretKey,
-            { expiresIn: "30s" },
+            { expiresIn: "10m" },
             (err, token) => {
               if (err) {
                 return res.status(400).send(err.message);
@@ -101,7 +101,7 @@ router.post("/access-token", (req, res) => {
                 jwt.sign(
                   { user },
                   constants.seceretKey,
-                  { expiresIn: "30s" },
+                  { expiresIn: "10m" },
                   (err, token) => {
                     if (err) {
                       return res.status(400).send(err.message);
