@@ -333,10 +333,10 @@ router.get("/partner-list", (req, res) => {
   try {
     partnerDB
       .find()
-
       .select(
-        "name pId partnerPic accountType businessName collegeName job workLocation rate phNum partnerDeviceToken"
+        "name pId partnerPic accountType businessName lang job workLocation rate phNum partnerDeviceToken"
       )
+      .populate("rate", "rating")
       .skip(skip)
       .limit(limit)
       .exec((err, data) => {
