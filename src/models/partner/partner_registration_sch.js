@@ -16,6 +16,7 @@ const {
   nonReqBool,
   reqBool,
   viewsSchema,
+  nonReqUniqueStr,
 } = require("../../helpers/schema/schemaHelp");
 
 const partnerRegistration = new mongoose.Schema(
@@ -143,6 +144,7 @@ const partnerRegistration = new mongoose.Schema(
     landMark: nonReqStr,
     websites: [nonReqStr],
     views: [viewsSchema],
+    storeId: nonReqUniqueStr,
 
     //common fields
     createdAt: createdAt,
