@@ -144,7 +144,15 @@ const partnerRegistration = new mongoose.Schema(
     landMark: nonReqStr,
     websites: [nonReqStr],
     views: [viewsSchema],
-    storeId: nonReqUniqueStr,
+    storeId: {
+      type: String,
+      trim: true,
+      index: true,
+      unique: true,
+      sparse: true,
+      required: false,
+      minlength: 4,
+    },
 
     //common fields
     createdAt: createdAt,
