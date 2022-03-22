@@ -126,4 +126,26 @@ router.delete("/catelogs/:docId", (req, res) => {
   }
 });
 
+/* ---------------------- GET CATELOGS LIST BY CATEGORY --------------------- */
+router.get("/catelog-by-job/:job", (req, res) => {
+  const job = req.params.job;
+  const skip = parseInt(req?.query?.skip ?? 0);
+  const limit = parseInt(req?.query?.limit ?? 10);
+  const isActive = req?.query?.isActive ?? true;
+  const isDeleted = req?.query?.isDeleted ?? false;
+  try {
+    catelogDB
+      .find({ category: job, isDeleted: isDeleted, isActive: isActive })
+      .select("-__v -isDeleted -isActive -updatedAt -createdAt -lastModified")
+      .skip(skip)
+      .limit(limit)
+      .exec((err, doc) => {
+        if (err) return res.status(400).json(err.message);
+        return res.status(200).json(doc);
+      });
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+});
+
 module.exports = router;
