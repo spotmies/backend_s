@@ -326,6 +326,7 @@ router.get("/nearest-partner", (req, res) => {
 });
 
 /* ---------------------------- get partner list ---------------------------- */
+
 router.get("/partner-list", (req, res) => {
   const skip = parseInt(req.query.skip ?? 0);
   const limit = parseInt(req?.query?.limit ?? 2);
@@ -342,6 +343,60 @@ router.get("/partner-list", (req, res) => {
       .exec((err, data) => {
         return processRequest(err, data, res, req);
       });
+  } catch (error) {
+    return catchFunc(error, res, req);
+  }
+});
+
+/* ------------------------ FORWARD ORDER TO PARTNER ------------------------ */
+
+router.post("/forward-order", (req, res) => {
+  const orderDocId = req.body.orderDocId;
+  const partnerDocId = req.body.partnerDocId;
+  try {
+    partnerDB.findByIdAndUpdate(
+      partnerDocId,
+      {
+        $addToSet: { inComingOrders: orderDocId },
+      },
+      (err, data) => {
+        if (err) return res.status(400).send(err.message);
+        if (data == null || !data || data == "")
+          return res
+            .status(400)
+            .json({ success: true, message: "partner not found" });
+        return res
+          .status(200)
+          .json({ success: true, message: "order forwarded" });
+      }
+    );
+  } catch (error) {
+    return catchFunc(error, res, req);
+  }
+});
+
+/* ------------------------ REMOVE ORDER TO PARTNER ------------------------ */
+
+router.post("/remove-order", (req, res) => {
+  const orderDocId = req.body.orderDocId;
+  const partnerDocId = req.body.partnerDocId;
+  try {
+    partnerDB.findByIdAndUpdate(
+      partnerDocId,
+      {
+        $pull: { inComingOrders: orderDocId },
+      },
+      (err, data) => {
+        if (err) return res.status(400).send(err.message);
+        if (data == null || !data || data == "")
+          return res
+            .status(400)
+            .json({ success: true, message: "partner not found" });
+        return res
+          .status(200)
+          .json({ success: true, message: "order forwarded" });
+      }
+    );
   } catch (error) {
     return catchFunc(error, res, req);
   }
