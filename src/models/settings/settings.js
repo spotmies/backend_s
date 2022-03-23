@@ -3,7 +3,6 @@ const {
   createdAt,
   modifiedAt,
   nonReqBool,
-  reqStr,
 } = require("../../helpers/schema/schemaHelp");
 
 const settingsSch = new mongoose.Schema(
