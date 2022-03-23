@@ -65,12 +65,17 @@ function changeStrema(io) {
       switch (change.operationType) {
         case "insert":
           console.log("new order came...", change.fullDocument);
-          let automation = await checkOrdersForwardAutomation();
-          console.log("automation", automation);
-          if (automation == true) {
-            console.log("order automation is ON");
-            broadCastOrder({ orderData: change.fullDocument, io: io });
-          }
+          // let automation = await checkOrdersForwardAutomation();
+          // console.log("automation", automation);
+          // if (automation == true) {
+          //   console.log("order automation is ON");
+          //   broadCastOrder({ orderData: change.fullDocument, io: io });
+          // }
+          broadCastOrder({
+            orderData: change.fullDocument,
+            io: io,
+          });
+
           break;
           try {
             partnerDB.updateMany(
