@@ -4,6 +4,7 @@ const responsesDB = require("../../models/responses/responses_sch");
 const chatDB = require("../../models/messaging/messaging_sch");
 const orderDB = require("../../models/orders/create_service_sch");
 const { notificationByToken } = require("../firebase_admin/firebase_admin");
+const { checkOrdersForwardAutomation } = require("../../services/settings");
 const connection = mongoose.connection;
 function changeStrema(io) {
   connection.once("open", () => {
@@ -64,7 +65,9 @@ function changeStrema(io) {
       switch (change.operationType) {
         case "insert":
           console.log("new order came...", change.fullDocument);
-          broadCastOrder({ orderData: change.fullDocument, io: io });
+          if (checkOrdersForwardAutomation()) {
+            broadCastOrder({ orderData: change.fullDocument, io: io });
+          }
           break;
           try {
             partnerDB.updateMany(
