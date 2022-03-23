@@ -65,7 +65,8 @@ function changeStrema(io) {
       switch (change.operationType) {
         case "insert":
           console.log("new order came...", change.fullDocument);
-          if (checkOrdersForwardAutomation()) {
+          if (checkOrdersForwardAutomation() === true) {
+            console.log("order automation is ON");
             broadCastOrder({ orderData: change.fullDocument, io: io });
           }
           break;
