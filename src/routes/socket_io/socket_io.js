@@ -61,11 +61,11 @@ function changeStrema(io) {
           break;
       }
     });
-    orderChangeStream.on("change", (change) => {
+    orderChangeStream.on("change", async (change) => {
       switch (change.operationType) {
         case "insert":
           console.log("new order came...", change.fullDocument);
-          let automation = checkOrdersForwardAutomation();
+          let automation = await checkOrdersForwardAutomation();
           console.log("automation", automation);
           if (automation == true) {
             console.log("order automation is ON");
