@@ -23,6 +23,7 @@ const faqRouter = require("../routes/support/faq");
 const feedbackQuestionsRouter = require("../routes/suggestions/feedback_questions");
 const public = require("./public/public");
 const store = require("../routes/store/store");
+const settingsRouter = require("./settings/settings");
 
 /* -------------------------------------------------------------------------- */
 /*                                MAIN ROUTERS                                */
@@ -48,6 +49,7 @@ router.use("/support/faq", faqRouter);
 router.use("/suggestion/feedback-question", feedbackQuestionsRouter);
 router.use("/public", public);
 router.use("/store", store);
+router.use("/settings", verifyToken, settingsRouter);
 router.get("/stamp", (req, res) => {
   let stamp = new Date().valueOf();
   res.send(stamp.toString());
