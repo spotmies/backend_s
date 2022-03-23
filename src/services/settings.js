@@ -1,24 +1,28 @@
 const settingsSchema = require("../models/settings/settings");
 
-function checkOrdersForwardAutomation() {
+checkOrdersForwardAutomation = () => {
   const settingName = "forward_orders";
-  try {
-    settingsSchema.findOne({ name: settingName }, (err, data) => {
-      if (err) {
-        console.log(err);
-        return false;
-      } else {
-        if (!data || data === null || data === undefined) return false;
-        if (data.isActive && !data.isDeleted) {
-          return data.value ?? false;
+  return new Promise((resolve) => {
+    try {
+      settingsSchema.findOne({ name: settingName }).exec((err, data) => {
+        if (err) {
+          console.log(err);
+          return resolve(false);
+        } else {
+          console.log(data);
+          if (!data || data === null || data === undefined)
+            return resolve(false);
+          if (data.isActive && !data.isDeleted) {
+            return resolve(data.value ?? false);
+          }
         }
-      }
-    });
-  } catch (error) {
-    console.log(error);
-    return false;
-  }
-}
+      });
+    } catch (error) {
+      console.log(error);
+      return resolve(false);
+    }
+  });
+};
 module.exports = {
   checkOrdersForwardAutomation,
 };

@@ -5,6 +5,7 @@ const {
 } = require("../../helpers/error_handling/process_request");
 const router = express.Router();
 const settingsSchema = require("../../models/settings/settings");
+// const { checkOrdersForwardAutomation } = require("../../services/settings");
 
 /* ------------------------ CREATE A NEW SETTINGS ----------------------- */
 
@@ -56,6 +57,13 @@ router.put("/:setting", (req, res) => {
     return catchFunc(error, res, req);
   }
 });
+
+// router.get("/testing", async (req, res) => {
+//   console.log("testing");
+//   let result = await checkOrdersForwardAutomation();
+//   console.log(result);
+//   return res.json(result);
+// });
 
 /* --------------------------- GET SETTING BY NAME -------------------------- */
 
