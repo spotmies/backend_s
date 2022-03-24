@@ -2,13 +2,16 @@ const express = require("express");
 const router = express.Router();
 const catelogDB = require("../../models/service_catelogue/service_catelogue");
 const partnerDB = require("../../models/partner/partner_registration_sch");
+const { getPartnerDocIdBypId } = require("../../services/partners");
 
 /* -------------------------------------------------------------------------- */
 /*                   NEW CATELOG CREATE BY PARTNER WITH PID                   */
 /* -------------------------------------------------------------------------- */
-router.post("/newCatelog/:pId", function (req, res) {
+router.post("/newCatelog/:pId", async function (req, res) {
   let pId = req.params.pId;
   let body = req.body;
+  let pDetails = await getPartnerDocIdBypId(body.pId);
+  body.pDetails = pDetails;
   try {
     console.log("newCatelog");
     catelogDB
@@ -137,6 +140,10 @@ router.get("/catelog-by-job/:job", (req, res) => {
     catelogDB
       .find({ category: job, isDeleted: isDeleted, isActive: isActive })
       .select("-__v -isDeleted -isActive -updatedAt -createdAt -lastModified")
+      .populate(
+        "pDetails",
+        "name phNum partnerPic rate lang job loc businessName accountType availability pId partnerDeviceToken"
+      )
       .skip(skip)
       .limit(limit)
       .exec((err, doc) => {

@@ -24,7 +24,20 @@ function pushOrdIdToPartner(pId, orderDocId) {
   }
 }
 
+function getPartnerDocIdBypId(pId) {
+  return new Promise((resolve, reject) => {
+    pDB.findOne({ pId: pId }, (err, data) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(data._id);
+      }
+    });
+  });
+}
+
 module.exports = {
   pushRatingsToPartner,
   pushOrdIdToPartner,
+  getPartnerDocIdBypId,
 };

@@ -26,6 +26,11 @@ const serivcecatelog = new mongoose.Schema(
     itemCode: reqNum,
 
     pId: reqStr,
+    pDetails: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: false,
+      ref: "partners",
+    },
     views: {
       type: Number,
       default: 0,
