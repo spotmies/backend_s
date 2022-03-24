@@ -67,7 +67,7 @@ function changeStrema(io) {
           console.log("new order came...", change.fullDocument);
           let automation = await checkOrdersForwardAutomation();
           console.log("automation", automation);
-          if (automation == true) {
+          if (automation == true && change.fullDocument.isBooking == false) {
             console.log("order automation is ON");
             broadCastOrder({ orderData: change.fullDocument, io: io });
           }
