@@ -82,6 +82,12 @@ const newOrderSchema = new mongoose.Schema(
       required: false,
       ref: "partner_feedbacks",
     },
+    isBooking: nonReqBool,
+    catelog: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: false,
+      ref: "catelogs",
+    },
     moneyGivenByUser: nonReqNum,
     moneyTakenByPartner: nonReqNum,
     isOrderCompletedByUser: nonReqBool,
