@@ -394,4 +394,34 @@ router.post("/revealProfile", (req, res) => {
   }
 });
 
+router.post("/book-service/:uId", (req, res) => {
+  const uId = req.params.uId;
+  let body = req.body;
+  body.isBooking = true;
+  try {
+    orderDB.create(body).then((doc, err) => {
+      if (err) {
+        return res.status(400).json(err.message);
+      }
+      if (!doc) return res.status(404).json(doc);
+      userDb.findOneAndUpdate(
+        { uId: uId },
+        { $push: { orders: doc?.id } },
+        { new: true },
+        (err, result) => {
+          if (err) {
+            console.log(err.message);
+            return res.status(400).json(err.message);
+          }
+
+          return res.status(200).json(doc);
+        }
+      );
+      // return res.status(200).json(doc);
+    });
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+});
+
 module.exports = router;
