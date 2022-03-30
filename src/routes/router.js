@@ -54,7 +54,7 @@ router.get("/stamp", (req, res) => {
   let stamp = new Date().valueOf();
   res.send(stamp.toString());
 });
-router.use("/geocode", verifyToken, geocodeLocator);
+router.use("/geocode", geocodeLocator);
 
 // Verify Token
 function verifyToken(req, res, next) {
