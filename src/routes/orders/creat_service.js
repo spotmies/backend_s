@@ -10,10 +10,37 @@ const { pushOrdIdToPartner } = require("../../services/partners");
 /* -------------------------------------------------------------------------- */
 /*                              create new order                              */
 /* -------------------------------------------------------------------------- */
-router.post(`/${constants.createOrder}/:uId`, (req, res, next) => {
+router.post(`/:serviceType/:uId`, (req, res, next) => {
+  const serviceType = req.params.serviceType;
+  const apis = ["book-service", "Create-Ord"];
+  if (!apis.includes(serviceType)) {
+    return res.status(400).send("service type is not valid");
+  }
+
   const uId = req.params.uId;
   var data = req.body;
   console.log("post data", data);
+  if (serviceType === "book-service") {
+    const reqFields = [
+      "money",
+      "schedule",
+      "pId",
+      "pDetails",
+      "catelog",
+      "revealProfileTo",
+      "media",
+    ];
+    for (let i = 0; i < reqFields.length; i++) {
+      if (
+        !data[reqFields[i]] ||
+        data[reqFields[i]] == null ||
+        data[reqFields[i]] == undefined
+      ) {
+        return res.status(400).json(`${reqFields[i]} is required`);
+      }
+    }
+  }
+
   try {
     orderDB
       .create(data)
@@ -214,6 +241,7 @@ router.get(`/:userType/:uId`, (req, res) => {
         "feedBackDetails",
         "rating description media createdAt pDetails"
       )
+      .populate("catelog")
       .exec(function (err, data) {
         if (err) {
           console.error(err);
@@ -394,34 +422,57 @@ router.post("/revealProfile", (req, res) => {
   }
 });
 
-router.post("/book-service/:uId", (req, res) => {
-  const uId = req.params.uId;
-  let body = req.body;
-  body.isBooking = true;
-  try {
-    orderDB.create(body).then((doc, err) => {
-      if (err) {
-        return res.status(400).json(err.message);
-      }
-      if (!doc) return res.status(404).json(doc);
-      userDb.findOneAndUpdate(
-        { uId: uId },
-        { $push: { orders: doc?.id } },
-        { new: true },
-        (err, result) => {
-          if (err) {
-            console.log(err.message);
-            return res.status(400).json(err.message);
-          }
+// /* -------------------- Book service from partner catelog ------------------- */
 
-          return res.status(200).json(doc);
-        }
-      );
-      // return res.status(200).json(doc);
-    });
-  } catch (error) {
-    return res.status(500).json(error.message);
-  }
-});
+// router.post("/book-servicse/:uId", (req, res) => {
+//   const uId = req.params.uId;
+//   let body = req.body;
+
+//   try {
+//     body.isBooking = true;
+//     // const reqFields = [
+//     //   "money",
+//     //   "schedule",
+//     //   "pId",
+//     //   "pDetails",
+//     //   "catelog",
+//     //   "revealProfileTo",
+//     //   "media",
+//     // ];
+//     // for (let i = 0; i < reqFields.length; i++) {
+//     //   if (
+//     //     !body[reqFields[i]] ||
+//     //     body[reqFields[i]] == null ||
+//     //     body[reqFields[i]] == undefined
+//     //   ) {
+//     //     return res.status(400).json(`${reqFields[i]} is required`);
+//     //   }
+//     // }
+//     orderDB.create(body).then((doc, err) => {
+//       if (err) {
+//         console.log(err.message);
+//         return res.status(400).json(err.message);
+//       }
+//       if (!doc) return res.status(404).json(doc);
+//       // try {
+//       //   userDb.findOneAndUpdate(
+//       //     { uId: uId },
+//       //     { $push: { orders: doc?.id } },
+//       //     { new: true },
+//       //     (err, result) => {
+//       //       if (err) {
+//       //         console.log(err.message);
+//       //         return res.status(400).json(err.message);
+//       //       }
+
+//       //       return res.status(200).json(doc);
+//       //     }
+//       //   );
+//       // } catch (error) {}
+//     });
+//   } catch (error) {
+//     return res.status(500).json(error.message);
+//   }
+// });
 
 module.exports = router;
