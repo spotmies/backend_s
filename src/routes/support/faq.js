@@ -24,10 +24,14 @@ router.post("/new-faq", (req, res) => {
 router.get("/all-faqs", (req, res) => {
   const isDeleted = req.query.isDeleted ?? false;
   const isActive = req.query.isActive ?? true;
+  const platform = req.query.platform ?? "partnerApp";
   try {
-    db.find({ isDeleted: isDeleted, isActive: isActive }, (err, data) => {
-      return processRequest(err, data, res, req);
-    });
+    db.find(
+      { isDeleted: isDeleted, isActive: isActive, platform: platform },
+      (err, data) => {
+        return processRequest(err, data, res, req);
+      }
+    );
   } catch (error) {
     return catchFunc(error, res, req);
   }
