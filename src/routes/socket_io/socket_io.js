@@ -400,15 +400,15 @@ function updateMsgsInDb(data, sender) {
   }
 }
 function updateMsgStatesAndCountsInDb(data) {
-  let msgId = data.msgId;
-  let status = data.status;
+  let msgId = data?.msgId;
+  let status = data?.status;
   let updateBlock = {};
-  if (data.sender === "user") {
+  if (data?.sender === "user") {
     if (status === 3) {
       updateBlock.uCount = 0;
     }
     updateBlock.pState = status;
-  } else if (data.sender === "partner") {
+  } else if (data?.sender === "partner") {
     if (status === 3) {
       updateBlock.pCount = 0;
     }
@@ -423,7 +423,6 @@ function updateMsgStatesAndCountsInDb(data) {
         if (err) {
           console.log(err);
         }
-        console.log(data.uCount);
       }
     );
   } catch (error) {
@@ -432,11 +431,11 @@ function updateMsgStatesAndCountsInDb(data) {
 }
 
 function disableOrDeleteChat(object) {
-  let msgId = object.msgId;
+  let msgId = object?.msgId;
   let updateBlock = {};
   updateBlock.cBuild = 0;
-  if (object.type == "delete") {
-    if (object.sender == "user") updateBlock.isDeletedForUser = true;
+  if (object?.type == "delete") {
+    if (object?.sender == "user") updateBlock.isDeletedForUser = true;
     else updateBlock.isDeletedForPartner = true;
     updateBlock.lastModified = new Date().valueOf();
   }
@@ -490,26 +489,26 @@ module.exports = {
       socket.on("sendNewMessage", (data) => {
         console.log("new msg", data);
         socket
-          .to(data.target.uId)
-          .to(data.target.pId)
+          .to(data?.target?.uId)
+          .to(data?.target?.pId)
           .emit("recieveNewMessage", data);
         updateMsgsInDb(data);
       });
 
       socket.on("sendNewMessageCallback", function (data, callBack) {
         console.log("ack", data);
-        let object = JSON.parse(data.object);
-        let notificationData = data.target;
-        let deviceTokens = data.target.deviceToken;
-        delete notificationData.deviceToken;
+        let object = JSON.parse(data?.object);
+        let notificationData = data?.target;
+        let deviceTokens = data?.target?.deviceToken;
+        delete notificationData?.deviceToken;
 
-        if (object.sender === "user") {
-          socket.to(data.target.pId).emit("recieveNewMessage", data);
-        } else if (object.sender === "partner") {
-          socket.to(data.target.uId).emit("recieveNewMessage", data);
+        if (object?.sender === "user") {
+          socket.to(data?.target?.pId).emit("recieveNewMessage", data);
+        } else if (object?.sender === "partner") {
+          socket.to(data?.target?.uId).emit("recieveNewMessage", data);
         } else {
-          socket.to(data.target.pId).emit("recieveNewMessage", data);
-          socket.to(data.target.uId).emit("recieveNewMessage", data);
+          socket.to(data?.target?.pId).emit("recieveNewMessage", data);
+          socket.to(data?.target?.uId).emit("recieveNewMessage", data);
         }
         callBack("success");
         updateMsgsInDb(data, object?.sender);
@@ -533,24 +532,24 @@ module.exports = {
       socket.on("sendReadReciept", function (data) {
         console.log("got read reciept", data);
         if (data.sender === "user") {
-          socket.to(data.pId).emit("recieveReadReciept", data);
+          socket.to(data?.pId).emit("recieveReadReciept", data);
         } else {
-          socket.to(data.uId).emit("recieveReadReciept", data);
+          socket.to(data?.uId).emit("recieveReadReciept", data);
         }
         updateMsgStatesAndCountsInDb(data);
       });
       socket.on("chatStream", function (data, callBack) {
         console.log("chatstream on sock", data);
-        switch (data.type) {
+        switch (data?.type) {
           case "disable":
           case "delete":
-            socket.to(data.pId).emit("chatStream", data);
+            socket.to(data?.pId).emit("chatStream", data);
             callBack("success");
             disableOrDeleteChat(data);
             break;
           case "revealProfile":
             callBack("success");
-            socket.to(data.pId).emit("chatStream", data);
+            socket.to(data?.pId).emit("chatStream", data);
           default:
             callBack("wentWrong");
             break;
