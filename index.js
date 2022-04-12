@@ -13,6 +13,11 @@ var io = require("socket.io")(server);
 var webSocket = require("./src/routes/socket_io/socket_io");
 var firebaseFcm = require("./src/routes/firebase_admin/firebase_admin");
 
+process.on("uncaughtException", function (err) {
+  console.error(err);
+  console.log("Node NOT Exiting...");
+});
+
 app.use(cors());
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
