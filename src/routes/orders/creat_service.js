@@ -22,6 +22,7 @@ router.post(`/:serviceType/:uId`, (req, res, next) => {
   console.log("post data", data);
   if (serviceType === "book-service") {
     data["isBooking"] = true;
+    data["orderState"] = 8;
     const reqFields = [
       "money",
       "schedule",
