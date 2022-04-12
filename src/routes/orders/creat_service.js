@@ -6,6 +6,7 @@ const responsesDB = require("../../models/responses/responses_sch");
 const constants = require("../../helpers/constants");
 const { notificationByToken } = require("../firebase_admin/firebase_admin");
 const { pushOrdIdToPartner } = require("../../services/partners");
+const { getOrderFullDetails } = require("../../services/orders");
 
 /* -------------------------------------------------------------------------- */
 /*                              create new order                              */
@@ -62,7 +63,11 @@ router.post(`/:serviceType/:uId`, (req, res, next) => {
                 console.log(err.message);
                 return res.status(400).json(err.message);
               }
-              return res.status(200).json(doc);
+              // return res.status(200).json(doc);
+              getOrderFullDetails(doc._id).then((fullDoc) => {
+                if (fullDoc) res.status(200).json(fullDoc);
+                else res.status(404).json(fullDoc);
+              });
             }
           );
         } catch (err) {}
@@ -197,6 +202,23 @@ router.get(`/${constants.orders}`, (req, res) => {
 /* -------------------------------------------------------------------------- */
 /*                       GET ALL ORDERS BY USER/PARTNER                       */
 /* -------------------------------------------------------------------------- */
+
+router.get("/get-orders/:orderDocId", async (req, res) => {
+  console.log("get-orders");
+  const orderDocId = req.params.orderDocId;
+  try {
+    // let data = await getOrderFullDetails(orderDocId);
+    getOrderFullDetails(orderDocId).then((data, err) => {
+      console.log("err", err);
+      console.log("data", data);
+      if (data) res.status(200).json(data);
+      else res.status(404).json(data);
+    });
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+});
+
 router.get(`/:userType/:uId`, (req, res) => {
   let originalUrl = req.query;
   const uOrPId = req.params.uId;
