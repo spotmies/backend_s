@@ -5,6 +5,7 @@ const chatDB = require("../../models/messaging/messaging_sch");
 const orderDB = require("../../models/orders/create_service_sch");
 const { notificationByToken } = require("../firebase_admin/firebase_admin");
 const { checkOrdersForwardAutomation } = require("../../services/settings");
+const { sendNotificationByPid } = require("../../services/partners");
 const connection = mongoose.connection;
 function changeStrema(io) {
   connection.once("open", () => {
@@ -71,105 +72,19 @@ function changeStrema(io) {
             console.log("order automation is ON");
             broadCastOrder({ orderData: change.fullDocument, io: io });
           }
+          if (change.fullDocument.isBooking == true) {
+            console.log("send notification to partner");
+            sendNotificationByPid(
+              change.fullDocument.pId,
+              "Alert",
+              "You got new order please check in your order tab"
+            );
+          }
           // broadCastOrder({
           //   orderData: change.fullDocument,
           //   io: io,
           // });
 
-          break;
-          try {
-            partnerDB.updateMany(
-              { job: change.fullDocument.job, availability: true },
-              {
-                $push: { inComingOrders: change.fullDocument._id },
-              },
-              function (err, doc) {
-                if (err) {
-                  console.log(`problem with assign order ${err}`);
-                } else {
-                  console.log("order assigned : ");
-                }
-              }
-            );
-            try {
-              orderDB
-                .findById(change.fullDocument._id)
-                .populate(
-                  "uDetails",
-                  "name phNum uId userState altNum eMail pic lastLogin userDeviceToken"
-                )
-                .exec(function (err, orderData) {
-                  if (err) {
-                    console.error(err);
-                  }
-                  if (orderData) {
-                    try {
-                      partnerDB.find(
-                        { job: change.fullDocument.job, availability: true },
-
-                        (err, partnersData) => {
-                          if (err) {
-                            console.error(err);
-                          }
-                          console.log(
-                            "socket on for incoming orders >>",
-                            orderData
-                          );
-                          let pIdsArray = [];
-                          partnersData.forEach((element) => {
-                            io.to(element.pId).emit("inComingOrders", {
-                              action: "new",
-                              payload: orderData,
-                            });
-                            pIdsArray.push(element.pId);
-                            notificationByToken({
-                              token: element.partnerDeviceToken,
-                              title: "New order For you",
-                              body: change.fullDocument.problem,
-                              data: {
-                                problem: `${change.fullDocument.problem}`,
-                                money: change.fullDocument.money
-                                  ? `${change.fullDocument.money}`
-                                  : "",
-                                ordId: `${change.fullDocument.ordId}`,
-                                media: change.fullDocument.media[0]
-                                  ? `${change.fullDocument.media[0]}`
-                                  : "",
-                                schedule: `${change.fullDocument.schedule}`,
-                              },
-                            });
-                          });
-                          // updateSendpIdToOrder(orderData._id, pIdsArray);
-                          orderDB.updateOne(
-                            { _id: orderData._id },
-                            {
-                              $addToSet: { orderSendTo: { $each: pIdsArray } },
-                            },
-                            function (err) {
-                              if (err) {
-                                console.log(
-                                  "error while adding incoming partner"
-                                );
-                                console.log(err);
-                              } else {
-                                console.log("Successfully added");
-                              }
-                            }
-                          );
-                          console.log("socket off for in orders >>>");
-                        }
-                      );
-                    } catch (error) {
-                      console.log("something went wrong110 ", error);
-                    }
-                  }
-                });
-            } catch (error) {
-              console.log("something went wrong at 115", error);
-            }
-          } catch (error) {
-            console.log("error updating incoming order to partner", error);
-          }
           break;
         case "update":
           console.log("orders updated...", change);

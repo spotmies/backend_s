@@ -1,4 +1,7 @@
 const pDB = require("../models/partner/partner_registration_sch");
+const {
+  notificationByToken,
+} = require("../routes/firebase_admin/firebase_admin");
 
 function pushRatingsToPartner(pId, reviewDoc) {
   console.log("pushRatingsToPartner", pId, reviewDoc);
@@ -36,8 +39,21 @@ function getPartnerDocIdBypId(pId) {
   });
 }
 
+function sendNotificationByPid(pId, title, body) {
+  return new Promise((resolve, reject) => {
+    pDB.findOne({ pId: pId }, (err, data) => {
+      if (err) {
+        reject(err);
+      } else {
+        notificationByToken(data.partnerDeviceToken, title, body);
+      }
+    });
+  });
+}
+
 module.exports = {
   pushRatingsToPartner,
   pushOrdIdToPartner,
   getPartnerDocIdBypId,
+  sendNotificationByPid,
 };
