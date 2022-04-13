@@ -40,15 +40,22 @@ function getPartnerDocIdBypId(pId) {
 }
 
 function sendNotificationByPid(pId, title, body) {
-  return new Promise((resolve, reject) => {
+  try {
     pDB.findOne({ pId: pId }, (err, data) => {
       if (err) {
-        reject(err);
+        console.log(err);
       } else {
-        notificationByToken(data.partnerDeviceToken, title, body);
+        // console.log(data.partnerDeviceToken);
+        notificationByToken({
+          token: data.partnerDeviceToken,
+          title: title,
+          body: body,
+        });
       }
     });
-  });
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 module.exports = {

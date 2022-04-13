@@ -203,21 +203,17 @@ router.get(`/${constants.orders}`, (req, res) => {
 /*                       GET ALL ORDERS BY USER/PARTNER                       */
 /* -------------------------------------------------------------------------- */
 
-router.get("/get-orders/:orderDocId", async (req, res) => {
-  console.log("get-orders");
-  const orderDocId = req.params.orderDocId;
-  try {
-    // let data = await getOrderFullDetails(orderDocId);
-    getOrderFullDetails(orderDocId).then((data, err) => {
-      console.log("err", err);
-      console.log("data", data);
-      if (data) res.status(200).json(data);
-      else res.status(404).json(data);
-    });
-  } catch (error) {
-    return res.status(500).send(error.message);
-  }
-});
+// router.get("/get-orders/:orderDocId", async (req, res) => {
+//   console.log("get-orders");
+//   const orderDocId = req.params.orderDocId;
+//   try {
+//     sendNotificationByPid(orderDocId, "title", "body");
+//     // notificationByToken(orderDocId, "title", "body");
+//     return res.status(200).json(orderDocId);
+//   } catch (error) {
+//     return res.status(500).send(error.message);
+//   }
+// });
 
 router.get(`/:userType/:uId`, (req, res) => {
   let originalUrl = req.query;
