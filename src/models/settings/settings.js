@@ -3,6 +3,7 @@ const {
   createdAt,
   modifiedAt,
   nonReqBool,
+  reqStr,
 } = require("../../helpers/schema/schemaHelp");
 
 const settingsSch = new mongoose.Schema(
@@ -30,6 +31,7 @@ const settingsSch = new mongoose.Schema(
     lastModified: modifiedAt,
     isActive: { type: Boolean, default: true },
     isDeleted: nonReqBool,
+    label: reqStr,
   },
   { timestamps: true }
 );
