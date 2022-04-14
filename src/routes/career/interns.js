@@ -14,11 +14,11 @@ router.post("/new-intern-registration", (req, res) => {
         res.status(400).send(err.message);
       } else {
         res.status(200).json(data);
-        notificationByTopic({
-          topic: "spotmiesPartner",
-          title: "New Intern Registered",
-          body: `name: ${data.name} \napplied for: ${data.appliedFor} \nphone: ${data.phone}  `,
-        });
+        // notificationByTopic({
+        //   topic: "spotmiesPartner",
+        //   title: "New Intern Registered",
+        //   body: `name: ${data.name} \napplied for: ${data.appliedFor} \nphone: ${data.phone}  `,
+        // });
       }
     });
   } catch (error) {
