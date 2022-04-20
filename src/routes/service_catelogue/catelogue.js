@@ -144,6 +144,8 @@ router.get("/catelog-by-job/:job", (req, res) => {
         "pDetails",
         "name phNum partnerPic rate lang job loc businessName accountType availability pId partnerDeviceToken"
       )
+      .populate("reviews", "rating media description uId uDetails createdAt")
+      .populate("bookings", "createdAt")
       .skip(skip)
       .limit(limit)
       .exec((err, doc) => {
