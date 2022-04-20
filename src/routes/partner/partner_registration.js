@@ -245,7 +245,7 @@ router.get(`/all-partners`, (req, res) => {
   const isDeleted = req.query.isDeleted ?? false;
   try {
     partnerDB
-      .find({ isDeleted: isDeleted })
+      .find({ isDeleted: isDeleted, permission: 10 })
       .populate("rate", "rating")
       .exec((err, data) => {
         return processRequest(err, data, res, req);
@@ -333,7 +333,7 @@ router.get("/partner-list", (req, res) => {
 
   try {
     partnerDB
-      .find()
+      .find({ isDeleted: false, permission: 10 })
       .select(
         "name pId partnerPic accountType businessName lang job workLocation rate phNum partnerDeviceToken"
       )
