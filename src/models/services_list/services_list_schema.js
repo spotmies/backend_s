@@ -8,6 +8,7 @@ const {
   uniqueNumImmutable,
   nonReqStr,
   defaultNum,
+  mediaSch,
 } = require("../../helpers/schema/schemaHelp");
 
 const servicesListSchema = new mongoose.Schema(
@@ -40,6 +41,7 @@ const servicesListSchema = new mongoose.Schema(
     partnerAppSecondaryColor: nonReqStr,
 
     images: arrSch,
+    media: [mediaSch],
 
     isActive: nonReqBool,
     isDeleted: nonReqBool,

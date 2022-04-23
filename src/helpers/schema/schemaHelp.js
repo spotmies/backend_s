@@ -15,7 +15,7 @@ const reqNum = {
 const defaultNum = {
   type: Number,
   default: 0,
-  required:false
+  required: false,
 };
 
 //string notRequired
@@ -34,8 +34,6 @@ const createdAt = {
   default: Date.now,
 };
 
-
-
 const defaultString = {
   type: String,
   default: "",
@@ -46,16 +44,15 @@ const settingId = {
   type: String,
   required: true,
   minlength: 4,
-
-}
+};
 
 const constantsId = {
-  type:String,
-  required:true,
-  minlength:4,
-  unique:true,
-  immutable:true,
-}
+  type: String,
+  required: true,
+  minlength: 4,
+  unique: true,
+  immutable: true,
+};
 
 //string
 const reqStr = {
@@ -87,7 +84,6 @@ const phoneNum = {
 const reqArrOfNum = {
   type: [Number],
   required: true,
-
 };
 
 const arrOfNum = {
@@ -95,6 +91,11 @@ const arrOfNum = {
   required: false,
 };
 
+const mediaSch = {
+  required: false,
+  type: reqStr,
+  url: reqStr,
+};
 
 const timeStamp = {
   required: false,
@@ -217,7 +218,6 @@ const reqEmail = {
   index: true,
 };
 
-
 const arrSch = [{ type: String }];
 
 const bool = {
@@ -246,7 +246,7 @@ const uniqueNumImmutable = {
   immutable: true,
   required: true,
   unique: true,
-}
+};
 const isVerifedSch = {
   required: false,
   default: false,
@@ -276,8 +276,6 @@ const viewsSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
-
 
 module.exports = {
   reqBool,
@@ -317,5 +315,6 @@ module.exports = {
   reqArrOfNum,
   arrOfNum,
   defaultNum,
-  viewsSchema
+  viewsSchema,
+  mediaSch,
 };
