@@ -312,9 +312,13 @@ router.get("/nearest-partner", (req, res) => {
         },
         ...block,
       })
+      // .select(
+      //   "pId name workLocation job partnerPic perAdd phNum accountType businessName collegeName isActive"
+      // )
       .select(
-        "pId name workLocation job partnerPic perAdd phNum accountType businessName collegeName isActive"
+        "name pId partnerPic accountType businessName lang job workLocation rate phNum partnerDeviceToken"
       )
+      .populate("rate", "rating")
       .skip(skip)
       .limit(limit)
       .exec((err, data) => {
