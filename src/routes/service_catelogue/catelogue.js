@@ -157,4 +157,64 @@ router.get("/catelog-by-job/:job", (req, res) => {
   }
 });
 
+/* ---------------------- GET CATELOGS LIST  --------------------- */
+
+/* ---------------------------------- This api gives the list of catelogs in all category ---------------------------------- */
+
+router.get("/suffle-1", (req, res) => {
+  const skip = parseInt(req?.query?.skip ?? 0);
+  const limit = parseInt(req?.query?.limit ?? 10);
+  const isActive = req?.query?.isActive ?? true;
+  const isDeleted = req?.query?.isDeleted ?? false;
+  try {
+    catelogDB
+      .find({ isDeleted: isDeleted, isActive: isActive })
+      .select("-__v -isDeleted -isActive -updatedAt -createdAt -lastModified")
+      .populate(
+        "pDetails",
+        "name phNum partnerPic rate lang job loc businessName accountType availability pId partnerDeviceToken"
+      )
+      .populate("reviews", "rating media description uId uDetails createdAt")
+      .populate("bookings", "createdAt")
+      .skip(skip)
+      .limit(limit)
+      .exec((err, doc) => {
+        if (err) return res.status(400).json(err.message);
+        return res.status(200).json(doc);
+      });
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+});
+
+/* ---------------------- GET CATELOGS LIST BY PRICE LOW TO HIGH --------------------- */
+
+router.get("/shuffle-2", (req, res) => {
+  const skip = parseInt(req?.query?.skip ?? 0);
+  const limit = parseInt(req?.query?.limit ?? 10);
+  const isActive = req?.query?.isActive ?? true;
+  const isDeleted = req?.query?.isDeleted ?? false;
+  const priceSort = req?.query?.priceSort ?? 1;
+  try {
+    catelogDB
+      .find({ isDeleted: isDeleted, isActive: isActive })
+      .sort({ price: priceSort })
+      .select("-__v -isDeleted -isActive -updatedAt -createdAt -lastModified")
+      .populate(
+        "pDetails",
+        "name phNum partnerPic rate lang job loc businessName accountType availability pId partnerDeviceToken"
+      )
+      .populate("reviews", "rating media description uId uDetails createdAt")
+      .populate("bookings", "createdAt")
+      .skip(skip)
+      .limit(limit)
+      .exec((err, doc) => {
+        if (err) return res.status(400).json(err.message);
+        return res.status(200).json(doc);
+      });
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+});
+
 module.exports = router;
