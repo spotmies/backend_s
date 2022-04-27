@@ -10,6 +10,7 @@ const {
   arrSch,
   arrOfNum,
   defaultNum,
+  defaultTrueBool,
 } = require("../../helpers/schema/schemaHelp");
 
 const polygonSchema = new mongoose.Schema({
@@ -76,7 +77,7 @@ const serivcecatelog = new mongoose.Schema(
     warrantyDays: nonReqNum,
     warrantyDetails: nonReqStr,
     isWarranty: nonReqBool,
-    cashOnService: nonReqBool,
+    cashOnService: defaultTrueBool,
     rating: nonReqNum,
     isVerified: nonReqBool,
     daysToComplete: nonReqNum,
@@ -95,6 +96,7 @@ const serivcecatelog = new mongoose.Schema(
       coordinates: [Number],
       required: false,
     },
+    maxRange: reqNum,
 
     pinCodeAvailability: arrOfNum,
     isDeleted: nonReqBool,

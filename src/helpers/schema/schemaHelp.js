@@ -262,6 +262,12 @@ const reqBool = {
   type: Boolean,
 };
 
+const defaultTrueBool = {
+  required: false,
+  default: true,
+  type: Boolean,
+};
+
 const viewsSchema = new mongoose.Schema(
   {
     uId: reqStr,
@@ -317,4 +323,5 @@ module.exports = {
   defaultNum,
   viewsSchema,
   mediaSch,
+  defaultTrueBool,
 };
