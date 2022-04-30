@@ -71,10 +71,30 @@ router.put("/catelogs/:docId", (req, res) => {
 router.get("/catelogs/:docId", (req, res) => {
   const docId = req.params.docId;
   try {
-    catelogDB.findById(docId, (err, doc) => {
-      if (err) return res.status(400).json(err.message);
-      return res.status(200).json(doc);
-    });
+    catelogDB
+      .findById(docId)
+      .select("-__v -isDeleted -isActive -updatedAt -createdAt -lastModified")
+      .populate(
+        "pDetails",
+        "name phNum partnerPic rate lang job loc businessName accountType availability pId partnerDeviceToken"
+      )
+      .populate({
+        path: "reviews",
+        select: "rating media description uDetails createdAt",
+        populate: {
+          path: "uDetails",
+          select: "name pic",
+        },
+      })
+      .populate("bookings", "createdAt")
+      .exec((err, data) => {
+        if (err) {
+          //console.error(err);
+          return res.status(400).json(err.message);
+        }
+        if (!data) return res.status(404).json(data);
+        return res.status(200).json(data);
+      });
   } catch (error) {
     return res.status(500).json(error.message);
   }
@@ -161,7 +181,7 @@ router.get("/catelog-by-job/:job", (req, res) => {
 
 /* ---------------------------------- This api gives the list of catelogs in all category ---------------------------------- */
 
-router.get("/suffle-1", (req, res) => {
+router.get("/shuffle-1", (req, res) => {
   const skip = parseInt(req?.query?.skip ?? 0);
   const limit = parseInt(req?.query?.limit ?? 10);
   const isActive = req?.query?.isActive ?? true;
