@@ -237,4 +237,37 @@ router.get("/shuffle-2", (req, res) => {
   }
 });
 
+router.get("/search/:searchItem", (req, res) => {
+  const searchItem = req.params.searchItem;
+  const params = req?.query;
+  const skip = parseInt(params.skip ?? 0);
+  const isActive = params.isActive ?? true;
+  const isDeleted = params.isDeleted ?? false;
+  let limit = params.limit != undefined ? Number(params.limit) : 5;
+  let regex = new RegExp(searchItem, "i");
+  catelogDB.find(
+    {
+      $and: [
+        { $or: [{ name: regex }, { description: regex }] },
+        { isDeleted: isDeleted, isActive: isActive },
+      ],
+    },
+    null,
+    {
+      limit: limit,
+      skip: skip,
+      select: "name media price description range",
+    },
+
+    function (err, docs) {
+      if (err) return res.status(400).json(err);
+      return res.status(200).json({
+        success: true,
+        type: "catelogs",
+        data: docs,
+      });
+    }
+  );
+});
+
 module.exports = router;
