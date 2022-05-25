@@ -42,10 +42,18 @@ function processRequestNext(err, data, res, req, next, onNoData) {
   // return res.status(200).json(data);
   next();
 }
+function tryCatch(res, req, func) {
+  try {
+    func();
+  } catch (error) {
+    return catchFunc(error, res, req);
+  }
+}
 
 module.exports = {
   processRequest,
   deleteRequest,
   catchFunc,
   processRequestNext,
+  tryCatch,
 };
