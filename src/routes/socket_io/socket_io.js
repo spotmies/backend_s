@@ -6,6 +6,7 @@ const orderDB = require("../../models/orders/create_service_sch");
 const { notificationByToken } = require("../firebase_admin/firebase_admin");
 const { checkOrdersForwardAutomation } = require("../../services/settings");
 const { sendNotificationByPid } = require("../../services/partners");
+const { sendNotificationByUid } = require("../../services/users");
 const connection = mongoose.connection;
 function changeStrema(io) {
   connection.once("open", () => {
@@ -66,6 +67,17 @@ function changeStrema(io) {
       switch (change.operationType) {
         case "insert":
           console.log("new order came...", change.fullDocument);
+          sendNotificationByUid(
+            "BkkjgGBculhaoDRyxHd0RnbUp8H3",
+            "new order created",
+            change?.fullDocument?.problem
+          );
+
+          sendNotificationByUid(
+            "Lz7SJsnDcZefgoc69Ik5vgL6meb2",
+            "new order created",
+            change?.fullDocument?.problem
+          );
           let automation = await checkOrdersForwardAutomation();
           console.log("automation", automation);
           if (automation == true && change.fullDocument.isBooking == false) {
