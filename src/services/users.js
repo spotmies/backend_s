@@ -1,7 +1,7 @@
 const {
   notificationByToken,
 } = require("../routes/firebase_admin/firebase_admin");
-const userDB  = require("../models/users/userSch");
+const userDB = require("../models/users/userSch");
 
 function sendNotificationByUid(uId, title, body) {
   try {
@@ -11,7 +11,7 @@ function sendNotificationByUid(uId, title, body) {
       } else {
         // console.log(data.partnerDeviceToken);
         notificationByToken({
-          token: data.partnerDeviceToken,
+          token: data.userDeviceToken,
           title: title,
           body: body,
         });
