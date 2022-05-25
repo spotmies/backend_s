@@ -283,7 +283,36 @@ const viewsSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+const refUser = {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "users",
+  required: true,
+  // autopopulate: { select: "name mobile" },
+};
+const refNonReqUser = {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "users",
+  required: false,
+  // autopopulate: { select: "name mobile" },
+};
+const refPartner = {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "partners",
+  required: true,
+  // autopopulate: { select: "name mobile" },
+};
+const refNonReqPartner = {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "partners",
+  required: false,
+  // autopopulate: { select: "name mobile" },
+};
+
 module.exports = {
+  refNonReqPartner,
+  refPartner,
+  refNonReqUser,
+  refUser,
   reqBool,
   reqNum,
   nonReqStr,
