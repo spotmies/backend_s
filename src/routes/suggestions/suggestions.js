@@ -5,6 +5,7 @@ const {
 } = require("../../helpers/error_handling/process_request");
 const router = express.Router();
 const schema = require("../../models/suggestions/suggesions_sch");
+const { sendNotificationToAdmin } = require("../../services/users");
 
 /* ----------------------------- New suggestion ----------------------------- */
 
@@ -12,6 +13,12 @@ router.post("/new-suggestion", (req, res) => {
   const body = req.body;
   try {
     schema.create(body, (err, data) => {
+      if (data) {
+        sendNotificationToAdmin(
+          "suggestion created",
+          `sub: ${data.subject} ,for: ${data.suggestionFor}, body: ${data.body}`
+        );
+      }
       return processRequest(err, data, res, req);
     });
   } catch (error) {
