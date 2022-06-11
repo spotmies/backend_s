@@ -3,6 +3,7 @@ const router = express.Router();
 const catelogDB = require("../../models/service_catelogue/service_catelogue");
 const partnerDB = require("../../models/partner/partner_registration_sch");
 const { getPartnerDocIdBypId } = require("../../services/partners");
+const { sendNotificationToAdmin } = require("../../services/users");
 
 /* -------------------------------------------------------------------------- */
 /*                   NEW CATELOG CREATE BY PARTNER WITH PID                   */
@@ -19,6 +20,7 @@ router.post("/newCatelog/:pId", async function (req, res) {
       .then(async () => {
         const temp1 = new catelogDB(body);
         const doc = await temp1.save();
+
         partnerDB.findOneAndUpdate(
           { pId: pId },
           { $push: { catelogs: doc.id } },
@@ -26,6 +28,7 @@ router.post("/newCatelog/:pId", async function (req, res) {
             if (err) return res.status(400).json(err.message);
           }
         );
+        sendNotificationToAdmin("new catelog created", `name: ${doc?.name}`);
         return res.json(doc);
       })
       .catch((err) => {

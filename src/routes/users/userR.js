@@ -6,6 +6,10 @@ const {
   processRequest,
   catchFunc,
 } = require("../../helpers/error_handling/process_request");
+const {
+  sendNotificationByUid,
+  sendNotificationToAdmin,
+} = require("../../services/users");
 //post method for registering user
 /* -------------------------------------------------------------------------- */
 /*                                   new user registration                                  */
@@ -21,6 +25,10 @@ router.post("/newUser", (req, res, next) => {
         const user = new userDb(data);
         const result = await user.save();
         res.json(result);
+        sendNotificationToAdmin(
+          "new user registered",
+          `${data.name} , ${data.phNum} has registered`
+        );
       })
       .catch((err) => {
         //console.log("err", err);
@@ -183,6 +191,23 @@ router.get("/testing", (req, res) => {
     return res.status(200).json({
       message: "testing",
       api: req.originalUrl,
+    });
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+});
+
+/* -------------------- SEND NOTIFIACTION BY PHONE NUMBER ------------------- */
+router.get("/sendNotification", (req, res) => {
+  const phNum = req.query?.phoneNumber;
+  const title = req.query?.title ?? "title";
+  const message = req.query?.message ?? "message";
+  try {
+    //send nofication to user or parnter by phone number of uid or pid
+
+    sendNotificationByUid(phNum, title, message);
+    return res.status(200).json({
+      message: "notification sent",
     });
   } catch (error) {
     return res.status(500).send(error.message);

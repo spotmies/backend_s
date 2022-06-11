@@ -5,20 +5,51 @@ const notificationDB = require("../models/notifications/notifications");
 const partnerDB = require("../models/partner/partner_registration_sch");
 const userDB = require("../models/users/userSch");
 
+function sendNotificationToAdmin(title, message) {
+  const admins = [8341980196, 8019933883, 7993613685];
+  admins.forEach((admin) => {
+    sendNotificationByUid(admin, title, message);
+  });
+}
+
 function sendNotificationByUid(uId, title, body) {
   try {
-    userDB.findOne({ uId: uId }, (err, data) => {
-      if (err) {
-        console.log(err);
-      } else {
-        // console.log(data.partnerDeviceToken);
-        notificationByToken({
-          token: data.userDeviceToken,
-          title: title,
-          body: body,
-        });
+    userDB.findOne(
+      {
+        $or: [{ uId: uId }, { phNum: uId }],
+      },
+      (err, data) => {
+        if (err) {
+          console.log(err);
+        } else if (!data) {
+          partnerDB.findOne(
+            {
+              $or: [{ pId: uId }, { phNum: uId }],
+            },
+            (err2, dataa) => {
+              if (err2) {
+                console.log(err);
+              } else if (!dataa) {
+                return;
+              } else {
+                notificationByToken({
+                  token: dataa?.partnerDeviceToken,
+                  title: title,
+                  body: body,
+                });
+              }
+            }
+          );
+        } else {
+          // console.log(data.partnerDeviceToken);
+          notificationByToken({
+            token: data.userDeviceToken,
+            title: title,
+            body: body,
+          });
+        }
       }
-    });
+    );
   } catch (error) {
     console.log(error);
   }
@@ -66,4 +97,5 @@ function saveNotification({ token, title, body, nData } = {}) {
 module.exports = {
   sendNotificationByUid,
   saveNotification,
+  sendNotificationToAdmin,
 };
