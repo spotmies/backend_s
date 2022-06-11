@@ -7,6 +7,7 @@ const {
   processRequest,
   catchFunc,
 } = require("../../helpers/error_handling/process_request");
+const { sendNotificationToAdmin } = require("../../services/users");
 
 /* -------------------------------------------------------------------------- */
 /*                                 NEW PARTNER                                */
@@ -38,6 +39,10 @@ router.post(`/${constants.newPartner}`, (req, res, next) => {
           return res.status(400).send(err.message);
         }
         if (!doc) return res.status(404).json(doc);
+        sendNotificationToAdmin(
+          "new partner registered",
+          `${doc.name} ${doc.phNum}`
+        );
         return res.status(200).json(doc);
       })
       .catch((err) => {
