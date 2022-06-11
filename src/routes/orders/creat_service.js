@@ -7,6 +7,7 @@ const constants = require("../../helpers/constants");
 const { notificationByToken } = require("../firebase_admin/firebase_admin");
 const { pushOrdIdToPartner } = require("../../services/partners");
 const { getOrderFullDetails } = require("../../services/orders");
+const { sendNotificationToAdmin } = require("../../services/users");
 
 /* -------------------------------------------------------------------------- */
 /*                              create new order                              */
@@ -65,8 +66,10 @@ router.post(`/:serviceType/:uId`, (req, res, next) => {
               }
               // return res.status(200).json(doc);
               getOrderFullDetails(doc._id).then((fullDoc) => {
-                if (fullDoc) res.status(200).json(fullDoc);
-                else res.status(404).json(fullDoc);
+                if (fullDoc) {
+                  sendNotificationToAdmin("order created", fullDoc?.problem);
+                  res.status(200).json(fullDoc);
+                } else res.status(404).json(fullDoc);
               });
             }
           );
