@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const chatDB = require("../../models/messaging/messaging_sch");
 const constants = require("../../helpers/constants");
+const { sendNotificationToAdmin } = require("../../services/users");
 
 /* -------------------------------------------------------------------------- */
 /*                            CREATE NEW CHAT ROOM                            */
@@ -53,6 +54,10 @@ function getChatById({ res, msgId, cBuild = "msgId", cBuildValue } = {}) {
         }
         if (!data || data == null || data == "")
           return res.status(501).json(data);
+        sendNotificationToAdmin(
+          "chat created",
+          `user: ${data?.uDetails?.name}, partner: ${data?.pDetails?.name}`
+        );
         return res.status(200).json(data);
       });
   } catch (error) {
