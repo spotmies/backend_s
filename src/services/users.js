@@ -6,7 +6,7 @@ const partnerDB = require("../models/partner/partner_registration_sch");
 const userDB = require("../models/users/userSch");
 
 function sendNotificationToAdmin(title, message) {
-  const admins = [8341980196, 8019933883, 7993613685];
+  const admins = [8341980196, 8019933883, 7993613685, 9999999999];
   admins.forEach((admin) => {
     sendNotificationByUid(admin, title, message);
   });
