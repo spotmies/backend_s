@@ -60,6 +60,11 @@ router.put("/catelogs/:docId", (req, res) => {
           return res.status(400).json(err.message);
         }
         if (!data) return res.status(404).json(data);
+        if (!data.isVerified)
+          sendNotificationToAdmin(
+            "catelog updated",
+            `name: ${data?.name} please verify it`
+          );
         return res.status(200).json(data);
       }
     );
