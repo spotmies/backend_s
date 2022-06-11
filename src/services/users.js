@@ -14,15 +14,15 @@ function sendNotificationToAdmin(title, message) {
 
 function sendNotificationByUid(uId, title, body) {
   try {
-    userDB.findOne(
+    partnerDB.findOne(
       {
-        $or: [{ uId: uId }, { phNum: uId }],
+        $or: [{ pId: uId }, { phNum: uId }],
       },
       (err, data) => {
         if (err) {
           console.log(err);
         } else if (!data) {
-          partnerDB.findOne(
+          userDB.findOne(
             {
               $or: [{ pId: uId }, { phNum: uId }],
             },
@@ -33,7 +33,7 @@ function sendNotificationByUid(uId, title, body) {
                 return;
               } else {
                 notificationByToken({
-                  token: dataa?.partnerDeviceToken,
+                  token: dataa?.userDeviceToken,
                   title: title,
                   body: body,
                 });
@@ -43,7 +43,7 @@ function sendNotificationByUid(uId, title, body) {
         } else {
           // console.log(data.partnerDeviceToken);
           notificationByToken({
-            token: data.userDeviceToken,
+            token: data.partnerDeviceToken,
             title: title,
             body: body,
           });
