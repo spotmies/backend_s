@@ -23,6 +23,7 @@ router.post("/new-service-list", (req, res) => {
 
 router.get("/all-service-list", (req, res) => {
   const parmas = req.query;
+  console.log("params -> ", parmas);
   const isDeleted = parmas.isDeleted ?? false;
   const isActive = parmas.isActive ?? true;
   try {
