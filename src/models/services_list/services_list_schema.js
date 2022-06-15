@@ -43,6 +43,10 @@ const servicesListSchema = new mongoose.Schema(
     images: arrSch,
     media: [mediaSch],
 
+    visibleToUser: nonReqBool,
+    visibleToWeb: nonReqBool,
+    visibleToPartner: nonReqBool,
+
     isActive: nonReqBool,
     isDeleted: nonReqBool,
     createdAt: createdAt,
