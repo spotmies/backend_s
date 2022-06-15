@@ -1,2 +1,1 @@
 runtime: nodejs16
-flex: session_affinity
