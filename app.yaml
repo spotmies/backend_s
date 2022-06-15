@@ -1,5 +1,3 @@
 runtime: nodejs
-env: flex
-manual_scaling:
 network:
   session_affinity: true
