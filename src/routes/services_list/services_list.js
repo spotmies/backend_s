@@ -24,10 +24,27 @@ router.post("/new-service-list", (req, res) => {
 router.get("/all-service-list", (req, res) => {
   const parmas = req.query;
   console.log("params -> ", parmas);
-  const isDeleted = parmas.isDeleted ?? false;
-  const isActive = parmas.isActive ?? true;
+  let query = {
+    isDeleted: parmas.isDeleted ?? false,
+    isActive: parmas.isActive ?? true,
+  };
+
+  switch (parmas.api_from) {
+    case "user_app":
+      query["visibleToUser"] = true;
+      break;
+    case "partner_app":
+      query["visibleToPartner"] = true;
+      break;
+    case "user_web":
+      query["visibleToWeb"] = true;
+      break;
+
+    default:
+      break;
+  }
   try {
-    listDB.find({ isDeleted: isDeleted, isActive: isActive }, (err, data) => {
+    listDB.find(query, (err, data) => {
       return processRequest(err, data, res, req);
     });
   } catch (error) {
@@ -71,5 +88,22 @@ router.delete("/services-list/:docId", (req, res) => {
     return catchFunc(error, res, req);
   }
 });
+
+// dummy api
+
+// router.get("/updatenewchanges", (req, res) => {
+//   listDB.updateMany(
+//     {},
+//     {
+//       $set: {
+//         visibleToWeb: true,
+//       },
+//     },
+//     { new: true },
+//     (err, data) => {
+//       return processRequest(err, data, res, req);
+//     }
+//   );
+// });
 
 module.exports = router;
