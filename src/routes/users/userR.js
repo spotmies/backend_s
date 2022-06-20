@@ -30,7 +30,6 @@ router.post("/newUser", async (req, res, next) => {
       data.refferalCode = refferalCode;
     }
     console.log("data", data);
-    return;
     userDb
       .init()
       .then(async () => {
