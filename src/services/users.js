@@ -94,8 +94,62 @@ function saveNotification({ token, title, body, nData } = {}) {
     }
   });
 }
+
+function generateRefferalCode(name, mobile, uId, isPartner) {
+  let sampleRefferalCodes = [];
+  sampleRefferalCodes.push(name.slice(0, 3).toUpperCase() + mobile.slice(-3));
+  sampleRefferalCodes.push(
+    name.slice(0, 3).toUpperCase() +
+      mobile.slice(-3) +
+      uId.slice(-3).toUpperCase()
+  );
+  sampleRefferalCodes.push(
+    name.slice(0, 3).toUpperCase() +
+      uId.slice(-3).toUpperCase() +
+      mobile.slice(-3)
+  );
+  sampleRefferalCodes.push(
+    uId.slice(-3).toUpperCase() +
+      name.slice(0, 3).toUpperCase() +
+      mobile.slice(-3)
+  );
+
+  sampleRefferalCodes.push(
+    mobile.slice(-3) +
+      name.slice(0, 3).toUpperCase() +
+      uId.slice(-3).toUpperCase()
+  );
+
+  sampleRefferalCodes.push(
+    mobile.slice(-3) +
+      uId.slice(-3).toUpperCase() +
+      name.slice(0, 3).toUpperCase()
+  );
+
+  return new Promise((resolve, reject) => {
+    try {
+      const dataBase = isPartner === true ? partnerDB : userDB;
+      sampleRefferalCodes.forEach((code) => {
+        dataBase.findOne({ refferalCode: code }).exec((err, user) => {
+          if (err) {
+            resolve("null");
+            // reject(err.message);
+          }
+          if (!user) {
+            resolve(code);
+            return false;
+          }
+        });
+      });
+    } catch (error) {
+      resolve("null");
+      // reject(error.message);
+    }
+  });
+}
 module.exports = {
   sendNotificationByUid,
   saveNotification,
   sendNotificationToAdmin,
+  generateRefferalCode,
 };
