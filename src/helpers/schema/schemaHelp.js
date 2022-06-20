@@ -53,7 +53,13 @@ const constantsId = {
   unique: true,
   immutable: true,
 };
-
+const refferalCode = {
+  type: String,
+  trim: true,
+  index: true,
+  unique: true,
+  sparse: true,
+};
 //string
 const reqStr = {
   type: String,
@@ -353,4 +359,5 @@ module.exports = {
   viewsSchema,
   mediaSch,
   defaultTrueBool,
+  refferalCode,
 };

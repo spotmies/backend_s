@@ -17,6 +17,8 @@ const {
   reqBool,
   viewsSchema,
   nonReqUniqueStr,
+  refferalCode,
+  refNonReqPartner,
 } = require("../../helpers/schema/schemaHelp");
 
 const partnerRegistration = new mongoose.Schema(
@@ -41,6 +43,12 @@ const partnerRegistration = new mongoose.Schema(
     experience: nonReqNum,
     minServicePrice: nonReqNum,
     maxServicePrice: nonReqNum,
+
+    refferalCode: refferalCode,
+    refferBy: refNonReqPartner,
+    refferTo: [refNonReqPartner],
+    isRefferalCredited: nonReqBool,
+
     media: [
       {
         mediaType: reqStr,

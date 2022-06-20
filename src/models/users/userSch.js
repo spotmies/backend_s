@@ -12,6 +12,8 @@ const {
   timeStamp,
   nonReqBool,
   createdAt,
+  refferalCode,
+  refNonReqUser,
 } = require("../../helpers/schema/schemaHelp");
 
 const userSchema = new mongoose.Schema(
@@ -28,18 +30,15 @@ const userSchema = new mongoose.Schema(
     userState: {
       type: String,
       required: true,
-      enum:["active","inActive","blocked","banned","suspended",],
+      enum: ["active", "inActive", "blocked", "banned", "suspended"],
     },
     orders: [{ type: mongoose.Schema.Types.ObjectId, ref: "orders" }],
     lastLogin: nonReqNum,
     logs: [String],
-    referalCode: {
-      type: String,
-      trim: true,
-      index: true,
-      unique: true,
-      sparse: true,
-    },
+    refferalCode: refferalCode,
+    refferBy: refNonReqUser,
+    refferTo: [refNonReqUser],
+    isRefferalCredited: nonReqBool,
     location: {
       type: [Number],
     },
