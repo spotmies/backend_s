@@ -7,13 +7,16 @@ const {
   processRequest,
   catchFunc,
 } = require("../../helpers/error_handling/process_request");
-const { sendNotificationToAdmin } = require("../../services/users");
+const {
+  sendNotificationToAdmin,
+  generateRefferalCode,
+} = require("../../services/users");
 
 /* -------------------------------------------------------------------------- */
 /*                                 NEW PARTNER                                */
 /* -------------------------------------------------------------------------- */
 
-router.post(`/${constants.newPartner}`, (req, res, next) => {
+router.post(`/${constants.newPartner}`, async (req, res, next) => {
   let data = req.body;
   data.permission = 10;
   console.log("newPart", data);
@@ -30,6 +33,15 @@ router.post(`/${constants.newPartner}`, (req, res, next) => {
   }
   console.log("parsed", data);
   try {
+    const refferalCode = await generateRefferalCode(
+      data.name,
+      data.phNum,
+      data.pId,
+      true
+    );
+    if (refferalCode != "null") {
+      data.refferalCode = refferalCode;
+    }
     partnerDB
       .create(data)
       .then((doc, err) => {

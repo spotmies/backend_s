@@ -9,16 +9,28 @@ const {
 const {
   sendNotificationByUid,
   sendNotificationToAdmin,
+  generateRefferalCode,
 } = require("../../services/users");
 //post method for registering user
 /* -------------------------------------------------------------------------- */
 /*                                   new user registration                                  */
 /* -------------------------------------------------------------------------- */
-router.post("/newUser", (req, res, next) => {
+router.post("/newUser", async (req, res, next) => {
   //console.log("newUser");
-  const data = req.body;
+  let data = req.body;
   console.log("from api", data);
   try {
+    const refferalCode = await generateRefferalCode(
+      data.name,
+      data.phNum,
+      data.uId,
+      false
+    );
+    if (refferalCode != "null") {
+      data.refferalCode = refferalCode;
+    }
+    console.log("data", data);
+    return;
     userDb
       .init()
       .then(async () => {
