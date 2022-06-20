@@ -164,9 +164,15 @@ router.get("/catelog-by-job/:job", (req, res) => {
   const limit = parseInt(req?.query?.limit ?? 10);
   const isActive = req?.query?.isActive ?? true;
   const isDeleted = req?.query?.isDeleted ?? false;
+  const isVerified = req?.query?.isVerified ?? true;
   try {
     catelogDB
-      .find({ category: job, isDeleted: isDeleted, isActive: isActive })
+      .find({
+        category: job,
+        isDeleted: isDeleted,
+        isActive: isActive,
+        isVerified: isVerified,
+      })
       .select("-__v -isDeleted -isActive -updatedAt -createdAt -lastModified")
       .populate(
         "pDetails",
@@ -194,9 +200,14 @@ router.get("/shuffle-1", (req, res) => {
   const limit = parseInt(req?.query?.limit ?? 10);
   const isActive = req?.query?.isActive ?? true;
   const isDeleted = req?.query?.isDeleted ?? false;
+  const isVerified = req?.query?.isVerified ?? true;
   try {
     catelogDB
-      .find({ isDeleted: isDeleted, isActive: isActive })
+      .find({
+        isDeleted: isDeleted,
+        isActive: isActive,
+        isVerified: isVerified,
+      })
       .select("-__v -isDeleted -isActive -updatedAt -createdAt -lastModified")
       .populate(
         "pDetails",
@@ -223,9 +234,14 @@ router.get("/shuffle-2", (req, res) => {
   const isActive = req?.query?.isActive ?? true;
   const isDeleted = req?.query?.isDeleted ?? false;
   const priceSort = req?.query?.priceSort ?? 1;
+  const isVerified = req?.query?.isVerified ?? true;
   try {
     catelogDB
-      .find({ isDeleted: isDeleted, isActive: isActive })
+      .find({
+        isDeleted: isDeleted,
+        isActive: isActive,
+        isVerified: isVerified,
+      })
       .sort({ price: priceSort })
       .select("-__v -isDeleted -isActive -updatedAt -createdAt -lastModified")
       .populate(
@@ -251,13 +267,14 @@ router.get("/search/:searchItem", (req, res) => {
   const skip = parseInt(params.skip ?? 0);
   const isActive = params.isActive ?? true;
   const isDeleted = params.isDeleted ?? false;
+  const isVerified = req?.query?.isVerified ?? true;
   let limit = params.limit != undefined ? Number(params.limit) : 5;
   let regex = new RegExp(searchItem, "i");
   catelogDB.find(
     {
       $and: [
         { $or: [{ name: regex }, { description: regex }] },
-        { isDeleted: isDeleted, isActive: isActive },
+        { isDeleted: isDeleted, isActive: isActive, isVerified: isVerified },
       ],
     },
     null,
