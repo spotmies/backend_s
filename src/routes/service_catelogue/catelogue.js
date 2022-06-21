@@ -8,6 +8,45 @@ const { sendNotificationToAdmin } = require("../../services/users");
 /* -------------------------------------------------------------------------- */
 /*                   NEW CATELOG CREATE BY PARTNER WITH PID                   */
 /* -------------------------------------------------------------------------- */
+
+function createCatelogAndPush(pId, body, res) {
+  console.log("body", body);
+  return new Promise((resolve, reject) => {
+    try {
+      catelogDB.create(body).exec((err, data) => {
+        if (err) {
+          if (res) return res.status(400).send(error.message);
+          resolve({
+            success: false,
+            message: error.message,
+          });
+        } else if (data) {
+          partnerDB.findOneAndUpdate(
+            { pId: pId },
+            { $push: { catelogs: doc.id } },
+            (err) => {
+              if (err) return res.status(400).json(err.message);
+            }
+          );
+          sendNotificationToAdmin("new catelog created", `name: ${doc?.name}`);
+          if (res) return res.json(doc);
+          resolve({
+            success: true,
+            message: "catelog created",
+            data: doc,
+          });
+        }
+      }); // end of catelogDB.create
+    } catch (error) {
+      if (res) return res.status(400).send(error.message);
+      resolve({
+        success: false,
+        message: error.message,
+      });
+    }
+  });
+}
+
 router.post("/newCatelog/:pId", async function (req, res) {
   let pId = req.params.pId;
   let body = req.body;
@@ -290,6 +329,106 @@ router.get("/search/:searchItem", (req, res) => {
         success: true,
         type: "catelogs",
         data: docs,
+      });
+    }
+  );
+});
+
+/* ---------------- CREATE A DUMMY LIST CATELOGS FOR PARTNER ---------------- */
+router.get("/assign-catelogs/:pid", (req, res) => {
+  const pid = req.params.pid;
+  const notRequiredFields = [
+    "__v",
+    "isDeleted",
+    "isActive",
+    "updatedAt",
+    "createdAt",
+    "lastModified",
+    "_id",
+    "isDummy",
+    "isVerified",
+    "isUpdated",
+  ];
+  try {
+    partnerDB.findOne({ pId: pid }, (err, partner) => {
+      if (partner) {
+        catelogDB.find(
+          { isDummy: true, category: partner?.job, isDeleted: false },
+          (err, docs) => {
+            if (err) return res.status(400).json(err);
+            if (docs.length < 1) {
+              return res.status(404).json({ error: "No catelogs found" });
+            }
+            docs.forEach(async (catelog, key) => {
+              let newBody = {};
+              Object.keys(catelog["_doc"]).forEach((key) => {
+                if (!notRequiredFields.includes(key)) {
+                  newBody[key] = catelog["_doc"][key];
+                }
+              });
+              // newBody.name = catelog.name;
+              // newBody.media = catelog.media;
+              // newBody.price = catelog.price;
+              // newBody.description = catelog.description;
+              // newBody.range = catelog.range;
+              // newBody.category = catelog.category;
+              // newBody.termsAndConditions = catelog.termsAndConditions;
+              // newBody.note = catelog.note;
+              // newBody.warrantyDays = catelog.warrantyDays;
+              // newBody.warrantyDetails = catelog.warrantyDetails;
+              // newBody.isWarranty = catelog.isWarranty;
+              // newBody.cashOnService = catelog.cashOnService;
+              // newBody.daysToComplete = catelog.daysToComplete;
+              // newBody.hoursToComplete = catelog.hoursToComplete;
+              // newBody.whatIncluds = catelog.whatIncluds;
+              // newBody.whatNotIncluds = catelog.whatNotIncluds;
+              // newBody.faq = catelog.faq;
+              // newBody.sorting = catelog.sorting;
+              // newBody.maxRange = catelog.maxRange;
+              newBody.pId = partner.pId;
+              newBody.pDetails = partner._id;
+              newBody.itemCode = key + 1;
+              newBody.isUpdated = false;
+              newBody.errorMessage = "Please update your catelog";
+
+              // return res.status(200).json(newBody);
+              await createCatelogAndPush(partner.pId, newBody);
+              if (key == docs.length - 1) {
+                return res.status(200).json({
+                  success: true,
+                  type: "catelogs",
+                  data: docs,
+                });
+              }
+            });
+          }
+        );
+      } else {
+        return res.status(400).json("Partner not found");
+      }
+    });
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+});
+
+//dummy testing api for schema updates
+router.get("/update-schema", (req, res) => {
+  // delete deleted docs funtion
+  // catelogDB.findOneAndDelete({ isDeleted: true }, (err, doc) => {
+  //   if (err) return res.status(400).json(err);
+  //   return res.status(200).json(doc);
+  // });
+
+  // update new schema variables
+  catelogDB.updateMany(
+    {},
+    { $set: { isDummy: false, isUpdated: true } },
+    (err, docs) => {
+      if (err) return res.status(400).json(err);
+      return res.status(200).json({
+        success: true,
+        type: "catelogs",
       });
     }
   );
