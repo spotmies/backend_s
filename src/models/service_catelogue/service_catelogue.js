@@ -97,6 +97,12 @@ const serivcecatelog = new mongoose.Schema(
       required: false,
     },
     maxRange: reqNum,
+    isDummy: nonReqBool,
+    isUpdated: {
+      type: Boolean,
+      default: true,
+    },
+    errorMessage: nonReqStr,
 
     pinCodeAvailability: arrOfNum,
     isDeleted: nonReqBool,
