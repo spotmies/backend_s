@@ -2,7 +2,10 @@ const express = require("express");
 const router = express.Router();
 const catelogDB = require("../../models/service_catelogue/service_catelogue");
 const partnerDB = require("../../models/partner/partner_registration_sch");
-const { getPartnerDocIdBypId } = require("../../services/partners");
+const {
+  getPartnerDocIdBypId,
+  sendNotificationByPid,
+} = require("../../services/partners");
 const { sendNotificationToAdmin } = require("../../services/users");
 
 /* -------------------------------------------------------------------------- */
@@ -84,16 +87,18 @@ router.post("/newCatelog/:pId", async function (req, res) {
 /*                           UPDATE CATELOG BY DOCID                          */
 /* -------------------------------------------------------------------------- */
 
-router.put("/catelogs/:docId", (req, res) => {
+router.put("/catelogs/:docId", async (req, res) => {
   const docId = req.params.docId;
   const body = req.body;
   body.lastModified = new Date().valueOf();
   try {
+    const oldData = await catelogDB.findById(docId);
     catelogDB.findByIdAndUpdate(
       docId,
       { $set: body },
       { new: true },
       (err, data) => {
+        console.log(oldData);
         if (err) {
           //console.error(err);
           return res.status(400).json(err.message);
@@ -104,6 +109,14 @@ router.put("/catelogs/:docId", (req, res) => {
             "catelog updated",
             `name: ${data?.name} please verify it`
           );
+        if (!oldData?.isVerified && data?.isVerified) {
+          sendNotificationToAdmin("catelog verified", `name: ${data?.name}`);
+          sendNotificationByPid(
+            data?.pId,
+            "Catelog verified",
+            `Your catelog "${data?.name}" verified, please check it`
+          );
+        }
         return res.status(200).json(data);
       }
     );
