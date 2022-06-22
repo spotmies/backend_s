@@ -225,4 +225,39 @@ router.get("/sendNotification", (req, res) => {
   }
 });
 
+/* -------------- GENERATE REFFERALCODE FOR OLD USER & PARTNERS ------------- */
+// router.get("/generateReferralCode", (req, res) => {
+//   try {
+//     userDb
+//       .find({ $or: [{ refferalCode: null }, { refferalCode: undefined }] })
+//       .exec(function (err, data) {
+//         if (err) {
+//           console.error(err);
+//           return res.status(400).send(err.message);
+//         }
+//         // return res.status(200).json(data);
+//         data.forEach(async function (user) {
+//           const referralCode = await generateRefferalCode(
+//             user.name,
+//             user.phNum.toString(),
+//             user.uId
+//           );
+//           userDb.findOneAndUpdate(
+//             { uId: user.uId },
+//             { $set: { refferalCode: referralCode } },
+//             { new: true },
+//             (err, doc) => {
+//               if (err) {
+//                 console.log(err.message);
+//               }
+//               console.log(" ----->", doc.refferalCode);
+//             }
+//           );
+//         });
+//       });
+//   } catch (error) {
+//     return res.status(500).send(error.message);
+//   }
+// });
+
 module.exports = router;
