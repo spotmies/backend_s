@@ -95,7 +95,9 @@ function saveNotification({ token, title, body, nData } = {}) {
   });
 }
 
-function generateRefferalCode(name, mobile, uId, isPartner) {
+function generateRefferalCode(namee, mobile, uId, isPartner) {
+  const name = namee.replace(/ /g, "");
+
   let sampleRefferalCodes = [];
   sampleRefferalCodes.push(name.slice(0, 3).toUpperCase() + mobile.slice(-3));
   sampleRefferalCodes.push(
