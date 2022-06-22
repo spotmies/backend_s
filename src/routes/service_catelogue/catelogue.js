@@ -13,14 +13,14 @@ function createCatelogAndPush(pId, body, res) {
   console.log("body", body);
   return new Promise((resolve, reject) => {
     try {
-      catelogDB.create(body).exec((err, data) => {
+      catelogDB.create(body, (err, doc) => {
         if (err) {
           if (res) return res.status(400).send(error.message);
           resolve({
             success: false,
             message: error.message,
           });
-        } else if (data) {
+        } else if (doc) {
           partnerDB.findOneAndUpdate(
             { pId: pId },
             { $push: { catelogs: doc.id } },
@@ -392,7 +392,8 @@ router.get("/assign-catelogs/:pid", (req, res) => {
               newBody.errorMessage = "Please update your catelog";
 
               // return res.status(200).json(newBody);
-              await createCatelogAndPush(partner.pId, newBody);
+              const resp = await createCatelogAndPush(partner.pId, newBody);
+              console.log(resp);
               if (key == docs.length - 1) {
                 return res.status(200).json({
                   success: true,
