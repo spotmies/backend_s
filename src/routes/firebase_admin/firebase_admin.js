@@ -1,5 +1,8 @@
 var admin = require("firebase-admin");
-const { saveNotification } = require("../../services/users");
+// const {
+//   saveNotification,
+//   saveNotificationToDB,
+// } = require("../../services/users");
 
 var serviceAccount = require("./spotmiess-firebase-adminsdk-kckns-252d3ae26a.json");
 var androidOptions = {
@@ -98,7 +101,13 @@ module.exports = {
       token: token,
     };
     sendPayload(payload);
-    saveNotification({ token: token, title: title, body: body, nData: data });
+    // saveNotificationToDB({
+    //   token,
+    //   title,
+    //   body,
+    //   data,
+    // });
+    // saveNotification({ token: token, title: title, body: body, nData: data });
   },
   notificationByTopic: function ({ topic, title, body, data } = {}) {
     let payload = {

@@ -95,6 +95,50 @@ function saveNotification({ token, title, body, nData } = {}) {
   });
 }
 
+function saveNotificationToDB(token, title, body, nData) {
+  try {
+    userDB.findOne({ userDeviceToken: token }, (err, data) => {
+      if (err) {
+        console.log(err);
+        return;
+      } else if (!data) {
+        //check for partner
+        partnerDB.findOne({ partnerDeviceToken: token }, (err, data) => {
+          if (err) {
+            console.log(err);
+            return;
+          }
+          if (!data) {
+            return;
+          } else {
+            notificationDB.create(
+              {
+                title: title,
+                body: body,
+                data: nData,
+                partner: data._id,
+              },
+              (err, data) => {}
+            );
+          }
+        });
+      } else {
+        notificationDB.create(
+          {
+            title: title,
+            user: data._id,
+            body: body,
+            data: nData ?? {},
+          },
+          (err, data) => {}
+        );
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 function generateRefferalCode(namee, mobile, uId, isPartner) {
   const name = namee.replace(/ /g, "");
 
@@ -154,4 +198,5 @@ module.exports = {
   saveNotification,
   sendNotificationToAdmin,
   generateRefferalCode,
+  saveNotificationToDB,
 };
