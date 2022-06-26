@@ -402,7 +402,8 @@ router.get("/assign-catelogs/:pid", (req, res) => {
               newBody.pDetails = partner._id;
               newBody.itemCode = key + 1;
               newBody.isUpdated = false;
-              newBody.errorMessage = "Please update your catelog";
+              newBody.errorMessage =
+                "Please update your catelog (price,images,description,etc..,)";
 
               // return res.status(200).json(newBody);
               const resp = await createCatelogAndPush(partner.pId, newBody);
@@ -428,21 +429,22 @@ router.get("/assign-catelogs/:pid", (req, res) => {
 
 //dummy testing api for schema updates
 router.get("/update-schema", (req, res) => {
-  // delete deleted docs funtion
-  // catelogDB.findOneAndDelete({ isDeleted: true }, (err, doc) => {
-  //   if (err) return res.status(400).json(err);
-  //   return res.status(200).json(doc);
-  // });
-
   // update new schema variables
   catelogDB.updateMany(
-    {},
-    { $set: { isDummy: false, isUpdated: true } },
+    { pId: "Lz7SJsnDcZefgoc69Ik5vgL6meb2" },
+    {
+      $set: {
+        isDummy: true,
+        errorMessage:
+          "Please update your catelog (price,images,description,etc..,)",
+      },
+    },
     (err, docs) => {
       if (err) return res.status(400).json(err);
       return res.status(200).json({
         success: true,
         type: "catelogs",
+        data: docs?.length,
       });
     }
   );
