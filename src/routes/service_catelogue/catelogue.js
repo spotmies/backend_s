@@ -428,26 +428,26 @@ router.get("/assign-catelogs/:pid", (req, res) => {
 });
 
 //dummy testing api for schema updates
-router.get("/update-schema", (req, res) => {
-  // update new schema variables
-  catelogDB.updateMany(
-    { pId: "Lz7SJsnDcZefgoc69Ik5vgL6meb2" },
-    {
-      $set: {
-        isDummy: true,
-        errorMessage:
-          "Please update your catelog (price,images,description,etc..,)",
-      },
-    },
-    (err, docs) => {
-      if (err) return res.status(400).json(err);
-      return res.status(200).json({
-        success: true,
-        type: "catelogs",
-        data: docs?.length,
-      });
-    }
-  );
-});
+// router.get("/update-schema", (req, res) => {
+//   // update new schema variables
+//   catelogDB.updateMany(
+//     { pId: "Lz7SJsnDcZefgoc69Ik5vgL6meb2" },
+//     {
+//       $set: {
+//         isDummy: true,
+//         errorMessage:
+//           "Please update your catelog (price,images,description,etc..,)",
+//       },
+//     },
+//     (err, docs) => {
+//       if (err) return res.status(400).json(err);
+//       return res.status(200).json({
+//         success: true,
+//         type: "catelogs",
+//         data: docs?.length,
+//       });
+//     }
+//   );
+// });
 
 module.exports = router;
