@@ -187,7 +187,7 @@ router.put("/users/:id", (req, res) => {
 
 router.get("/server-type", (req, res) => {
   try {
-    return res.status(200).json({ serverType: "test-server" });
+    return res.status(200).json({ serverType: "production branch" });
   } catch (error) {
     return res.status(500).send(error.message);
   }
