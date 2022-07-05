@@ -225,6 +225,16 @@ router.get("/sendNotification", (req, res) => {
   }
 });
 
+router.get("/update-app-config", (req, res) => {
+  try {
+    userDb.updateMany({}, { $set: { appConfig: true } }, (err, doc) => {
+      return processRequest(err, doc, res, req);
+    });
+  } catch (error) {
+    return catchFunc(error, res, req);
+  }
+});
+
 /* -------------- GENERATE REFFERALCODE FOR OLD USER & PARTNERS ------------- */
 // router.get("/generateReferralCode", (req, res) => {
 //   try {
