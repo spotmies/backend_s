@@ -423,4 +423,14 @@ router.post("/remove-order", (req, res) => {
   }
 });
 
+router.get("/update-app-config", (req, res) => {
+  try {
+    partnerDB.updateMany({}, { $set: { appConfig: true } }, (err, doc) => {
+      return processRequest(err, doc, res, req);
+    });
+  } catch (error) {
+    return catchFunc(error, res, req);
+  }
+});
+
 module.exports = router;
